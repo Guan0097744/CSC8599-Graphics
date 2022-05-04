@@ -2,10 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\CSC8599",
-    "\\CSC8599\\CSC8599",
-    "\\CSC8599\\CSC8599\\assets",
-    "\\CSC8599\\CSC8599\\src"
+    "\\CSC8599\\CSC8599"
   ],
-  "SelectedNode": "\\CSC8599\\CSC8599\\assets\\fragment_core.glsl",
+  "SelectedNode": "\\CSC8599\\CSC8599\\src",
   "PreviewInSolutionExplorer": false
 }
