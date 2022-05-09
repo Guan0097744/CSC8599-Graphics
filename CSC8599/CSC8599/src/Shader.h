@@ -11,81 +11,43 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-/*
-	Class to represent shader program
-*/
-
 class Shader 
 {
 public:
-	// program ID
-	unsigned int ID;
+	unsigned int id;	// Program ID
 
-	/*
-		constructors
-	*/
-
-	// default
 	Shader();
 
-	// initialize with paths to vertex, fragment, and optional geometry shaders
-	Shader(bool includeDefaultHeader,
-		const char* vertexShaderPath,
-		const char* fragShaderPath,
-		const char* geoShaderPath = nullptr);
+	// Initialize with paths to vertex, fragment, and optional geometry shaders
+	Shader(const char* vertexShaderPath,
+		const char* fragShaderPath);
 
-	/*
-		process functions
-	*/
-
-	// generate using vertex, frag, and optional geometry shaders
-	void Generate(bool includeDefaultHeader,
-		const char* vertexShaderPath,
-		const char* fragShaderPath,
-		const char* geoShaderPath = nullptr);
-
-	// activate shader
+	// Activate shader
 	void Activate();
 
-	// cleanup
-	void Cleanup();
+	// Clean up
+	void CleanUp();
 
-	/*
-		set uniform variables
-	*/
+	// Load string from file
+	static std::string LoadShaderSrc(const char* filePath);
 
-	void SetBool(const std::string& name, bool value);
-	void SetInt(const std::string& name, int value);
-	void SetFloat(const std::string& name, float value);
-	void Set3Float(const std::string& name, float v1, float v2, float v3);
-	void Set3Float(const std::string& name, glm::vec3 v);
-	void Set4Float(const std::string& name, float v1, float v2, float v3, float v4);
-	//void set4Float(const std::string& name, aiColor4D color);
-	void Set4Float(const std::string& name, glm::vec4 v);
-	void SetMat3(const std::string& name, glm::mat3 val);
-	void SetMat4(const std::string& name, glm::mat4 val);
+	// Compile shader program
+	static GLuint CompileShader(const char* filePath, GLuint type);
 
-	/*
-		static
-	*/
-
-	// compile shader program
-	static GLuint CompileShader(bool includeDefaultHeader, const char* filePath, GLuint type);
-
-	// default directory
-	static std::string defaultDirectory;
-
-	// stream containing default header source
-	static std::stringstream defaultHeaders;
-
-	// load into default header
+	// Load into default header
 	static void LoadIntoDefault(const char* filepath);
 
-	// clear default header (after shader compilation)
+	// Clear default header (after shader compilation)
 	static void ClearDefault();
 
-	// load string from file
-	static char* LoadShaderSrc(bool includeDefaultHeader, const char* filePath);
+	// Default directory
+	static std::string defaultDirectory;
+
+	// Stream containing default header source
+	static std::stringstream defaultHeaders;
+
+	// Set uniform variables
+	void SetMat4(const std::string& name, glm::mat4 val);
 };
 
 #endif

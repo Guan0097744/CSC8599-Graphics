@@ -12,9 +12,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Shader.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
-std::string loadShaderSrc(const char* filename);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -51,84 +52,8 @@ int main()
 		return -1;
 	}
 
-	/*
-		Shaders
-	*/
-	int  success;
-	char infoLog[512];
-
-	// Compile vertex shader
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	std::string vertShaderSrc = loadShaderSrc("assets/vertex_core.glsl");
-	const GLchar* vertexShaderSrc = vertShaderSrc.c_str();
-	glShaderSource(vertexShader, 1, &vertexShaderSrc, NULL);
-	glCompileShader(vertexShader);
-	// Error catch
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Compile fragment shader
-	unsigned int fragmentShaders[2];
-	
-	fragmentShaders[0] = glCreateShader(GL_FRAGMENT_SHADER);
-	std::string fragShaderSrc = loadShaderSrc("assets/fragment_core.glsl");
-	const GLchar* fragmentShaderSrc = fragShaderSrc.c_str();
-	glShaderSource(fragmentShaders[0], 1, &fragmentShaderSrc, NULL);
-	glCompileShader(fragmentShaders[0]);
-	// Error catch
-	glGetShaderiv(fragmentShaders[0], GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShaders[0], 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	fragmentShaders[1] = glCreateShader(GL_FRAGMENT_SHADER);
-	fragShaderSrc = loadShaderSrc("assets/fragment_core2.glsl");
-	fragmentShaderSrc = fragShaderSrc.c_str();
-	glShaderSource(fragmentShaders[1], 1, &fragmentShaderSrc, NULL);
-	glCompileShader(fragmentShaders[1]);
-	// Error catch
-	glGetShaderiv(fragmentShaders[1], GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShaders[1], 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Shader link
-	unsigned int shaderPrograms[2];
-
-	shaderPrograms[0] = glCreateProgram();
-	glAttachShader(shaderPrograms[0], vertexShader);
-	glAttachShader(shaderPrograms[0], fragmentShaders[0]);
-	glLinkProgram(shaderPrograms[0]);
-	// Error catch
-	glGetProgramiv(shaderPrograms[0], GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderPrograms[0], 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	}
-
-	shaderPrograms[1] = glCreateProgram();
-	glAttachShader(shaderPrograms[1], vertexShader);
-	glAttachShader(shaderPrograms[1], fragmentShaders[1]);
-	glLinkProgram(shaderPrograms[1]);
-	// Error catch
-	glGetProgramiv(shaderPrograms[1], GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderPrograms[1], 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	}
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShaders[0]);
-	glDeleteShader(fragmentShaders[1]);
+	Shader shader("assets/vertex_core.glsl", "assets/fragment_core.glsl");
+	Shader shader2("assets/vertex_core.glsl", "assets/fragment_core2.glsl");
 
 	/*
 		VAO, VBO
@@ -139,11 +64,11 @@ int main()
 	//	0.0f,  0.5f, 0.0f  // top   
 	//};
 	float vertices[] = {
-		// Positions			// Colors
-		 0.5f,  0.5f, 0.0f,		1.0f, 1.0f, 0.5f,  		
-		 0.5f, -0.5f, 0.0f,		0.5f, 1.0f, 0.75f,
-		-0.5f, -0.5f, 0.0f,		0.6f, 1.0f, 0.2f,
-		-0.5f,  0.5f, 0.0f,		1.0f, 0.2f, 1.0f   
+		// Positions			// Colors				// Texture Coordinates
+		 0.5f,  0.5f, 0.0f,		1.0f, 1.0f, 0.5f,  		0.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f,		0.5f, 1.0f, 0.75f,		0.0f, 1.0f,
+		-0.5f, -0.5f, 0.0f,		0.6f, 1.0f, 0.2f,		1.0f, 0.0f,
+		-0.5f,  0.5f, 0.0f,		1.0f, 0.2f, 1.0f,		1.0f, 1.0f
 	};
 	unsigned int indices[] = {  // start from 0
 		0, 1, 3,   // first triangle
@@ -170,13 +95,20 @@ int main()
 	// Color
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-
+	// Texture Coordinates
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 	glm::mat4 trans = glm::mat4(1.0f);
 	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	glUseProgram(shaderPrograms[0]);
-	glUniformMatrix4fv(glGetUniformLocation(shaderPrograms[0], "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+	shader.Activate();
+	shader.SetMat4("transform", trans);
 
+	glm::mat4 trans2 = glm::mat4(1.0f);
+	trans2 = glm::scale(trans2, glm::vec3(1.5f));
+	trans2 = glm::rotate(trans2, glm::radians(15.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	shader2.Activate();
+	shader2.SetMat4("transform", trans2);
 
 	/* 
 		Render loop
@@ -189,19 +121,23 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 20.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(glGetUniformLocation(shaderPrograms[0], "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+		shader.Activate();
+		shader.SetMat4("transform", trans);
 
 		glBindVertexArray(VAO);
-
+		shader.Activate();
 		// First triangle
-		glUseProgram(shaderPrograms[0]);
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	// Wireframe Mode
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 		// Second triangle
-		//glUseProgram(shaderPrograms[1]);
-		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
+		trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -20.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		shader2.Activate();
+		shader2.SetMat4("transform", trans2);
+
+		shader2.Activate();
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
 
 		// GLFW: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		glfwSwapBuffers(window);
@@ -211,8 +147,7 @@ int main()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
-	glDeleteProgram(shaderPrograms[0]);
-	glDeleteProgram(shaderPrograms[1]);
+	glDeleteProgram(shader.id);
 
 	glfwTerminate();
 
@@ -232,26 +167,4 @@ void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-}
-
-std::string loadShaderSrc(const char* filename)
-{
-	std::ifstream file;
-	std::stringstream buf;
-	std::string ret = "";
-	
-	file.open(filename);
-	if (file.is_open())
-	{
-		buf << file.rdbuf();
-		ret = buf.str();
-	}
-	else
-	{
-		std::cout << "Could not open " << filename << std::endl;
-	}
-
-	file.close();
-
-	return ret;
 }
