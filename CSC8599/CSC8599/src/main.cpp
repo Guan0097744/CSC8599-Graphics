@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <stb/stb_image.h>
+
 #include <fstream>
 #include <sstream>
 #include <streambuf>
@@ -99,7 +101,15 @@ int main()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-	glm::mat4 trans = glm::mat4(1.0f);
+
+	// Textures
+	unsigned int texture1;
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+
+
+
+	/*glm::mat4 trans = glm::mat4(1.0f);
 	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	shader.Activate();
 	shader.SetMat4("transform", trans);
@@ -108,7 +118,7 @@ int main()
 	trans2 = glm::scale(trans2, glm::vec3(1.5f));
 	trans2 = glm::rotate(trans2, glm::radians(15.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	shader2.Activate();
-	shader2.SetMat4("transform", trans2);
+	shader2.SetMat4("transform", trans2);*/
 
 	/* 
 		Render loop
@@ -120,9 +130,9 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 20.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		/*trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 20.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		shader.Activate();
-		shader.SetMat4("transform", trans);
+		shader.SetMat4("transform", trans);*/
 
 		glBindVertexArray(VAO);
 		shader.Activate();
@@ -132,12 +142,14 @@ int main()
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 		// Second triangle
-		trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -20.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		/*trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -20.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		shader2.Activate();
-		shader2.SetMat4("transform", trans2);
+		shader2.SetMat4("transform", trans2);*/
 
-		shader2.Activate();
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
+		/*shader2.Activate();
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));*/
+
+		glBindVertexArray(0);
 
 		// GLFW: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		glfwSwapBuffers(window);
