@@ -20,8 +20,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1000;
+const unsigned int SCR_HEIGHT = 1000;
 
 int main() 
 {
@@ -67,10 +67,10 @@ int main()
 	//};
 	float vertices[] = {
 		// Positions			// Colors				// Texture Coordinates
-		 0.5f,  0.5f, 0.0f,		1.0f, 1.0f, 0.5f,  		0.0f, 0.0f,
-		 0.5f, -0.5f, 0.0f,		0.5f, 1.0f, 0.75f,		0.0f, 1.0f,
-		-0.5f, -0.5f, 0.0f,		0.6f, 1.0f, 0.2f,		1.0f, 0.0f,
-		-0.5f,  0.5f, 0.0f,		1.0f, 0.2f, 1.0f,		1.0f, 1.0f
+		 0.5f,  0.5f, 0.0f,		1.0f, 1.0f, 0.5f,  		1.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f,		0.5f, 1.0f, 0.75f,		1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f,		0.6f, 1.0f, 0.2f,		0.0f, 0.0f,
+		-0.5f,  0.5f, 0.0f,		1.0f, 0.2f, 1.0f,		0.0f, 1.0f
 	};
 	unsigned int indices[] = {  // start from 0
 		0, 1, 3,   // first triangle
@@ -92,10 +92,10 @@ int main()
 
 	// Set attribute pointer
 	// Position
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	// Color
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	// Texture Coordinates
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
@@ -107,7 +107,47 @@ int main()
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
+	// Texture Wrapping
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+	// Texture Filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Load image
+	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* data = stbi_load("assets/takagi.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+	unsigned int texture2;
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	data = stbi_load("assets/takagi2.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+	shader.Activate();
+	shader.SetInt("texture1", 0);
+	shader.SetInt("texture2", 1);
 
 	/*glm::mat4 trans = glm::mat4(1.0f);
 	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -127,8 +167,14 @@ int main()
 	{
 		processInput(window);
 
+		// Render
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		glActiveTexture(GL_TEXTURE0); // Activate the texture unit first before binding texture
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 
 		/*trans = glm::rotate(trans, glm::radians((float)glfwGetTime() / 20.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		shader.Activate();
@@ -139,7 +185,7 @@ int main()
 		// First triangle
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	// Wireframe Mode
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// Second triangle
 		/*trans2 = glm::rotate(trans2, glm::radians((float)glfwGetTime() / -20.0f), glm::vec3(0.0f, 0.0f, 1.0f));

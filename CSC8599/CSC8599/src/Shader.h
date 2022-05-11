@@ -47,6 +47,15 @@ public:
 	static std::stringstream defaultHeaders;
 
 	// Set uniform variables
+	void SetBool(const std::string& name, bool value);
+	void SetInt(const std::string& name, int value);
+	void SetFloat(const std::string& name, float value);
+	void Set3Float(const std::string& name, float v1, float v2, float v3);
+	void Set3Float(const std::string& name, glm::vec3 v);
+	void Set4Float(const std::string& name, float v1, float v2, float v3, float v4);
+	//void Set4Float(const std::string& name, aiColor4D color);
+	void Set4Float(const std::string& name, glm::vec4 v);
+	void SetMat3(const std::string& name, glm::mat3 val);
 	void SetMat4(const std::string& name, glm::mat4 val);
 };
 
