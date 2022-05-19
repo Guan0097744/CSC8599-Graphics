@@ -40,9 +40,6 @@ public:
 	static bool ButtonWentDown(int button);
 
 private:
-	/*
-		static mouse values
-	*/
 
 	// x posiiton
 	static double x;

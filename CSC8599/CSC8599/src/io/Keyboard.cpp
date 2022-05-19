@@ -1,17 +1,9 @@
 #include "Keyboard.h"
 
-/*
-	define initial static values
-*/
-
 // key state array (true for down, false for up)
 bool Keyboard::Keys[GLFW_KEY_LAST] = { 0 };
 // key changed array (true if changed)
 bool Keyboard::KeysChanged[GLFW_KEY_LAST] = { 0 };
-
-/*
-	static callback
-*/
 
 // key state changed
 void Keyboard::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) 
@@ -29,10 +21,6 @@ void Keyboard::KeyCallback(GLFWwindow* window, int key, int scancode, int action
 	}
 	KeysChanged[key] = action != GLFW_REPEAT;
 }
-
-/*
-	static accessors
-*/
 
 // get key state
 bool Keyboard::Key(int key) 
