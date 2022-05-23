@@ -23,11 +23,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
 // settings
-const unsigned int SCR_WIDTH = 1000;
-const unsigned int SCR_HEIGHT = 1000;
+unsigned int SCR_WIDTH = 1000;
+unsigned int SCR_HEIGHT = 1000;
+float x, y, z;
 
 float mixVal = 0.5f;
-glm::mat4 transform = glm::mat4(1.0f);
 
 int main() 
 {
@@ -191,9 +191,9 @@ int main()
 	shader.SetInt("texture1", 0);
 	shader.SetInt("texture2", 1);
 
-	transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	shader.SetMat4("transform", transform);
+	x = 0.0f;
+	y = 0.0f;
+	z = 3.0f;
 
 	/* 
 		Render loop
@@ -212,10 +212,22 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
 		glBindVertexArray(VAO);
+
+		// Create transformation for screen
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+
+		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f));
+		view = glm::translate(view, glm::vec3(-x, -y, -z));
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
 		shader.Activate();
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	// Wireframe Mode
 		shader.SetFloat("mixVal", mixVal);
-		shader.SetMat4("transform", transform);
+		shader.SetMat4("model", model);
+		shader.SetMat4("view", view);
+		shader.SetMat4("projection", projection);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -241,6 +253,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	// Make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
+	SCR_WIDTH = width;
+	SCR_HEIGHT = height;
 }
 
 // Process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
@@ -268,18 +282,22 @@ void processInput(GLFWwindow* window)
 
 	if (Keyboard::Key(GLFW_KEY_W))
 	{
-		transform = glm::translate(transform, glm::vec3(0.0f, 0.1f, 0.0f));
+		//transform = glm::translate(transform, glm::vec3(0.0f, 0.1f, 0.0f));
+		z -= 0.1f;
 	}
 	if (Keyboard::Key(GLFW_KEY_S))
 	{
-		transform = glm::translate(transform, glm::vec3(0.0f, -0.1f, 0.0f));
+		//transform = glm::translate(transform, glm::vec3(0.0f, -0.1f, 0.0f));
+		z += 0.1f;
 	}
 	if (Keyboard::Key(GLFW_KEY_A))
 	{
-		transform = glm::translate(transform, glm::vec3(-0.1f, 0.0f, 0.0f));
+		//transform = glm::translate(transform, glm::vec3(-0.1f, 0.0f, 0.0f));
+		x += 0.1f;
 	}
 	if (Keyboard::Key(GLFW_KEY_D))
 	{
-		transform = glm::translate(transform, glm::vec3(0.1f, 0.0f, 0.0f));
+		//transform = glm::translate(transform, glm::vec3(0.1f, 0.0f, 0.0f));
+		x -= 0.1f;
 	}
 }
