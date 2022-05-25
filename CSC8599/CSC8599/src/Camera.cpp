@@ -3,12 +3,13 @@
 // default and initialize with position
 Camera::Camera(glm::vec3 position): 
 	cameraPos(position),
-	yaw(0.0f),
+	worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
+	yaw(-90.0f),
 	pitch(0.0f),
-	speed(2.5f),
-	sensitivity(1.0f),
+	speed(2.0f),
+	sensitivity(0.2f),
 	zoom(45.0f),
-	cameraFront(glm::vec3(1.0f, 0.0f, 0.0f))
+	cameraFront(glm::vec3(0.0f, 0.0f, -1.0f))
 {
 	UpdateCameraVectors();
 }
@@ -97,8 +98,8 @@ void Camera::UpdateCameraVectors()
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	
 	cameraFront = glm::normalize(direction);
-
-	//cameraRight = glm::normalize(glm::cross(cameraFront, Environment::worldUp));
-	cameraUp = glm::normalize(glm::cross(cameraRight, cameraFront));
+	cameraRight = glm::normalize(glm::cross(cameraFront, worldUp));
+	cameraUp	= glm::normalize(glm::cross(cameraRight, cameraFront));
 }

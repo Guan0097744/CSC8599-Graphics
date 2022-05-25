@@ -14,20 +14,30 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Shader.h"
+#include "graphics/Shader.h"
+#include "graphics/Texture.h"
 
 #include "io/Mouse.h"
 #include "io/Keyboard.h"
 
+#include "Camera.h"
+#include "Scene.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
+void processInput(double dt);
 
 // settings
 unsigned int SCR_WIDTH = 1000;
 unsigned int SCR_HEIGHT = 1000;
-float x, y, z;
+
+Scene scene;
 
 float mixVal = 0.5f;
+
+glm::mat4 mouseTransform = glm::mat4(1.0f);
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
 
 int main() 
 {
@@ -43,18 +53,12 @@ int main()
 #endif // __APPLE__
 
 	// GLFW window creation
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "CSC8599", NULL, NULL);
-	if (window == NULL)
+	if (!scene.Init())
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetKeyCallback(window, Keyboard::KeyCallback);
-	glfwSetCursorPosCallback(window, Mouse::CursorPosCallback);
-	glfwSetScrollCallback(window, Mouse::MouseWheelCallback);
 
 	// GLAD: load all OpenGL function pointers
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -63,10 +67,11 @@ int main()
 		return -1;
 	}
 
+	scene.SetParametres();
+
 	glEnable(GL_DEPTH_TEST);
 
-	Shader shader("assets/vertex_core.glsl", "assets/fragment_core.glsl");
-	Shader shader2("assets/vertex_core.glsl", "assets/fragment_core2.glsl");
+	Shader shader("assets/object_vs.glsl", "assets/object_fs.glsl");
 
 	float vertices[] = {
 		// Positions		// Texture Coordinates
@@ -145,71 +150,33 @@ int main()
 	glEnableVertexAttribArray(1);
 
 	// Textures
-	unsigned int texture1;
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-
-	// Texture Wrapping
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	// Texture Filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// Load image
-	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = stbi_load("assets/takagi.jpg", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
-
-	unsigned int texture2;
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-	data = stbi_load("assets/takagi2.jpg", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
+	
+	Texture texture1("assets/takagi.jpg", "texture1");
+	texture1.Load();
+	Texture texture2("assets/takagi2.jpg", "texture2");
+	texture2.Load();
 
 	shader.Activate();
-	shader.SetInt("texture1", 0);
-	shader.SetInt("texture2", 1);
-
-	x = 0.0f;
-	y = 0.0f;
-	z = 3.0f;
+	shader.SetInt("texture1", texture1.id);
+	shader.SetInt("texture2", texture2.id);
 
 	/* 
 		Render loop
 	*/
-	while (!glfwWindowShouldClose(window))
+	while (!scene.ShouldClose())
 	{
-		processInput(window);
+		double currentTime = glfwGetTime();
+		deltaTime = currentTime - lastFrame;
+		lastFrame = currentTime;
+		processInput(deltaTime);
 
 		// Render
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		scene.Update();
 
 		glActiveTexture(GL_TEXTURE0); // Activate the texture unit first before binding texture
-		glBindTexture(GL_TEXTURE_2D, texture1);
+		texture1.Bind();
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
+		texture2.Bind();
 
 		glBindVertexArray(VAO);
 
@@ -218,9 +185,10 @@ int main()
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f));
-		view = glm::translate(view, glm::vec3(-x, -y, -z));
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		model = glm::rotate(model, /*(float)glfwGetTime() **/ glm::radians(-55.0f), glm::vec3(0.5f));
+		//view = glm::translate(view, glm::vec3(-x, -y, -z));
+		view = camera.GetViewMatrix();
+		projection = glm::perspective(glm::radians(camera.GetZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		shader.Activate();
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	// Wireframe Mode
@@ -234,8 +202,7 @@ int main()
 		glBindVertexArray(0);
 
 		// GLFW: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		scene.NewFrame();
 	}
 
 	glDeleteVertexArrays(1, &VAO);
@@ -258,10 +225,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 // Process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-void processInput(GLFWwindow* window)
+void processInput(double dt)
 {
 	if (Keyboard::Key(GLFW_KEY_ESCAPE))
-		glfwSetWindowShouldClose(window, true);
+		scene.SetShouldClose(true);
 		
 	if (Keyboard::Key(GLFW_KEY_UP))
 	{
@@ -280,24 +247,41 @@ void processInput(GLFWwindow* window)
 		}
 	}
 
+	// Move camera
 	if (Keyboard::Key(GLFW_KEY_W))
 	{
-		//transform = glm::translate(transform, glm::vec3(0.0f, 0.1f, 0.0f));
-		z -= 0.1f;
+		camera.UpdateCameraPos(CameraDirection::FORWARD, dt);
 	}
 	if (Keyboard::Key(GLFW_KEY_S))
 	{
-		//transform = glm::translate(transform, glm::vec3(0.0f, -0.1f, 0.0f));
-		z += 0.1f;
+		camera.UpdateCameraPos(CameraDirection::BACKWARD, dt);
 	}
 	if (Keyboard::Key(GLFW_KEY_A))
 	{
-		//transform = glm::translate(transform, glm::vec3(-0.1f, 0.0f, 0.0f));
-		x += 0.1f;
+		camera.UpdateCameraPos(CameraDirection::LEFT, dt);
 	}
 	if (Keyboard::Key(GLFW_KEY_D))
 	{
-		//transform = glm::translate(transform, glm::vec3(0.1f, 0.0f, 0.0f));
-		x -= 0.1f;
+		camera.UpdateCameraPos(CameraDirection::RIGHT, dt);
+	}
+	if (Keyboard::Key(GLFW_KEY_SPACE))
+	{
+		camera.UpdateCameraPos(CameraDirection::UP, dt);
+	}
+	if (Keyboard::Key(GLFW_KEY_LEFT_SHIFT))
+	{
+		camera.UpdateCameraPos(CameraDirection::DOWN, dt);
+	}
+
+	double dx = Mouse::GetDX();
+	double dy = Mouse::GetDY();
+	if (dx != 0 || dy != 0)
+	{
+		camera.UpdateCameraDirection(dx, dy);
+	}
+	double scrollDy = Mouse::GetScrollDY();
+	if (scrollDy != 0)
+	{
+		camera.UpdateCameraZoom(scrollDy);
 	}
 }

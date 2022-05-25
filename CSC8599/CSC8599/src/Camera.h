@@ -28,6 +28,8 @@ public:
 	glm::vec3 cameraUp;
 	glm::vec3 cameraRight;
 
+	glm::vec3 worldUp;
+
 	// camera rotational values
 	float yaw; // x-axis
 	float pitch; // y-axis
@@ -38,7 +40,7 @@ public:
 	float zoom;
 
 	// default and initialize with position
-	Camera(glm::vec3 position = glm::vec3(0.0f));
+	Camera(glm::vec3 position);
 
 	// change camera direction (mouse movement)
 	void UpdateCameraDirection(double dx, double dy);

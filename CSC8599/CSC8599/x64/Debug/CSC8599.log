@@ -1,6 +1,4 @@
-﻿  Camera.cpp
-  main.cpp
-  Shader.cpp
-  Generating Code...
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿  main.cpp
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(169,27): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(170,15): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
   CSC8599.vcxproj -> C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe
