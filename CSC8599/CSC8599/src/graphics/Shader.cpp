@@ -42,7 +42,7 @@ void Shader::Activate()
 	glUseProgram(id);
 }
 
-void Shader::CleanUp()
+void Shader::Cleanup()
 {
 	glDeleteProgram(id);
 }

@@ -30,7 +30,7 @@ public:
 	void Activate();
 
 	// Clean up
-	void CleanUp();
+	void Cleanup();
 
 	// Load string from file
 	static std::string LoadShaderSrc(const char* filePath);
