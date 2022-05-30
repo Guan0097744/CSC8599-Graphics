@@ -24,6 +24,7 @@
 #include "Scene.h"
 
 #include "graphics/models/Cube.hpp"
+#include "graphics/models/Lamp.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(double dt);
@@ -74,9 +75,13 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	Shader shader("assets/object_vs.glsl", "assets/object_fs.glsl");
+	Shader lampShader("assets/object_vs.glsl", "assets/lamp_fs.glsl");
 
-	Cube cube(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.75f));
+	Cube cube(Material::gold, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.75f));
 	cube.Init();
+
+	Lamp lamp(glm::vec3(1.0f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, -0.5f, 0.5f), glm::vec3(0.25f));
+	lamp.Init();
 
 	/* 
 		Render loop
@@ -99,15 +104,29 @@ int main()
 		projection = glm::perspective(glm::radians(camera.GetZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		shader.Activate();
+		shader.Set3Float("light.position", lamp.pos);
+		shader.Set3Float("viewPos", camera.cameraPos);
+		shader.Set3Float("light.ambient", lamp.ambient);
+		shader.Set3Float("light.diffuse", lamp.diffuse);
+		shader.Set3Float("light.specular", lamp.specular);
+
 		shader.SetFloat("mixVal", mixVal);
 		shader.SetMat4("view", view);
 		shader.SetMat4("projection", projection);
 
 		cube.Render(shader);
 
+		lampShader.Activate();
+		lampShader.SetMat4("view", view);
+		lampShader.SetMat4("projection", projection);
+		lamp.Render(lampShader);
+
 		// GLFW: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		scene.NewFrame();
 	}
+
+	cube.Cleanup();
+	lamp.Cleanup();
 
 	glfwTerminate();
 

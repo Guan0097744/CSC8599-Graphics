@@ -12,6 +12,7 @@ public:
 	glm::vec3 diffuse;
 	glm::vec3 specular;
 
+	// lightColor, ambient, diffuse, specular, pos, size
 	Lamp(glm::vec3 lightColor,
 		glm::vec3 ambient,
 		glm::vec3 diffuse,
@@ -24,9 +25,14 @@ public:
 		specular(specular),
 		Cube(Material::white_plastic, pos, size)
 	{
-
 	}
 
+	void Render(Shader shader)
+	{
+		shader.Set3Float("lightColor", lightColor);
+
+		Cube::Render(shader);
+	}
 };
 
 #endif // !LAMP_HPP

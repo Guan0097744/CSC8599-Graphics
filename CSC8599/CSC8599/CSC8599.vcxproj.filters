@@ -55,6 +55,7 @@
   <ItemGroup>
     <None Include="assets\object_fs.glsl" />
     <None Include="assets\object_vs.glsl" />
+    <None Include="assets\lamp_fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\io\Mouse.h">
@@ -96,6 +97,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="assets\takagi2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\container2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\container2_specular.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
