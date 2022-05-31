@@ -16,6 +16,7 @@
 
 #include "graphics/Shader.h"
 #include "graphics/Texture.h"
+#include "graphics/Light.h"
 
 #include "io/Mouse.h"
 #include "io/Keyboard.h"
@@ -83,6 +84,8 @@ int main()
 	Lamp lamp(glm::vec3(1.0f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, -0.5f, 0.5f), glm::vec3(0.25f));
 	lamp.Init();
 
+	DirLight dirLight = { glm::vec3(-0.2f, -0.1f, -0.3f), glm::vec3(0.1f), glm::vec3(0.4f), glm::vec3(0.75f) };
+
 	/* 
 		Render loop
 	*/
@@ -98,27 +101,30 @@ int main()
 		scene.Update();
 
 		// Create transformation for screen
+		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 		view = camera.GetViewMatrix();
 		projection = glm::perspective(glm::radians(camera.GetZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		shader.Activate();
-		shader.Set3Float("light.position", lamp.pos);
 		shader.Set3Float("viewPos", camera.cameraPos);
-		shader.Set3Float("light.ambient", lamp.ambient);
-		shader.Set3Float("light.diffuse", lamp.diffuse);
-		shader.Set3Float("light.specular", lamp.specular);
 
-		shader.SetFloat("mixVal", mixVal);
+		dirLight.direction = glm::vec3(
+			glm::rotate(model, glm::radians(0.5f), glm::vec3(1.0f, 0.0f, 0.0f)) *
+			glm::vec4(dirLight.direction, 1.0f));
+		dirLight.Render(shader);
+
+		shader.SetMat4("model", model);
 		shader.SetMat4("view", view);
 		shader.SetMat4("projection", projection);
 
 		cube.Render(shader);
 
 		lampShader.Activate();
+		/*lampShader.SetMat4("model", model);
 		lampShader.SetMat4("view", view);
-		lampShader.SetMat4("projection", projection);
+		lampShader.SetMat4("projection", projection);*/
 		lamp.Render(lampShader);
 
 		// GLFW: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

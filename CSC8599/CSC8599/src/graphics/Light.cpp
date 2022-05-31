@@ -1,0 +1,36 @@
+#include "Light.h"
+
+void DirLight::Render(Shader shader)
+{
+	std::string name = "dirLight";
+
+	shader.Set3Float(name + ".direction", direction);
+	shader.Set3Float(name + ".ambient", ambient);
+	shader.Set3Float(name + ".diffuse", diffuse);
+	shader.Set3Float(name + ".specular", specular);
+}
+
+void PointLight::Render(Shader shader)
+{
+	std::string name = "pointLight";
+
+	shader.Set3Float(name + ".position", position);
+	shader.Set3Float(name + ".ambient", ambient);
+	shader.Set3Float(name + ".diffuse", diffuse);
+	shader.Set3Float(name + ".specular", specular);
+}
+
+void SpotLight::Render(Shader shader)
+{
+	std::string name = "spotLight";
+
+	shader.Set3Float(name + ".position", position);
+	shader.Set3Float(name + ".direction", direction);
+
+	shader.SetFloat(name + ".cutOff", cutOff);
+	shader.SetFloat(name + ".outerCutOff", outerCutOff);
+
+	shader.Set3Float(name + ".ambient", ambient);
+	shader.Set3Float(name + ".diffuse", diffuse);
+	shader.Set3Float(name + ".specular", specular);
+}

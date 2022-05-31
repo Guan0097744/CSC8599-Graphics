@@ -73,14 +73,20 @@ public:
 		/*Texture tex0("assets/takagi.jpg", "texture0");
 		tex0.Load();
 		Texture tex1("assets/takagi2.jpg", "texture1");
-		tex1.Load();*/
+		tex1.Load();
 		Texture tex2("assets/container2.png", "material.diffuse");
 		tex2.Load();
 		Texture tex3("assets/container2_specular.png", "material.specular");
-		tex3.Load();
+		tex3.Load();*/
+
+		Texture defDiffTex("assets/red.png", "material.diffuse");
+		Texture defSpecTex("assets/red.png", "material.specular");
+		defDiffTex.Load();
+		defSpecTex.Load();
 
 		//meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices, { tex0, tex1 }));
-		meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices, { tex2, tex3 }));
+		//meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices, { tex2, tex3 }));
+		meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices, { defDiffTex, defSpecTex }));
 	}
 
 	void Render(Shader shader)
@@ -92,8 +98,6 @@ public:
 		shader.SetMat4("model", model);
 
 		shader.Set3Float("material.ambient", material.ambient);
-		//shader.Set3Float("material.diffuse", material.diffuse);
-		//shader.Set3Float("material.specular", material.specular);
 		shader.SetFloat("material.shininess", material.shininess);
 
 		Model::Render(shader);
