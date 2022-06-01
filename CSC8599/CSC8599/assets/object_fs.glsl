@@ -123,16 +123,29 @@ vec3 CalSpotLight(vec3 norm, vec3 viewDir, vec3 diffMap, vec3 specMap)
 	// Ambient
 	vec3 ambient	= spotLight.ambient * diffMap;
 
-	// Diffuse
 	vec3 lightDir	= normalize(spotLight.position - fragPos);
-	float diff		= max(dot(norm, lightDir), 0.0);
-	vec3 diffuse	= spotLight.diffuse * (diff * diffMap);
+	float theta		= dot(lightDir, normalize(-spotLight.direction));
+	if(theta > spotLight.outerCutOff)
+	{
+		// Diffuse
+		float diff		= max(dot(norm, lightDir), 0.0);
+		vec3 diffuse	= spotLight.diffuse * (diff * diffMap);
 
-	// Specular
-	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec		= pow(max(dot(viewDir, reflectDir), 0.0), material.shininess * 128);
-	vec3 specular	= spotLight.specular * (spec * specMap);
+		// Specular
+		vec3 reflectDir = reflect(-lightDir, norm);
+		float spec		= pow(max(dot(viewDir, reflectDir), 0.0), material.shininess * 128);
+		vec3 specular	= spotLight.specular * (spec * specMap);
 
-	vec3 result		= ambient + diffuse + specular;
-	return result;
+		float intensity = (theta - spotLight.outerCutOff) / (spotLight.cutOff - spotLight.outerCutOff);
+		intensity = clamp(intensity, 0.0, 1.0);
+		diffuse *= intensity;
+		specular *= intensity;
+
+		return vec3(ambient + diffuse + specular);
+	}
+	else
+	{
+		return ambient;
+	}
+
 }
