@@ -1,5 +1,6 @@
 ﻿  main.cpp
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Cube.hpp(68,30): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(96,27): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(97,15): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Cube.hpp(70,30): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(129,27): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(130,15): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   CSC8599.vcxproj -> C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe

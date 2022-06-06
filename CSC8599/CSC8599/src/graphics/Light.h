@@ -20,15 +20,16 @@ struct PointLight
 {
 	glm::vec3 position;
 
-	glm::vec3 ambient;
-	glm::vec3 diffuse;
-	glm::vec3 specular;
-
+	// Attenuation constants
 	float constant;
 	float linear;
 	float quadratic;
 
-	void Render(Shader shader);
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+
+	void Render(int index, Shader shader);
 };
 
 struct SpotLight
@@ -39,11 +40,16 @@ struct SpotLight
 	float cutOff;
 	float outerCutOff;
 
+	// Attenuation constants
+	float constant;
+	float linear;
+	float quadratic;
+
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
 
-	void Render(Shader shader);
+	void Render(int index, Shader shader);
 };
 
 #endif

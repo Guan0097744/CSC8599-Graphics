@@ -78,14 +78,47 @@ int main()
 	Shader shader("assets/object_vs.glsl", "assets/object_fs.glsl");
 	Shader lampShader("assets/object_vs.glsl", "assets/lamp_fs.glsl");
 
-	Cube cube(Material::gold, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.75f));
-	cube.Init();
 
-	Lamp lamp(glm::vec3(1.0f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, -0.5f, 0.5f), glm::vec3(0.25f));
-	lamp.Init();
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
+	Cube cubes[10];
+	for (unsigned int i = 0; i < 10; i++) {
+		cubes[i] = Cube(Material::gold, cubePositions[i], glm::vec3(1.0f));
+		cubes[i].Init();
+	}
+
+	glm::vec3 pointLightPositions[] = {
+			glm::vec3(0.7f,  0.2f,  2.0f),
+			glm::vec3(2.3f, -3.3f, -4.0f),
+			glm::vec3(-4.0f,  2.0f, -12.0f),
+			glm::vec3(0.0f,  0.0f, -3.0f)
+	};
+	Lamp lamps[4];
+	for (unsigned int i = 0; i < 4; i++) {
+		lamps[i] = Lamp(glm::vec3(1.0f),
+			glm::vec3(0.05f), glm::vec3(0.8f), glm::vec3(1.0f),
+			1.0f, 0.07f, 0.032f,
+			pointLightPositions[i], glm::vec3(0.25f));
+		lamps[i].Init();
+	}
 
 	DirLight dirLight = { glm::vec3(-0.2f, -0.1f, -0.3f), glm::vec3(0.1f), glm::vec3(0.4f), glm::vec3(0.75f) };
 
+	SpotLight spotLight = { camera.cameraPos, camera.cameraFront, 
+		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(20.0f)),	// Cut off
+		1.0f, 0.07f, 0.032f,	// Attenuation constants
+		glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(1.0f) };
 
 	/* 
 		Render loop
@@ -111,29 +144,53 @@ int main()
 		shader.Activate();
 		shader.Set3Float("viewPos", camera.cameraPos);
 
-		dirLight.direction = glm::vec3(
+		/*dirLight.direction = glm::vec3(
 			glm::rotate(model, glm::radians(0.5f), glm::vec3(1.0f, 0.0f, 0.0f)) *
 			glm::vec4(dirLight.direction, 1.0f));
-		dirLight.Render(shader);
+		dirLight.Render(shader);*/
+
+		for (int i = 0; i < 4; i++)
+		{
+			lamps[i].pointLight.Render(i, shader);
+		}
+		shader.SetInt("numPointLights", 4);
+
+		spotLight.position = camera.cameraPos;
+		spotLight.direction = camera.cameraFront;
+		spotLight.Render(0, shader);
+		shader.SetInt("numSpotLights", 1);
 
 		shader.SetMat4("model", model);
 		shader.SetMat4("view", view);
 		shader.SetMat4("projection", projection);
 
-		cube.Render(shader);
+		for (int i = 0; i < 10; i++)
+		{
+			cubes[i].Render(shader);
+		}
 
 		lampShader.Activate();
-		/*lampShader.SetMat4("model", model);
+		lampShader.SetMat4("model", model);
 		lampShader.SetMat4("view", view);
-		lampShader.SetMat4("projection", projection);*/
-		lamp.Render(lampShader);
+		lampShader.SetMat4("projection", projection);
+		for (int i = 0; i < 4; i++)
+		{
+			lamps[i].Render(lampShader);
+		}
 
 		// GLFW: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		scene.NewFrame();
 	}
 
-	cube.Cleanup();
-	lamp.Cleanup();
+
+	for (int i = 0; i < 10; i++)
+	{
+		cubes[i].Cleanup();
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		lamps[i].Cleanup();
+	}
 
 	glfwTerminate();
 

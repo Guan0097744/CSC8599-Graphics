@@ -11,15 +11,20 @@ public:
 	
 	PointLight pointLight;
 
+	Lamp() {}
+
 	// lightColor, ambient, diffuse, specular, pos, size
 	Lamp(glm::vec3 lightColor,
 		glm::vec3 ambient,
 		glm::vec3 diffuse,
 		glm::vec3 specular,
+		float constant,
+		float linear,
+		float quadratic,
 		glm::vec3 pos,
 		glm::vec3 size) :
 		lightColor(lightColor),
-		pointLight({ pos, ambient, diffuse, specular }),
+		pointLight({ pos, constant, linear, quadratic, ambient, diffuse, specular }),
 		Cube(Material::white_plastic, pos, size) {}
 
 	void Render(Shader shader)
