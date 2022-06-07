@@ -6,35 +6,29 @@
 
 #include <stb/stb_image.h>
 
+#include <assimp/scene.h>
+
 class Texture
 {
 public:
 	Texture();
-	Texture(const char* path, const char* name, bool defaultParametres = true);
+	Texture(std::string dir, std::string path, aiTextureType type);
 
 	void Generate();
 	void Load(bool flip = true);
 
-	void SetFilters(GLenum all);
-	void SetFilters(GLenum mag, GLenum min);
-
-	void SetWrap(GLenum all);
-	void SetWrap(GLenum s, GLenum t);
-
 	void Bind();
-	
-	unsigned int id;	// Texture id
-	unsigned int tex;
-	const char* name;
+
+	unsigned int GetId()		{ return id; }
+	aiTextureType GetTexType()	{ return type; }
+	std::string GetDir()		{ return dir; }
+	std::string GetPath()		{ return path; }
 
 private:
-	static int currentId;
-
-	const char* path;
-	int width;
-	int height;
-	int nChannels;
-
+	unsigned int	id;
+	aiTextureType	type;
+	std::string		dir;	// Directory
+	std::string		path;
 };
 
 #endif

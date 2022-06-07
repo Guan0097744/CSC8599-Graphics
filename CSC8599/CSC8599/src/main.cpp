@@ -17,6 +17,7 @@
 #include "graphics/Shader.h"
 #include "graphics/Texture.h"
 #include "graphics/Light.h"
+#include "graphics/Model.h"
 
 #include "io/Mouse.h"
 #include "io/Keyboard.h"
@@ -78,25 +79,9 @@ int main()
 	Shader shader("assets/object_vs.glsl", "assets/object_fs.glsl");
 	Shader lampShader("assets/object_vs.glsl", "assets/lamp_fs.glsl");
 
-
-	glm::vec3 cubePositions[] = {
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f)
-	};
-
-	Cube cubes[10];
-	for (unsigned int i = 0; i < 10; i++) {
-		cubes[i] = Cube(Material::gold, cubePositions[i], glm::vec3(1.0f));
-		cubes[i].Init();
-	}
+	Model m(glm::vec3(0.0f, 0.0f, -0.5f), glm::vec3(0.15f));
+	m.LoadModel("assets/models/nanosuit/nanosuit.obj");
+	//m.LoadModel("assets/models/gun/scene.gltf");
 
 	glm::vec3 pointLightPositions[] = {
 			glm::vec3(0.7f,  0.2f,  2.0f),
@@ -105,7 +90,7 @@ int main()
 			glm::vec3(0.0f,  0.0f, -3.0f)
 	};
 	Lamp lamps[4];
-	for (unsigned int i = 0; i < 4; i++) {
+	for (int i = 0; i < 4; i++) {
 		lamps[i] = Lamp(glm::vec3(1.0f),
 			glm::vec3(0.05f), glm::vec3(0.8f), glm::vec3(1.0f),
 			1.0f, 0.07f, 0.032f,
@@ -164,10 +149,7 @@ int main()
 		shader.SetMat4("view", view);
 		shader.SetMat4("projection", projection);
 
-		for (int i = 0; i < 10; i++)
-		{
-			cubes[i].Render(shader);
-		}
+		m.Render(shader);
 
 		lampShader.Activate();
 		lampShader.SetMat4("model", model);
@@ -182,11 +164,8 @@ int main()
 		scene.NewFrame();
 	}
 
+	m.Cleanup();
 
-	for (int i = 0; i < 10; i++)
-	{
-		cubes[i].Cleanup();
-	}
 	for (int i = 0; i < 4; i++)
 	{
 		lamps[i].Cleanup();

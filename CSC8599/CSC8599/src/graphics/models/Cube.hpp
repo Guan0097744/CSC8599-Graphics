@@ -12,10 +12,8 @@ public:
 
 	Material material;
 
-	Cube() {}
-
-	Cube(Material material, glm::vec3 pos, glm::vec3 size) :
-		material(material), pos(pos), size(size) {}
+	Cube(glm::vec3 pos = glm::vec3(0.0f), glm::vec3 size = glm::vec3(1.0f)) :
+		 Model(pos, size) {}
 
 	void Init()
 	{
@@ -67,42 +65,12 @@ public:
 		};
 
 		std::vector<unsigned int> indices(numVertices);
-		for (unsigned int i = 0; i < numVertices; i++)
+		for (int i = 0; i < numVertices; i++)
 		{
 			indices[i] = i;
 		}
 
-		/*Texture tex0("assets/takagi.jpg", "texture0");
-		tex0.Load();
-		Texture tex1("assets/takagi2.jpg", "texture1");
-		tex1.Load();
-		Texture tex2("assets/container2.png", "material.diffuse");
-		tex2.Load();
-		Texture tex3("assets/container2_specular.png", "material.specular");
-		tex3.Load();*/
-
-		Texture defDiffTex("assets/red.png", "material.diffuse");
-		Texture defSpecTex("assets/red.png", "material.specular");
-		defDiffTex.Load();
-		defSpecTex.Load();
-
-		//meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices, { tex0, tex1 }));
-		//meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices, { tex2, tex3 }));
-		meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices, { defDiffTex, defSpecTex }));
-	}
-
-	void Render(Shader shader)
-	{
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, pos);
-		//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f));
-		model = glm::scale(model, size);
-		shader.SetMat4("model", model);
-
-		shader.Set3Float("material.ambient", material.ambient);
-		shader.SetFloat("material.shininess", material.shininess);
-
-		Model::Render(shader);
+		meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices));
 	}
 };
 

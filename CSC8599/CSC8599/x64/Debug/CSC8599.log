@@ -1,6 +1,13 @@
-﻿  main.cpp
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Cube.hpp(70,30): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(129,27): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(130,15): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿  Mesh.cpp
+  Model.cpp
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Mesh.cpp(70,65): warning C4267:  'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(53,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(60,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(73,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(108,20): warning C4018:  '<': signed/unsigned mismatch
+  main.cpp
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(111,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(114,27): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(115,15): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
   CSC8599.vcxproj -> C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe

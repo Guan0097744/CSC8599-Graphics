@@ -3,8 +3,8 @@
 struct Material
 {
 	vec3 ambient;
-	sampler2D diffuse;
-	sampler2D specular;
+	vec3 diffuse;
+	vec3 specular;
 	float shininess;
 };
 
@@ -49,6 +49,8 @@ struct SpotLight
 	vec3 specular;
 };
 
+uniform sampler2D diffuse0;
+uniform sampler2D specular0;
 uniform DirLight dirLight;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
@@ -71,8 +73,8 @@ void main()
 {
 	vec3 norm		= normalize(normal);
 	vec3 viewDir	= normalize(viewPos - fragPos);
-	vec3 diffMap	= texture(material.diffuse, texCoord).rgb;
-	vec3 specMap	= texture(material.specular, texCoord).rgb;
+	vec3 diffMap	= texture(diffuse0, texCoord).rgb;
+	vec3 specMap	= texture(specular0, texCoord).rgb;
 
 	vec3 result;
 
