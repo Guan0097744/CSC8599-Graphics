@@ -21,9 +21,9 @@ public:
 	glm::vec3 pos;
 	glm::vec3 size;
 
-	Model(glm::vec3 pos = glm::vec3(0.0f), glm::vec3 size = glm::vec3(1.0f));
+	Model(glm::vec3 pos = glm::vec3(0.0f), glm::vec3 size = glm::vec3(1.0f), bool noTex = false);
 
-	void Init();
+	virtual void Init() {};
 	void LoadModel(std::string path);
 	void Render(Shader& shader);
 	void Cleanup();
@@ -32,6 +32,7 @@ protected:
 	std::string directory;
 	std::vector<Mesh> meshes;
 	std::vector<Texture> texsLoaded;
+	bool noTex;
 
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);

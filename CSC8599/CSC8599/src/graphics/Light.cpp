@@ -5,9 +5,10 @@ void DirLight::Render(Shader shader)
 	std::string name = "dirLight";
 
 	shader.Set3Float(name + ".direction", direction);
-	shader.Set3Float(name + ".ambient", ambient);
-	shader.Set3Float(name + ".diffuse", diffuse);
-	shader.Set3Float(name + ".specular", specular);
+
+	shader.Set4Float(name + ".ambient", ambient);
+	shader.Set4Float(name + ".diffuse", diffuse);
+	shader.Set4Float(name + ".specular", specular);
 }
 
 void PointLight::Render(int index, Shader shader)
@@ -20,9 +21,9 @@ void PointLight::Render(int index, Shader shader)
 	shader.SetFloat(name + ".linear", linear);
 	shader.SetFloat(name + ".quadratic", quadratic);
 
-	shader.Set3Float(name + ".ambient", ambient);
-	shader.Set3Float(name + ".diffuse", diffuse);
-	shader.Set3Float(name + ".specular", specular);
+	shader.Set4Float(name + ".ambient", ambient);
+	shader.Set4Float(name + ".diffuse", diffuse);
+	shader.Set4Float(name + ".specular", specular);
 }
 
 void SpotLight::Render(int index, Shader shader)
@@ -39,7 +40,7 @@ void SpotLight::Render(int index, Shader shader)
 	shader.SetFloat(name + ".linear", linear);
 	shader.SetFloat(name + ".quadratic", quadratic);
 
-	shader.Set3Float(name + ".ambient", ambient);
-	shader.Set3Float(name + ".diffuse", diffuse);
-	shader.Set3Float(name + ".specular", specular);
+	shader.Set4Float(name + ".ambient", ambient);
+	shader.Set4Float(name + ".diffuse", diffuse);
+	shader.Set4Float(name + ".specular", specular);
 }

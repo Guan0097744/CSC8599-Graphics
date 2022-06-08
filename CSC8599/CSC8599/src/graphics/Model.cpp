@@ -1,26 +1,22 @@
 #include "Model.h"
 
-Model::Model(glm::vec3 pos, glm::vec3 size) :
-	pos(pos), size(size)
+Model::Model(glm::vec3 pos, glm::vec3 size, bool noTex) :
+	pos(pos), size(size), noTex(noTex)
 {
 
-}
-
-void Model::Init()
-{
 }
 
 void Model::LoadModel(std::string path)
 {
 	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl << "Could not load model at" << path << std::endl;
 		return;
 	}
-	directory = path.substr(0, path.find_last_of('/'));
+	directory = path.substr(0, path.find_last_of("/"));
 
 	ProcessNode(scene->mRootNode, scene);
 }
@@ -108,7 +104,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	for (int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
-		for (int j = 0; j < face.mIndices[j]; j++)
+		for (int j = 0; j < face.mNumIndices; j++)
 		{
 			indices.push_back(face.mIndices[j]);
 		}
@@ -116,6 +112,19 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 	// Process material
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+	if (noTex)
+	{
+		// Diffuse color
+		aiColor4D diff(1.0f);
+		aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diff);
+
+		// Specular color
+		aiColor4D spec(1.0f);
+		aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &spec);
+
+		return Mesh(vertices, indices, diff, spec);
+	}
 
 	// Diffuse maps
 	std::vector<Texture> diffuseMaps = LoadTextures(material, aiTextureType_DIFFUSE);

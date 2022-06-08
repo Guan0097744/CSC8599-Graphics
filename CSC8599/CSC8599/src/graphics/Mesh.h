@@ -25,12 +25,18 @@ class Mesh
 public:
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	unsigned int VAO;
-
 	std::vector<Texture> textures;
 
-	Mesh();
+	// Material diffuse value
+	aiColor4D diffuse;
+	// Material specular value
+	aiColor4D specular;
+
+	unsigned int VAO;
+
+	Mesh() {};
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures = {});
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, aiColor4D diffuse, aiColor4D specular);
 
 	void Render(Shader& shader);
 
@@ -38,6 +44,7 @@ public:
 
 private:
 	unsigned int VBO, EBO;
+	bool noTex;
 
 	void Setup();
 };

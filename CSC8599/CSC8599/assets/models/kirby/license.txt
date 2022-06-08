@@ -1,0 +1,11 @@
+Model Information:
+* title:	Kirby vending machine - FanArt
+* source:	https://sketchfab.com/3d-models/kirby-vending-machine-fanart-20b12623ecee4e43ab00f14a0b50449c
+* author:	PONTAN1111 (https://sketchfab.com/PONTAN1111)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Kirby vending machine - FanArt" (https://sketchfab.com/3d-models/kirby-vending-machine-fanart-20b12623ecee4e43ab00f14a0b50449c) by PONTAN1111 (https://sketchfab.com/PONTAN1111) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
