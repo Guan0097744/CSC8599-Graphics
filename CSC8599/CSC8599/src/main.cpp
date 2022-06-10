@@ -79,10 +79,11 @@ int main()
 	Shader shader("assets/object_vs.glsl", "assets/object_fs.glsl");
 	Shader lampShader("assets/object_vs.glsl", "assets/lamp_fs.glsl");
 
-	Model m(glm::vec3(0.0f, 0.0f, -0.5f), glm::vec3(0.05f), true);
+	Model m(glm::vec3(0.0f, 0.0f, -0.5f), glm::vec3(0.05f));
+	//m.LoadModel("assets/models/nanosuit/nanosuit.obj");
 	//m.LoadModel("assets/models/kirby/scene.gltf");
-	//m.LoadModel("assets/models/kirby2/Kirby.fbx");
-	m.LoadModel("assets/models/gun/scene.gltf");
+	m.LoadModel("assets/models/kirby2/Kirby.fbx");
+	//m.LoadModel("assets/models/gun/scene.gltf");
 	//m.LoadModel("assets/models/shiba/scene.gltf");
 
 	glm::vec3 pointLightPositions[] = {

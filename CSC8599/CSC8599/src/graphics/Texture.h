@@ -15,14 +15,17 @@ public:
 	Texture(std::string dir, std::string path, aiTextureType type);
 
 	void Generate();
-	void Load(bool flip = true);
+	void Load(bool flip = true, GLint wrapMode = GL_REPEAT, GLint magFilterMode = GL_LINEAR, GLint minFilterMode = GL_LINEAR_MIPMAP_LINEAR);
+	void LoadFromAssimp(const aiTexture* aiTex, GLint wrapMode = GL_REPEAT, GLint magFilterMode = GL_LINEAR, GLint minFilterMode = GL_LINEAR_MIPMAP_LINEAR);
 
 	void Bind();
 
-	unsigned int GetId()		{ return id; }
-	aiTextureType GetTexType()	{ return type; }
-	std::string GetDir()		{ return dir; }
-	std::string GetPath()		{ return path; }
+	unsigned int GetId()			{ return id; }
+	void SetId(unsigned int texId)	{ id = texId; }
+
+	aiTextureType GetTexType()		{ return type; }
+	std::string GetDir()			{ return dir; }
+	std::string GetPath()			{ return path; }
 
 private:
 	unsigned int	id;

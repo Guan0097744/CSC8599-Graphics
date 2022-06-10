@@ -127,11 +127,11 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	}
 
 	// Diffuse maps
-	std::vector<Texture> diffuseMaps = LoadTextures(material, aiTextureType_DIFFUSE);
+	std::vector<Texture> diffuseMaps = LoadTextures(material, aiTextureType_DIFFUSE, scene);
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
 	// Specular maps
-	std::vector<Texture> specularMaps = LoadTextures(material, aiTextureType_SPECULAR);
+	std::vector<Texture> specularMaps = LoadTextures(material, aiTextureType_SPECULAR, scene);
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
 	return Mesh(vertices, indices, textures);
@@ -164,6 +164,54 @@ std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type)
 			// Not loaded yet
 			Texture tex(directory, str.C_Str(), type);
 			tex.Load(false);
+			textures.push_back(tex);
+			texsLoaded.push_back(tex);
+		}
+	}
+
+	return textures;
+}
+
+std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type, const aiScene* scene)
+{
+
+	std::vector<Texture> textures;
+
+	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+	{
+		aiString str;
+		mat->GetTexture(type, i, &str);
+		std::cout << str.C_Str() << std::endl;
+
+		// Prevent duplicate load
+		bool skip = false;
+		for (unsigned int j = 0; j < texsLoaded.size(); j++)
+		{
+			if (std::strcmp(texsLoaded[j].GetPath().data(), str.C_Str()) == 0)
+			{
+				textures.push_back(texsLoaded[j]);
+				skip = true;
+				break;
+			}
+		}
+
+		if (!skip)
+		{
+			// Not loaded yet
+			Texture tex(directory, str.C_Str(), type);
+			
+			// Does .fbx have embedded texture
+			auto aitexture = scene->GetEmbeddedTexture(str.C_Str());
+			if (aitexture != nullptr)
+			{
+				tex.Load(aitexture);
+			}
+			else
+			{
+				tex.Load(false);
+			}
+
+			//tex.Load(false);
 			textures.push_back(tex);
 			texsLoaded.push_back(tex);
 		}
