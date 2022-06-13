@@ -1,2 +1,14 @@
-﻿  Texture.cpp
+﻿  Mesh.cpp
+  Model.cpp
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Mesh.cpp(86,65): warning C4267:  'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(49,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(56,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(69,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(104,20): warning C4018:  '<': signed/unsigned mismatch
+  Texture.cpp
+  main.cpp
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(107,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(127,27): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(128,15): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
   CSC8599.vcxproj -> C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe

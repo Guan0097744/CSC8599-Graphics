@@ -1,5 +1,6 @@
 #include "Model.h"
 
+
 Model::Model(glm::vec3 pos, glm::vec3 size, bool noTex) :
 	pos(pos), size(size), noTex(noTex)
 {
@@ -13,7 +14,7 @@ void Model::LoadModel(std::string path)
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
-		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl << "Could not load model at" << path << std::endl;
+		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl << "Could not load model at " << path << std::endl;
 		return;
 	}
 	directory = path.substr(0, path.find_last_of("/"));

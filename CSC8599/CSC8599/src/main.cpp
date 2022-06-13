@@ -31,7 +31,10 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(double dt);
 
-// settings
+//============================================================================================//
+//Settings
+//============================================================================================//
+
 unsigned int SCR_WIDTH = 1000;
 unsigned int SCR_HEIGHT = 1000;
 
@@ -40,7 +43,8 @@ Scene scene;
 float mixVal = 0.5f;
 
 glm::mat4 mouseTransform = glm::mat4(1.0f);
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
+
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
@@ -73,18 +77,31 @@ int main()
 	}
 
 	scene.SetParametres();
-
 	glEnable(GL_DEPTH_TEST);
+
+
+	//============================================================================================//
+	//SHADERS
+	//============================================================================================//
 
 	Shader shader("assets/object_vs.glsl", "assets/object_fs.glsl");
 	Shader lampShader("assets/object_vs.glsl", "assets/lamp_fs.glsl");
 
-	Model m(glm::vec3(0.0f, 0.0f, -0.5f), glm::vec3(0.05f));
-	//m.LoadModel("assets/models/nanosuit/nanosuit.obj");
-	//m.LoadModel("assets/models/kirby/scene.gltf");
-	m.LoadModel("assets/models/kirby2/Kirby.fbx");
+	//============================================================================================//
+	//MODELS
+	//============================================================================================//
+
+	Model m(glm::vec3(0.0f), glm::vec3(0.05f));
 	//m.LoadModel("assets/models/gun/scene.gltf");
-	//m.LoadModel("assets/models/shiba/scene.gltf");
+	//m.LoadModel("assets/models/kirby/scene.gltf");
+	//m.LoadModel("assets/models/kirby2/Kirby.fbx");
+	//m.LoadModel("assets/models/nanosuit/nanosuit.obj");
+	//m.LoadModel("assets/models/pbr_helmet/scene.gltf");
+	m.LoadModel("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
+
+	//============================================================================================//
+	//LIGHTS
+	//============================================================================================//
 
 	glm::vec3 pointLightPositions[] = {
 			glm::vec3(0.7f,  0.2f,  2.0f),

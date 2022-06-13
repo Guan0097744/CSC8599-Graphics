@@ -11,7 +11,6 @@
 class Texture
 {
 public:
-	Texture() {};
 	Texture(std::string dir, std::string path, aiTextureType type);
 
 	void Generate();

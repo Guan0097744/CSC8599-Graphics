@@ -20,45 +20,52 @@ enum class CameraDirection
 class Camera 
 {
 public:
+
+	//============================================================================================//
+	//Camera variables
+	//============================================================================================//
+
 	// position
 	glm::vec3 cameraPos;
 
-	// camera directional values
+	//============================================================================================//
+	//Camera directional values
+	//============================================================================================//
+
 	glm::vec3 cameraFront;
 	glm::vec3 cameraUp;
 	glm::vec3 cameraRight;
-
 	glm::vec3 worldUp;
 
-	// camera rotational values
-	float yaw; // x-axis
-	float pitch; // y-axis
+	//============================================================================================//
+	//Camera rotational values
+	//============================================================================================//
 
-	// camera movement values
+	// x-axis
+	float yaw;
+	// y-axis
+	float pitch;
+
+	//============================================================================================//
+	//Camera movement values
+	//============================================================================================//
+
 	float speed;
 	float sensitivity;
 	float zoom;
 
-	// default and initialize with position
+	//============================================================================================//
+	//Utility
+	//============================================================================================//
+
 	Camera(glm::vec3 position);
-
-	// change camera direction (mouse movement)
 	void UpdateCameraDirection(double dx, double dy);
-
-	// change camera position in certain direction (keyboard)
 	void UpdateCameraPos(CameraDirection direction, double dt);
-
-	// change camera zoom (scroll wheel)
 	void UpdateCameraZoom(double dy);
-
-	// get view matrix for camera
 	glm::mat4 GetViewMatrix();
-
-	// get zoom value for camera
 	float GetZoom();
 
 private:
-	// change camera directional vectors based on movement
 	void UpdateCameraVectors();
 };
 

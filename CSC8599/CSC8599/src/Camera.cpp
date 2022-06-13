@@ -1,22 +1,32 @@
 #include "Camera.h"
 
-// default and initialize with position
+/**
+ * @brief Default and initialize with position
+ * @param position 
+*/
 Camera::Camera(glm::vec3 position): 
 	cameraPos(position),
 	worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
-	yaw(-90.0f),
+	yaw(0.0f),
 	pitch(0.0f),
 	speed(2.0f),
-	sensitivity(0.2f),
+	sensitivity(0.5f),
 	zoom(45.0f),
-	cameraFront(glm::vec3(0.0f, 0.0f, -1.0f))
+	cameraFront(glm::vec3(1.0f, 0.0f, 0.0f))
 {
 	UpdateCameraVectors();
 }
 
-// change camera direction (mouse movement)
+/**
+ * @brief Change camera direction (mouse movement)
+ * @param dx 
+ * @param dy 
+*/
 void Camera::UpdateCameraDirection(double dx, double dy) 
 {
+	dx *= sensitivity * 0.1f;
+	dy *= sensitivity * 0.1f;
+
 	yaw += dx;
 	pitch += dy;
 
@@ -32,7 +42,11 @@ void Camera::UpdateCameraDirection(double dx, double dy)
 	UpdateCameraVectors();
 }
 
-// change camera position in certain direction (keyboard)
+/**
+ * @brief Change camera position in certain direction (keyboard)
+ * @param direction 
+ * @param dt 
+*/
 void Camera::UpdateCameraPos(CameraDirection direction, double dt) 
 {
 	float velocity = (float)dt * speed;
@@ -60,7 +74,10 @@ void Camera::UpdateCameraPos(CameraDirection direction, double dt)
 	}
 }
 
-// change camera zoom (scroll wheel)
+/**
+ * @brief Change camera zoom (scroll wheel)
+ * @param dy 
+*/
 void Camera::UpdateCameraZoom(double dy) 
 {
 	if (zoom >= 1.0f && zoom <= 45.0f) 
@@ -77,21 +94,27 @@ void Camera::UpdateCameraZoom(double dy)
 	}
 }
 
-
-
-// get view matrix for camera
+/**
+ * @brief Get view matrix for camera
+ * @return 
+*/
 glm::mat4 Camera::GetViewMatrix() 
 {
 	return glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 }
 
-// get zoom value for camera
+/**
+ * @brief Get zoom value for camera
+ * @return 
+*/
 float Camera::GetZoom() 
 {
 	return zoom;
 }
 
-// change camera directional vectors based on movement
+/**
+ * @brief Change camera directional vectors based on movement
+*/
 void Camera::UpdateCameraVectors() 
 {
 	glm::vec3 direction;
