@@ -137,40 +137,40 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	return Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type)
-{
-	std::vector<Texture> textures;
-
-	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-	{
-		aiString str;
-		mat->GetTexture(type, i, &str);
-		std::cout << str.C_Str() << std::endl;
-
-		// Prevent duplicate load
-		bool skip = false;
-		for (unsigned int j = 0; j < texsLoaded.size(); j++)
-		{
-			if (std::strcmp(texsLoaded[j].GetPath().data(), str.C_Str()) == 0)
-			{
-				textures.push_back(texsLoaded[j]);
-				skip = true;
-				break;
-			}
-		}
-
-		if (!skip)
-		{
-			// Not loaded yet
-			Texture tex(directory, str.C_Str(), type);
-			tex.Load(false);
-			textures.push_back(tex);
-			texsLoaded.push_back(tex);
-		}
-	}
-
-	return textures;
-}
+//std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type)
+//{
+//	std::vector<Texture> textures;
+//
+//	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+//	{
+//		aiString str;
+//		mat->GetTexture(type, i, &str);
+//		std::cout << str.C_Str() << std::endl;
+//
+//		// Prevent duplicate load
+//		bool skip = false;
+//		for (unsigned int j = 0; j < texsLoaded.size(); j++)
+//		{
+//			if (std::strcmp(texsLoaded[j].GetPath().data(), str.C_Str()) == 0)
+//			{
+//				textures.push_back(texsLoaded[j]);
+//				skip = true;
+//				break;
+//			}
+//		}
+//
+//		if (!skip)
+//		{
+//			// Not loaded yet
+//			Texture tex(directory, str.C_Str(), type);
+//			tex.Load(false);
+//			textures.push_back(tex);
+//			texsLoaded.push_back(tex);
+//		}
+//	}
+//
+//	return textures;
+//}
 
 std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type, const aiScene* scene)
 {
@@ -204,7 +204,7 @@ std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type, co
 			auto aitexture = scene->GetEmbeddedTexture(str.C_Str());
 			if (aitexture != nullptr)
 			{
-				tex.Load(aitexture);
+				tex.LoadFromAssimp(aitexture);
 			}
 			else
 			{

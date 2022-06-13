@@ -36,7 +36,7 @@ protected:
 
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	std::vector<Texture> LoadTextures(aiMaterial* mat, aiTextureType type);
+	//std::vector<Texture> LoadTextures(aiMaterial* mat, aiTextureType type);
 	std::vector<Texture> LoadTextures(aiMaterial* mat, aiTextureType type, const aiScene* scene);
 };
 

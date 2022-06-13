@@ -54,11 +54,12 @@ void Texture::Load(bool flip, GLint wrapMode, GLint magFilterMode, GLint minFilt
 	stbi_image_free(data);
 }
 
-void Texture::LoadFromAssimp(const aiTexture* aiTex, GLint wrapMode, GLint magFilterMode, GLint minFilterMode)
+void Texture::LoadFromAssimp(const aiTexture* aiTex, bool flip, GLint wrapMode, GLint magFilterMode, GLint minFilterMode)
 {
 	if (aiTex == nullptr)
 		return;
 
+	stbi_set_flip_vertically_on_load(flip);
 	int width, height, nChannels;
 	unsigned char* image_data = nullptr;
 	if (aiTex->mHeight == 0)

@@ -16,7 +16,7 @@ public:
 
 	void Generate();
 	void Load(bool flip = true, GLint wrapMode = GL_REPEAT, GLint magFilterMode = GL_LINEAR, GLint minFilterMode = GL_LINEAR_MIPMAP_LINEAR);
-	void LoadFromAssimp(const aiTexture* aiTex, GLint wrapMode = GL_REPEAT, GLint magFilterMode = GL_LINEAR, GLint minFilterMode = GL_LINEAR_MIPMAP_LINEAR);
+	void LoadFromAssimp(const aiTexture* aiTex, bool flip = false, GLint wrapMode = GL_REPEAT, GLint magFilterMode = GL_LINEAR, GLint minFilterMode = GL_LINEAR_MIPMAP_LINEAR);
 
 	void Bind();
 
