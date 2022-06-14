@@ -72,6 +72,11 @@ public:
 
 		meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices));
 	}
+
+	void Render(Shader shader, float dt)
+	{
+		Model::Render(shader, dt);
+	}
 };
 
 #endif

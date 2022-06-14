@@ -15,9 +15,12 @@
 
 #include "Mesh.h"
 
+#include "../physics/Rigidbody.h"
+
 class Model
 {
 public:
+	RigidBody rb;
 	glm::vec3 pos;
 	glm::vec3 size;
 
@@ -25,7 +28,7 @@ public:
 
 	virtual void Init() {};
 	void LoadModel(std::string path);
-	void Render(Shader& shader);
+	void Render(Shader& shader, float dt, bool setModel = true);
 	void Cleanup();
 
 protected:

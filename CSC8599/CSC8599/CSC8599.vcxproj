@@ -154,6 +154,7 @@
     <ClCompile Include="src\io\Mouse.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
+    <ClCompile Include="src\physics\Rigidbody.cpp" />
     <ClCompile Include="src\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,11 +170,15 @@
     <ClInclude Include="src\graphics\Mesh.h" />
     <ClInclude Include="src\graphics\Model.h" />
     <ClInclude Include="src\graphics\models\Cube.hpp" />
+    <ClInclude Include="src\graphics\models\Gun.hpp" />
     <ClInclude Include="src\graphics\models\Lamp.hpp" />
+    <ClInclude Include="src\graphics\models\Sphere.hpp" />
     <ClInclude Include="src\graphics\Texture.h" />
     <ClInclude Include="src\io\Keyboard.h" />
     <ClInclude Include="src\io\Mouse.h" />
     <ClInclude Include="src\graphics\Shader.h" />
+    <ClInclude Include="src\physics\Environment.h" />
+    <ClInclude Include="src\physics\Rigidbody.h" />
     <ClInclude Include="src\Scene.h" />
   </ItemGroup>
   <ItemGroup>

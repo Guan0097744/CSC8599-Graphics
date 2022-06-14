@@ -2,9 +2,9 @@
 
 
 Model::Model(glm::vec3 pos, glm::vec3 size, bool noTex) :
-	pos(pos), size(size), noTex(noTex)
+	/*pos(pos), */size(size), noTex(noTex)
 {
-
+	rb.pos = pos;
 }
 
 void Model::LoadModel(std::string path)
@@ -22,12 +22,18 @@ void Model::LoadModel(std::string path)
 	ProcessNode(scene->mRootNode, scene);
 }
 
-void Model::Render(Shader& shader)
+void Model::Render(Shader& shader, float dt, bool setModel)
 {
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, pos);
-	model = glm::scale(model, size);
-	shader.SetMat4("model", model);
+	rb.Update(dt);
+
+	if (setModel)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, rb.pos);
+		model = glm::scale(model, size);
+		shader.SetMat4("model", model);
+	}
+
 	shader.SetFloat("material.shininess", 0.5f);
 
 	for (Mesh mesh : meshes)

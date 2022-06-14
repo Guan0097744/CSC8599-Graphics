@@ -27,11 +27,11 @@ public:
 		pointLight({ pos, constant, linear, quadratic, ambient, diffuse, specular }),
 		Cube(pos, size) {}
 
-	void Render(Shader shader)
+	void Render(Shader shader, float dt)
 	{
 		shader.Set3Float("lightColor", lightColor);
 
-		Cube::Render(shader);
+		Cube::Render(shader, dt);
 	}
 };
 

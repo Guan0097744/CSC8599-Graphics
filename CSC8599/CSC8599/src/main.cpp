@@ -27,6 +27,8 @@
 
 #include "graphics/models/Cube.hpp"
 #include "graphics/models/Lamp.hpp"
+#include "graphics/models/Gun.hpp"
+#include "graphics/models/Sphere.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(double dt);
@@ -43,7 +45,7 @@ Scene scene;
 float mixVal = 0.5f;
 
 glm::mat4 mouseTransform = glm::mat4(1.0f);
-Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
+Camera Camera::defaultCamera(glm::vec3(0.0f, 0.0f, 0.0f));
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -91,13 +93,17 @@ int main()
 	//MODELS
 	//============================================================================================//
 
-	Model m(glm::vec3(0.0f), glm::vec3(0.05f));
+	//Model m(glm::vec3(0.0f), glm::vec3(0.03f), true);
 	//m.LoadModel("assets/models/gun/scene.gltf");
 	//m.LoadModel("assets/models/kirby/scene.gltf");
 	//m.LoadModel("assets/models/kirby2/Kirby.fbx");
 	//m.LoadModel("assets/models/nanosuit/nanosuit.obj");
 	//m.LoadModel("assets/models/pbr_helmet/scene.gltf");
-	m.LoadModel("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
+	//m.LoadModel("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
+	//Gun g;
+	//g.LoadModel("assets/models/gun/scene.gltf");
+	Sphere sphere(glm::vec3(0.0f), glm::vec3(0.25f));
+	sphere.Init();
 
 	//============================================================================================//
 	//LIGHTS
@@ -125,14 +131,16 @@ int main()
 		lamps[i].Init();
 	}
 
-	SpotLight spotLight = { camera.cameraPos, camera.cameraFront, 
+	SpotLight spotLight = { Camera::defaultCamera.cameraPos, Camera::defaultCamera.cameraFront,
 		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(20.0f)),	// Cut off
 		1.0f, 0.07f, 0.032f,	// Attenuation constants
 		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), glm::vec4(1.0f), glm::vec4(1.0f) };
 
-	/* 
-		Render loop
-	*/
+
+	//============================================================================================//
+	//Render loop
+	//============================================================================================//
+
 	while (!scene.ShouldClose())
 	{
 		double currentTime = glfwGetTime();
@@ -148,11 +156,11 @@ int main()
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
-		view = camera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(camera.GetZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		view = Camera::defaultCamera.GetViewMatrix();
+		projection = glm::perspective(glm::radians(Camera::defaultCamera.GetZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		shader.Activate();
-		shader.Set3Float("viewPos", camera.cameraPos);
+		shader.Set3Float("viewPos", Camera::defaultCamera.cameraPos);
 
 		/*dirLight.direction = glm::vec3(
 			glm::rotate(model, glm::radians(0.5f), glm::vec3(1.0f, 0.0f, 0.0f)) *
@@ -165,16 +173,18 @@ int main()
 		}
 		shader.SetInt("numPointLights", 4);
 
-		spotLight.position = camera.cameraPos;
-		spotLight.direction = camera.cameraFront;
+		/*spotLight.position = Camera::defaultCamera.cameraPos;
+		spotLight.direction = Camera::defaultCamera.cameraFront;
 		spotLight.Render(0, shader);
-		shader.SetInt("numSpotLights", 1);
+		shader.SetInt("numSpotLights", 1);*/
 
 		shader.SetMat4("model", model);
 		shader.SetMat4("view", view);
 		shader.SetMat4("projection", projection);
 
-		m.Render(shader);
+		//m.Render(shader);
+		//g.Render(shader);
+		sphere.Render(shader, deltaTime);
 
 		lampShader.Activate();
 		lampShader.SetMat4("model", model);
@@ -182,14 +192,16 @@ int main()
 		lampShader.SetMat4("projection", projection);
 		for (int i = 0; i < 4; i++)
 		{
-			lamps[i].Render(lampShader);
+			lamps[i].Render(lampShader, deltaTime);
 		}
 
 		// GLFW: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		scene.NewFrame();
 	}
 
-	m.Cleanup();
+	//m.Cleanup();
+	//g.Cleanup();
+	sphere.Cleanup();
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -201,7 +213,12 @@ int main()
 	return 0;
 }
 
-// GLFW: whenever the window size changed (by OS or user resize) this callback function executes
+/**
+ * @brief GLFW: whenever the window size changed (by OS or user resize) this callback function executes
+ * @param window 
+ * @param width 
+ * @param height 
+*/
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// Make sure the viewport matches the new window dimensions; note that width and 
@@ -211,7 +228,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	SCR_HEIGHT = height;
 }
 
-// Process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+/**
+ * @brief Process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+ * @param dt 
+*/
 void processInput(double dt)
 {
 	if (Keyboard::Key(GLFW_KEY_ESCAPE))
@@ -237,38 +257,38 @@ void processInput(double dt)
 	// Move camera
 	if (Keyboard::Key(GLFW_KEY_W))
 	{
-		camera.UpdateCameraPos(CameraDirection::FORWARD, dt);
+		Camera::defaultCamera.UpdateCameraPos(CameraDirection::FORWARD, dt);
 	}
 	if (Keyboard::Key(GLFW_KEY_S))
 	{
-		camera.UpdateCameraPos(CameraDirection::BACKWARD, dt);
+		Camera::defaultCamera.UpdateCameraPos(CameraDirection::BACKWARD, dt);
 	}
 	if (Keyboard::Key(GLFW_KEY_A))
 	{
-		camera.UpdateCameraPos(CameraDirection::LEFT, dt);
+		Camera::defaultCamera.UpdateCameraPos(CameraDirection::LEFT, dt);
 	}
 	if (Keyboard::Key(GLFW_KEY_D))
 	{
-		camera.UpdateCameraPos(CameraDirection::RIGHT, dt);
+		Camera::defaultCamera.UpdateCameraPos(CameraDirection::RIGHT, dt);
 	}
 	if (Keyboard::Key(GLFW_KEY_SPACE))
 	{
-		camera.UpdateCameraPos(CameraDirection::UP, dt);
+		Camera::defaultCamera.UpdateCameraPos(CameraDirection::UP, dt);
 	}
 	if (Keyboard::Key(GLFW_KEY_LEFT_SHIFT))
 	{
-		camera.UpdateCameraPos(CameraDirection::DOWN, dt);
+		Camera::defaultCamera.UpdateCameraPos(CameraDirection::DOWN, dt);
 	}
 
 	double dx = Mouse::GetDX();
 	double dy = Mouse::GetDY();
 	if (dx != 0 || dy != 0)
 	{
-		camera.UpdateCameraDirection(dx, dy);
+		Camera::defaultCamera.UpdateCameraDirection(dx, dy);
 	}
 	double scrollDy = Mouse::GetScrollDY();
 	if (scrollDy != 0)
 	{
-		camera.UpdateCameraZoom(scrollDy);
+		Camera::defaultCamera.UpdateCameraZoom(scrollDy);
 	}
 }

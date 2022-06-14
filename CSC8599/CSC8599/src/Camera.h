@@ -20,6 +20,7 @@ enum class CameraDirection
 class Camera 
 {
 public:
+	static Camera defaultCamera;
 
 	//============================================================================================//
 	//Camera variables
@@ -41,9 +42,9 @@ public:
 	//Camera rotational values
 	//============================================================================================//
 
-	// x-axis
-	float yaw;
 	// y-axis
+	float yaw;
+	// x-axis
 	float pitch;
 
 	//============================================================================================//
