@@ -9,6 +9,7 @@
 #include <sstream>
 #include <streambuf>
 #include <string>
+#include <stack>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -30,8 +31,11 @@
 #include "graphics/models/Gun.hpp"
 #include "graphics/models/Sphere.hpp"
 
+#include "physics/Environment.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(double dt);
+void LaunchedItem(float dt);
 
 //============================================================================================//
 //Settings
@@ -45,10 +49,12 @@ Scene scene;
 float mixVal = 0.5f;
 
 glm::mat4 mouseTransform = glm::mat4(1.0f);
-Camera Camera::defaultCamera(glm::vec3(0.0f, 0.0f, 0.0f));
+Camera Camera::defaultCamera(glm::vec3(-3.0f, 0.0f, -.0f));
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+SphereArray launchSpheres;
 
 int main() 
 {
@@ -102,8 +108,8 @@ int main()
 	//m.LoadModel("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
 	//Gun g;
 	//g.LoadModel("assets/models/gun/scene.gltf");
-	Sphere sphere(glm::vec3(0.0f), glm::vec3(0.25f));
-	sphere.Init();
+
+	launchSpheres.Init();
 
 	//============================================================================================//
 	//LIGHTS
@@ -116,19 +122,37 @@ int main()
 			glm::vec3(0.0f,  0.0f, -3.0f)
 	};
 
+	glm::vec4 ambient	= glm::vec4(0.05f, 0.05f, 0.05f, 1.0f);
+	glm::vec4 diffuse	= glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);
+	glm::vec4 specular	= glm::vec4(1.0f);
+	float constant		= 1.0f;
+	float linear		= 0.09f;
+	float quadratic		= 0.03f;
+
 	DirLight dirLight = { glm::vec3(-0.2f, -0.1f, -0.3f), 
 		glm::vec4(0.1f, 0.1f, 0.1f, 1.0f), 
 		glm::vec4(0.4f, 0.4f, 0.4f, 1.0f), 
 		glm::vec4(0.75f, 0.75f, 0.75f, 1.0f) 
 	};
 
-	Lamp lamps[4];
+	/*Lamp lamps[4];
 	for (int i = 0; i < 4; i++) {
 		lamps[i] = Lamp(glm::vec3(1.0f),
-			glm::vec4(0.05f, 0.05f, 0.05f, 1.0f), glm::vec4(0.8f, 0.8f, 0.8f, 1.0f), glm::vec4(1.0f),
-			1.0f, 0.07f, 0.032f,
+			ambient, diffuse, specular,
+			constant, linear, quadratic,
 			pointLightPositions[i], glm::vec3(0.25f));
 		lamps[i].Init();
+	}*/
+
+	LampArray lamps;
+	lamps.Init();
+	for (int i = 0; i < 4; i++) 
+	{
+		lamps.instances.push_back({
+			pointLightPositions[i],
+			constant, linear, quadratic,
+			ambient, diffuse, specular,
+			});
 	}
 
 	SpotLight spotLight = { Camera::defaultCamera.cameraPos, Camera::defaultCamera.cameraFront,
@@ -169,7 +193,7 @@ int main()
 
 		for (int i = 0; i < 4; i++)
 		{
-			lamps[i].pointLight.Render(i, shader);
+			lamps.instances[i].Render(i, shader);
 		}
 		shader.SetInt("numPointLights", 4);
 
@@ -184,16 +208,33 @@ int main()
 
 		//m.Render(shader);
 		//g.Render(shader);
-		sphere.Render(shader, deltaTime);
+
+		std::stack<int> removeObjects;
+		for (int i = 0; i < launchSpheres.instances.size(); i++)
+		{
+			if (glm::length(Camera::defaultCamera.cameraPos - launchSpheres.instances[i].pos) > 50.0f)
+			{
+				removeObjects.push(i);
+				continue;
+			}
+		}
+		for (int i = 0; i < removeObjects.size(); i++)
+		{
+			launchSpheres.instances.erase(launchSpheres.instances.begin() + removeObjects.top());
+			removeObjects.pop();
+		}
+
+		if (launchSpheres.instances.size() > 0)
+		{
+			launchSpheres.Render(shader, deltaTime);
+		}
 
 		lampShader.Activate();
 		lampShader.SetMat4("model", model);
 		lampShader.SetMat4("view", view);
 		lampShader.SetMat4("projection", projection);
-		for (int i = 0; i < 4; i++)
-		{
-			lamps[i].Render(lampShader, deltaTime);
-		}
+		
+		lamps.Render(lampShader, deltaTime);
 
 		// GLFW: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		scene.NewFrame();
@@ -201,12 +242,10 @@ int main()
 
 	//m.Cleanup();
 	//g.Cleanup();
-	sphere.Cleanup();
 
-	for (int i = 0; i < 4; i++)
-	{
-		lamps[i].Cleanup();
-	}
+	lamps.Cleanup();
+
+	launchSpheres.Cleanup();
 
 	glfwTerminate();
 
@@ -254,7 +293,10 @@ void processInput(double dt)
 		}
 	}
 
-	// Move camera
+	//============================================================================================//
+	//Move camera
+	//============================================================================================//
+
 	if (Keyboard::Key(GLFW_KEY_W))
 	{
 		Camera::defaultCamera.UpdateCameraPos(CameraDirection::FORWARD, dt);
@@ -291,4 +333,23 @@ void processInput(double dt)
 	{
 		Camera::defaultCamera.UpdateCameraZoom(scrollDy);
 	}
+
+
+	//============================================================================================//
+	//Apply force
+	//============================================================================================//
+
+	if (Keyboard::KeyWentDown(GLFW_KEY_L))
+	{
+		LaunchedItem(dt);
+	}
+}
+
+void LaunchedItem(float dt)
+{
+	RigidBody rb(1.0f, Camera::defaultCamera.cameraPos);
+	rb.TransferEnergy(100.0f, Camera::defaultCamera.cameraFront);
+	rb.ApplyImpulse(Camera::defaultCamera.cameraFront, 10000.0f, dt);
+	rb.ApplyAcceleration(Environment::gravity);
+	launchSpheres.instances.push_back(rb);
 }

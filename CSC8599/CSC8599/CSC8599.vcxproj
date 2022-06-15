@@ -154,6 +154,7 @@
     <ClCompile Include="src\io\Mouse.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
+    <ClCompile Include="src\physics\Environment.cpp" />
     <ClCompile Include="src\physics\Rigidbody.cpp" />
     <ClCompile Include="src\Scene.cpp" />
   </ItemGroup>
@@ -172,6 +173,7 @@
     <ClInclude Include="src\graphics\models\Cube.hpp" />
     <ClInclude Include="src\graphics\models\Gun.hpp" />
     <ClInclude Include="src\graphics\models\Lamp.hpp" />
+    <ClInclude Include="src\graphics\models\ModelArray.hpp" />
     <ClInclude Include="src\graphics\models\Sphere.hpp" />
     <ClInclude Include="src\graphics\Texture.h" />
     <ClInclude Include="src\io\Keyboard.h" />

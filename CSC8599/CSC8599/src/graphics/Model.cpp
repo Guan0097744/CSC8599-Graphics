@@ -1,10 +1,12 @@
 #include "Model.h"
 
+#include "../physics/Environment.h"
 
 Model::Model(glm::vec3 pos, glm::vec3 size, bool noTex) :
 	/*pos(pos), */size(size), noTex(noTex)
 {
 	rb.pos = pos;
+	//rb.acceleration = Environment::gravity;
 }
 
 void Model::LoadModel(std::string path)

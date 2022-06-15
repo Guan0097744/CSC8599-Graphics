@@ -31,11 +31,12 @@ public:
 	void Render(Shader& shader, float dt, bool setModel = true);
 	void Cleanup();
 
-protected:
 	std::string directory;
 	std::vector<Mesh> meshes;
 	std::vector<Texture> texsLoaded;
 	bool noTex;
+
+protected:
 
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);

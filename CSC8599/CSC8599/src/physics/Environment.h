@@ -6,7 +6,7 @@
 class Environment
 {
 public:
-
+	static glm::vec3 gravity;
 };
 
 #endif // !ENVIRONMENT_H

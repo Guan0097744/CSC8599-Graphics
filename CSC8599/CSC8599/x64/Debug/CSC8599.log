@@ -1,7 +1,12 @@
 ﻿  Model.cpp
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(56,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(63,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(76,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(111,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(114,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(58,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(65,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(78,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(113,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(116,21): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(171,27): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(172,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(344,16): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
   CSC8599.vcxproj -> C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe

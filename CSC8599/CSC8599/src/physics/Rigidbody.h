@@ -33,25 +33,38 @@ public:
 
     void Update(float dt);
 
-    // apply a force
-    void applyForce(glm::vec3 force);
-    void applyForce(glm::vec3 direction, float magnitude);
+    //============================================================================================//
+    //Apply a force
+    //============================================================================================//
 
-    // apply an acceleration (remove redundancy of dividing by mass)
-    void applyAcceleration(glm::vec3 acceleration);
-    void applyAcceleration(glm::vec3 direction, float magnitude);
+    void ApplyForce(glm::vec3 force);
+    void ApplyForce(glm::vec3 direction, float magnitude);
 
-    // apply force over time
-    void applyImpulse(glm::vec3 force, float dt);
-    void applyImpulse(glm::vec3 direction, float magnitude, float dt);
+    //============================================================================================//
+    //Apply force over time
+    //============================================================================================//
 
-    // transfer potential or kinetic energy from another object
-    void transferEnergy(float joules, glm::vec3 direction);
+    void ApplyImpulse(glm::vec3 force, float dt);
+    void ApplyImpulse(glm::vec3 direction, float magnitude, float dt);
 
-    /*
-        collisions
-    */
-    void handleCollision(RigidBody* inst, glm::vec3 norm);
+    //============================================================================================//
+    //Apply an acceleration (remove redundancy of dividing by mass)
+    //============================================================================================//
+
+    void ApplyAcceleration(glm::vec3 a);
+    void ApplyAcceleration(glm::vec3 direction, float magnitude);
+
+    //============================================================================================//
+    //Transfer potential or kinetic energy from another object
+    //============================================================================================//
+
+    void TransferEnergy(float joules, glm::vec3 direction);
+
+    //============================================================================================//
+    //Collisions
+    //============================================================================================//
+
+    void HandleCollision(RigidBody* inst, glm::vec3 norm);
 };
 
 #endif
