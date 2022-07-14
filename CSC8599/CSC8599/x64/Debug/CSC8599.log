@@ -1,12 +1,20 @@
-﻿  Model.cpp
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(58,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(65,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(78,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(113,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(116,21): warning C4018: '<': signed/unsigned mismatch
-  main.cpp
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(171,27): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(172,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\main.cpp(344,16): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Generating Code...
+﻿  SceneManager.cpp
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(68,49): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(91,76): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(196,1): warning C4244: '+=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(241,1): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(242,35): warning C4018: '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(259,1): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(300,25): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\VertexBuffer.hpp(122,1): warning C4312: 'type cast': conversion from 'GLint' to 'void *' of greater size
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\FrameBuffer.hpp(143,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(192,37): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(335,33): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(394,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(64,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(70,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(113,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\SceneManager.cpp(55,20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\SceneManager.cpp(56,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\SceneManager.cpp(236,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   CSC8599.vcxproj -> C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe

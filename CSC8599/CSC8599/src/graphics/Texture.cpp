@@ -3,27 +3,33 @@
 #include <iostream>
 
 
+Texture::Texture(std::string name)
+	:name(name),type(aiTextureType_NONE)
+{
+	Generate();
+}
+
 Texture::Texture(std::string dir, std::string path, aiTextureType type) :
 	dir(dir), path(path), type(type)
 {
 	Generate();
 }
 
-
 void Texture::Generate()
 {
 	glGenTextures(1, &id);
 }
 
-void Texture::Load(bool flip, GLint wrapMode, GLint magFilterMode, GLint minFilterMode)
+void Texture::Load(bool flip)
 {
 	stbi_set_flip_vertically_on_load(flip);
 
 	int width, height, nChannels;
+
 	unsigned char* data = stbi_load((dir + "/" + path).c_str(), &width, &height, &nChannels, 0);
 
 	GLenum colorMode = GL_RGB;
-	switch (nChannels)
+	switch (nChannels) 
 	{
 	case 1:
 		colorMode = GL_RED;
@@ -31,30 +37,28 @@ void Texture::Load(bool flip, GLint wrapMode, GLint magFilterMode, GLint minFilt
 	case 4:
 		colorMode = GL_RGBA;
 		break;
-	}
+	};
 
-	if(data)
+	if (data) 
 	{
 		glBindTexture(GL_TEXTURE_2D, id);
 		glTexImage2D(GL_TEXTURE_2D, 0, colorMode, width, height, 0, colorMode, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		// Set wraps
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
-
-		// Set filters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilterMode);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilterMode);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
-	else
+	else 
 	{
-		std::cout << "Failed to load texture" << std::endl;
+		std::cout << "Failed to load texture. Image not loaded at " << path << std::endl;
 	}
+
 	stbi_image_free(data);
 }
 
-void Texture::LoadFromAssimp(const aiTexture* aiTex, bool flip, GLint wrapMode, GLint magFilterMode, GLint minFilterMode)
+void Texture::LoadFromAssimp(const aiTexture* aiTex, bool flip)
 {
 	if (aiTex == nullptr)
 		return;
@@ -88,13 +92,10 @@ void Texture::LoadFromAssimp(const aiTexture* aiTex, bool flip, GLint wrapMode, 
 		glTexImage2D(GL_TEXTURE_2D, 0, colorMode, width, height, 0, colorMode, GL_UNSIGNED_BYTE, image_data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		// Set wraps
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
-
-		// Set filters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilterMode);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilterMode);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 	else
 	{
@@ -104,7 +105,25 @@ void Texture::LoadFromAssimp(const aiTexture* aiTex, bool flip, GLint wrapMode, 
 
 }
 
+void Texture::Allocate(GLenum format, GLuint width, GLuint height, GLenum type)
+{
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, type, NULL);
+}
+
+void Texture::SetParams(GLenum texMinFilter, GLenum texMagFilter, GLenum wrapS, GLenum wrapT)
+{
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texMinFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texMagFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+}
+
 void Texture::Bind()
 {
 	glBindTexture(GL_TEXTURE_2D, id);
+}
+
+void Texture::Cleanup()
+{
+	glDeleteTextures(1, &id);
 }

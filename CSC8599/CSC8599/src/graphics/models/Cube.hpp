@@ -5,21 +5,20 @@
 #include "../Texture.h"
 #include "../Material.h"
 
-class Cube : public Model {
+class Cube : public Model 
+{
 public:
-	glm::vec3 pos;
-	glm::vec3 size;
+	Material m;
 
-	Material material;
-
-	Cube(glm::vec3 pos = glm::vec3(0.0f), glm::vec3 size = glm::vec3(1.0f)) :
-		 Model(pos, size) {}
+	Cube(unsigned int maxNoInstances, Material m = Material::red_plastic)
+		: Model("cube", maxNoInstances, CONST_INSTANCES | NO_TEX), m(m) {}
 
 	void Init()
 	{
 		int numVertices = 36;
 
-		float vertices[] = {
+		float vertices[] = 
+		{
 			// position                 normal              texcoord
 			-0.5f, -0.5f, -0.5f,     0.0f,  0.0f, -1.0f,    0.0f, 0.0f,
 			 0.5f, -0.5f, -0.5f,     0.0f,  0.0f, -1.0f,    1.0f, 0.0f,
@@ -64,18 +63,50 @@ public:
 			-0.5f,  0.5f, -0.5f,     0.0f,  1.0f,  0.0f,    0.0f, 1.0f
 		};
 
-		std::vector<unsigned int> indices(numVertices);
-		for (int i = 0; i < numVertices; i++)
+		float collisionVertices[] = 
 		{
-			indices[i] = i;
-		}
+			-0.5f, -0.5f, -0.5f,
+			-0.5f, -0.5f,  0.5f,
+			-0.5f,  0.5f, -0.5f,
+			-0.5f,  0.5f,  0.5f,
+			 0.5f, -0.5f, -0.5f,
+			 0.5f, -0.5f,  0.5f,
+			 0.5f,  0.5f, -0.5f,
+			 0.5f,  0.5f,  0.5f
+		};
+		unsigned int collisionIndices[] = 
+		{
+			0, 4, 6,
+			6, 2, 0,
 
-		meshes.push_back(Mesh(Vertex::GenList(vertices, numVertices), indices));
-	}
+			1, 5, 7,
+			7, 3, 1,
 
-	void Render(Shader shader, float dt)
-	{
-		Model::Render(shader, dt);
+			3, 2, 0,
+			0, 1, 3,
+
+			7, 6, 4,
+			4, 5, 7,
+
+			0, 4, 5,
+			5, 1, 0,
+
+			2, 6, 7,
+			7, 3, 2
+		};
+
+		//BoundingRegion br(glm::vec3(-0.5f), glm::vec3(0.5f));
+		BoundingRegion br(glm::vec3(0.0f), sqrt(3.0f) / 2.0f);
+
+		Mesh ret = ProcessMesh(br,
+			numVertices, vertices,
+			numVertices, NULL,
+			true,
+			8, collisionVertices,
+			12, collisionIndices);
+		ret.SetupMaterial(m);
+
+		AddMesh(&ret);
 	}
 };
 

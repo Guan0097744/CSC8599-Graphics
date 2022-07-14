@@ -1,46 +1,131 @@
 #include "Light.h"
 
-void DirLight::Render(Shader shader)
+DirLight::DirLight() {}
+
+DirLight::DirLight(glm::vec3 direction, glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular, BoundingRegion br)
+	: direction(direction),
+	ambient(ambient), diffuse(diffuse), specular(specular),
+	shadowFBO(2048, 2048, GL_DEPTH_BUFFER_BIT), br(br) 
 {
-	std::string name = "dirLight";
+	// setup FBO
+	shadowFBO.Generate();
 
-	shader.Set3Float(name + ".direction", direction);
+	shadowFBO.Bind();
+	shadowFBO.DisableColorBuffer();
+	shadowFBO.AllocateAndAttachTexture(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_FLOAT);
 
-	shader.Set4Float(name + ".ambient", ambient);
-	shader.Set4Float(name + ".diffuse", diffuse);
-	shader.Set4Float(name + ".specular", specular);
+	UpdateMatrices();
 }
 
-void PointLight::Render(int index, Shader shader)
+void DirLight::Render(Shader& shader, unsigned int textureIdx)
 {
-	std::string name = "pointLights[" + std::to_string(index) + "]";
-
-	shader.Set3Float(name + ".position", position);
-
-	shader.SetFloat(name + ".constant", constant);
-	shader.SetFloat(name + ".linear", linear);
-	shader.SetFloat(name + ".quadratic", quadratic);
-
-	shader.Set4Float(name + ".ambient", ambient);
-	shader.Set4Float(name + ".diffuse", diffuse);
-	shader.Set4Float(name + ".specular", specular);
+	// set depth texture
+	glActiveTexture(GL_TEXTURE0 + textureIdx);
+	shadowFBO.textures[0].Bind();
+	shader.SetInt("dirLightBuffer", textureIdx);
 }
 
-void SpotLight::Render(int index, Shader shader)
+void DirLight::UpdateMatrices()
 {
-	std::string name = "spotLights[" + std::to_string(index) + "]";
+	glm::mat4 proj			= glm::ortho(br.min.x, br.max.x, br.min.y, br.max.y, br.min.z, br.max.z);
+	glm::vec3 pos			= -2.0f * direction;
+	glm::mat4 lightView		= glm::lookAt(pos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	lightSpaceMatrix		= proj * lightView;
+}
 
-	shader.Set3Float(name + ".position", position);
-	shader.Set3Float(name + ".direction", direction);
+// list of directions
+glm::vec3 PointLight::directions[6] = 
+{
+	{  1.0f,  0.0f,  0.0f },
+	{ -1.0f,  0.0f,  0.0f },
+	{  0.0f,  1.0f,  0.0f },
+	{  0.0f, -1.0f,  0.0f },
+	{  0.0f,  0.0f,  1.0f },
+	{  0.0f,  0.0f, -1.0f }
+};
 
-	shader.SetFloat(name + ".cutOff", cutOff);
-	shader.SetFloat(name + ".outerCutOff", outerCutOff);
+// list of up vectors
+glm::vec3 PointLight::ups[6] = 
+{
+	{  0.0f, -1.0f,  0.0f },
+	{  0.0f, -1.0f,  0.0f },
+	{  0.0f,  0.0f,  1.0f },
+	{  0.0f,  0.0f, -1.0f },
+	{  0.0f, -1.0f,  0.0f },
+	{  0.0f, -1.0f,  0.0f }
+};
 
-	shader.SetFloat(name + ".constant", constant);
-	shader.SetFloat(name + ".linear", linear);
-	shader.SetFloat(name + ".quadratic", quadratic);
+PointLight::PointLight() {}
 
-	shader.Set4Float(name + ".ambient", ambient);
-	shader.Set4Float(name + ".diffuse", diffuse);
-	shader.Set4Float(name + ".specular", specular);
+PointLight::PointLight(glm::vec3 position, float k0, float k1, float k2, glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular, float nearPlane, float farPlane)
+	: position(position),
+	k0(k0), k1(k1), k2(k2),
+	ambient(ambient), diffuse(diffuse), specular(specular),
+	nearPlane(nearPlane), farPlane(farPlane),
+	shadowFBO(2048, 2048, GL_DEPTH_BUFFER_BIT)
+{
+	shadowFBO.Generate();
+
+	shadowFBO.Bind();
+	shadowFBO.DisableColorBuffer();
+	shadowFBO.AllocateAndAttachTexture(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_FLOAT);
+
+	UpdateMatrices();
+}
+
+void PointLight::Render(Shader& shader, int index, unsigned int textureIdx)
+{
+	// set depth texture
+	glActiveTexture(GL_TEXTURE0 + textureIdx);
+	shadowFBO.cubemap.Bind();
+	shader.SetInt("pointLightBuffers[" + std::to_string(index) + "]", textureIdx);
+}
+
+void PointLight::UpdateMatrices()
+{
+	glm::mat4 proj = glm::perspective(glm::radians(90.0f),	// FOV
+		(float)shadowFBO.height / (float)shadowFBO.width,	// aspect ratio
+		nearPlane, farPlane);								// near and far bounds
+
+	for (unsigned int i = 0; i < 6; i++) 
+	{
+		lightSpaceMatrices[i] = proj * glm::lookAt(position, position + PointLight::directions[i], PointLight::ups[i]);
+	}
+}
+
+SpotLight::SpotLight() {}
+
+SpotLight::SpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 up, float cutOff, float outerCutOff, float k0, float k1, float k2, glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular, float nearPlane, float farPlane)
+	: position(position), direction(direction), up(up),
+	cutOff(cutOff), outerCutOff(outerCutOff),
+	k0(k0), k1(k1), k2(k2),
+	ambient(ambient), diffuse(diffuse), specular(specular),
+	nearPlane(nearPlane), farPlane(farPlane),
+	shadowFBO(2048, 2048, GL_DEPTH_BUFFER_BIT)
+{
+	shadowFBO.Generate();
+
+	shadowFBO.Bind();
+	shadowFBO.DisableColorBuffer();
+	shadowFBO.AllocateAndAttachTexture(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_FLOAT);
+
+	UpdateMatrices();
+}
+
+void SpotLight::Render(Shader& shader, int index, unsigned int textureIdx)
+{
+	// set depth texture
+	glActiveTexture(GL_TEXTURE0 + textureIdx);
+	shadowFBO.textures[0].Bind();
+	shader.SetInt("spotLightBuffers[" + std::to_string(index) + "]", textureIdx);
+}
+
+void SpotLight::UpdateMatrices()
+{
+	glm::mat4 proj = glm::perspective(glm::acos(outerCutOff) * 2.0f,	// FOV
+		(float)shadowFBO.height / (float)shadowFBO.width,				// aspect ratio
+		nearPlane, farPlane);											// near and far bounds
+
+	glm::mat4 lightView		= glm::lookAt(position, position + direction, up);
+	lightSpaceMatrix		= proj * lightView;
 }

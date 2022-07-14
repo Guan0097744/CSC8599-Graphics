@@ -6,7 +6,8 @@
 class Environment
 {
 public:
-	static glm::vec3 gravity;
+	static glm::vec3 worldUp;	// Up vector in world
+	static glm::vec3 gravity;	// Acceleration of gravity
 };
 
 #endif // !ENVIRONMENT_H

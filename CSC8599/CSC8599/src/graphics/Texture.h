@@ -11,24 +11,31 @@
 class Texture
 {
 public:
+	Texture(std::string name);
 	Texture(std::string dir, std::string path, aiTextureType type);
 
 	void Generate();
-	void Load(bool flip = true, GLint wrapMode = GL_REPEAT, GLint magFilterMode = GL_LINEAR, GLint minFilterMode = GL_LINEAR_MIPMAP_LINEAR);
-	void LoadFromAssimp(const aiTexture* aiTex, bool flip = false, GLint wrapMode = GL_REPEAT, GLint magFilterMode = GL_LINEAR, GLint minFilterMode = GL_LINEAR_MIPMAP_LINEAR);
+
+	void Load(bool flip = true);
+	void LoadFromAssimp(const aiTexture* aiTex, bool flip = false);
+
+	void Allocate(GLenum format, GLuint width, GLuint height, GLenum type);
+
+	static void SetParams(GLenum texMinFilter = GL_NEAREST,
+		GLenum texMagFilter = GL_NEAREST,
+		GLenum wrapS = GL_REPEAT,
+		GLenum wrapT = GL_REPEAT);
 
 	void Bind();
+	void Cleanup();
 
-	unsigned int GetId()			{ return id; }
-	void SetId(unsigned int texId)	{ id = texId; }
+	//============================================================================================//
+	//Variables
+	//============================================================================================//
 
-	aiTextureType GetTexType()		{ return type; }
-	std::string GetDir()			{ return dir; }
-	std::string GetPath()			{ return path; }
-
-private:
 	unsigned int	id;
 	aiTextureType	type;
+	std::string		name;
 	std::string		dir;	// Directory
 	std::string		path;
 };

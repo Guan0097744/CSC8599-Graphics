@@ -21,12 +21,16 @@ public:
 	Shader();
 
 	// Initialize with paths to vertex, fragment, and optional geometry shaders
-	Shader(const char* vertexShaderPath,
-		const char* fragShaderPath);
+	Shader(bool includeDefaultHeader,
+		const char* vertexShaderPath,
+		const char* fragShaderPath,
+		const char* geoShaderPath = nullptr);
 
 	// generate using vertex, frag, and optional geometry shaders
-	void Generate(const char* vertexShaderPath,
-		const char* fragShaderPath);
+	void Generate(bool includeDefaultHeader,
+		const char* vertexShaderPath,
+		const char* fragShaderPath,
+		const char* geoShaderPath = nullptr);
 
 	// Activate shader
 	void Activate();
@@ -34,11 +38,15 @@ public:
 	// Clean up
 	void Cleanup();
 
-	// Load string from file
-	static std::string LoadShaderSrc(const char* filePath);
+	//============================================================================================//
+	//static
+	//============================================================================================//
 
-	// Compile shader program
-	static GLuint CompileShader(const char* filePath, GLuint type);
+	// Default directory
+	static std::string defaultDirectory;
+
+	// Stream containing default header source
+	static std::stringstream defaultHeaders;
 
 	// Load into default header
 	static void LoadIntoDefault(const char* filepath);
@@ -46,11 +54,11 @@ public:
 	// Clear default header (after shader compilation)
 	static void ClearDefault();
 
-	// Default directory
-	static std::string defaultDirectory;
+	// Load string from file
+	static char* LoadShaderSrc(bool includeDefaultHeader, const char* filePath);
 
-	// Stream containing default header source
-	static std::stringstream defaultHeaders;
+	// Compile shader program
+	static GLuint CompileShader(bool includeDefaultHeader, const char* filePath, GLuint type);
 
 	// Set uniform variables
 	void SetBool(const std::string& name, bool value);
@@ -63,6 +71,9 @@ public:
 	void Set4Float(const std::string& name, glm::vec4 v);
 	void SetMat3(const std::string& name, glm::mat3 val);
 	void SetMat4(const std::string& name, glm::mat4 val);
+
+private:
+	void CompileAndAttach(GLuint id, bool includeDefaultHeader, const char* path, GLuint type);
 };
 
 #endif

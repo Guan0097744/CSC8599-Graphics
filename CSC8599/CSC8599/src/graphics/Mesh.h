@@ -10,40 +10,55 @@
 
 #include "Shader.h"
 #include "Texture.h"
+#include "Material.h"
+#include "buffer/VertexBuffer.hpp"
+#include "models/Box.hpp"
+#include "../algorithms/Bounds.h"
+#include "../physics/CollisionMesh.h"
 
 struct Vertex
 {
 	glm::vec3 pos;
 	glm::vec3 normal;
 	glm::vec2 texCoord;
+	glm::vec3 tangent;
 
 	static std::vector<Vertex> GenList(float* vertices, int numVertices);
+	static void AverageVectors(glm::vec3& baseVec, glm::vec3 addition, unsigned char existingContributions);
+	static void CalcTanVectors(std::vector<Vertex>& list, std::vector<unsigned int>& indices);
 };
 
 class Mesh
 {
 public:
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-	std::vector<Texture> textures;
+	BoundingRegion				br;			// Bounding region for mesh
+	CollisionMesh*				collision;	// Pointer to the attached collision mesh
 
-	// Material diffuse value
-	aiColor4D diffuse;
+	std::vector<Vertex>			vertices;
+	std::vector<unsigned int>	indices;
+	std::vector<Texture>		textures;
 
-	// Material specular value
-	aiColor4D specular;
+	ArrayObject					VAO;		// Vertex array object pointing to all data for the mesh
 
-	unsigned int VAO;
+	aiColor4D					diffuse;	// Material diffuse value
+	aiColor4D					specular;	// Material specular value
 
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures = {});
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, aiColor4D diffuse, aiColor4D specular);
+	Mesh();
+	Mesh(BoundingRegion br);
+	Mesh(BoundingRegion br, std::vector<Texture> textures);
+	Mesh(BoundingRegion br, aiColor4D diff, aiColor4D spec);
+	Mesh(BoundingRegion br, Material m);
 
-	void Render(Shader& shader);
+	void LoadData(std::vector<Vertex> vertices, std::vector<unsigned int> indices, bool pad = false);
+	void LoadCollisionMesh(unsigned int noPoints, float* coordinates, unsigned int noFaces, unsigned int* indices);
+	void SetupTextures(std::vector<Texture> textures);
+	void SetupColors(aiColor4D diff, aiColor4D spec);
+	void SetupMaterial(Material mat);
 
+	void Render(Shader& shader, unsigned int numInstances);
 	void Cleanup();
 
 private:
-	unsigned int VBO, EBO;
 	bool noTex;
 
 	void Setup();

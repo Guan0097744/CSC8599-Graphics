@@ -3,124 +3,157 @@
     {
       "bufferView": 2,
       "componentType": 5126,
-      "count": 16519,
+      "count": 8383,
       "max": [
-        1.4899040460586548,
-        1.4899049997329712,
-        1.4899040460586548
+        1,
+        1,
+        1
       ],
       "min": [
-        -1.4899049997329712,
-        -1.4899040460586548,
-        -1.4899040460586548
+        -1,
+        -1,
+        -1
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
-      "byteOffset": 198228,
+      "byteOffset": 100596,
       "componentType": 5126,
-      "count": 16519,
+      "count": 8383,
       "max": [
-        1.0,
-        1.0,
-        1.0
+        0.99999994039535522,
+        0.99999994039535522,
+        0.99999994039535522
       ],
       "min": [
-        -1.0,
-        -1.0,
-        -1.0
+        -1,
+        -1,
+        -0.99999994039535522
       ],
       "type": "VEC3"
     },
     {
-      "bufferView": 1,
+      "bufferView": 3,
       "componentType": 5126,
-      "count": 16519,
+      "count": 8383,
       "max": [
-        1.0,
-        1.0
+        1,
+        1,
+        0.011972530744969845,
+        -1
       ],
       "min": [
-        0.0,
-        0.0
+        -1,
+        -1,
+        -0.012574844062328339,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 8383,
+      "max": [
+        1,
+        1
+      ],
+      "min": [
+        0,
+        0.01538500003516674
       ],
       "type": "VEC2"
     },
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 98304,
+      "count": 48384,
+      "max": [
+        8382
+      ],
+      "min": [
+        0
+      ],
       "type": "SCALAR"
     }
   ],
   "asset": {
     "extras": {
-      "author": "Eloi Stree (https://sketchfab.com/JamsCenterStudio)",
+      "author": "Giuliana Rizzo (https://sketchfab.com/darthgiu)",
       "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/3d-models/360-sphere-b9bbaac234ba4c4f8f29b3a98e4c5744",
-      "title": "360 Sphere"
+      "source": "https://sketchfab.com/3d-models/sphere-cd4fa4a642a74c7ca6ee2e7b5340f76a",
+      "title": "Sphere"
     },
-    "generator": "Sketchfab-12.68.0",
+    "generator": "Sketchfab-7.27.0",
     "version": "2.0"
   },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 393216,
+      "byteLength": 193536,
+      "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 132152,
-      "byteOffset": 393216,
+      "byteLength": 67064,
+      "byteOffset": 193536,
       "byteStride": 8,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 396456,
-      "byteOffset": 525368,
+      "byteLength": 201192,
+      "byteOffset": 260600,
       "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 134128,
+      "byteOffset": 461792,
+      "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
     }
   ],
   "buffers": [
     {
-      "byteLength": 921824,
+      "byteLength": 595920,
       "uri": "scene.bin"
     }
   ],
   "materials": [
     {
       "doubleSided": true,
-      "name": "SphereMaterial",
+      "name": "defaultMat",
       "pbrMetallicRoughness": {
         "baseColorFactor": [
-          0.8,
-          0.8,
-          0.8,
-          1.0
+          1,
+          1,
+          1,
+          1
         ],
-        "metallicFactor": 0.0,
-        "roughnessFactor": 0.8239417257461427
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
       }
     }
   ],
   "meshes": [
     {
-      "name": "Octahedron Sphere 6 R1_SphereMaterial_0",
       "primitives": [
         {
           "attributes": {
             "NORMAL": 1,
             "POSITION": 0,
-            "TEXCOORD_0": 2
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
           },
-          "indices": 3,
+          "indices": 4,
           "material": 0,
           "mode": 4
         }
@@ -132,92 +165,39 @@
       "children": [
         1
       ],
-      "matrix": [
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        2.220446049250313e-16,
-        -1.0,
-        0.0,
-        0.0,
-        1.0,
-        2.220446049250313e-16,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "name": "Sketchfab_model"
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
     },
     {
       "children": [
         2
       ],
-      "matrix": [
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        0.0,
-        0.0,
-        -1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "name": "62fddd37178a4465a4fd25f289c43d97.fbx"
+      "name": "RootNode (model correction matrix)"
     },
     {
       "children": [
         3
       ],
-      "name": "RootNode"
-    },
-    {
-      "children": [
-        4
-      ],
-      "matrix": [
-        100.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        99.99999999999866,
-        1.6292067073209114e-05,
-        0.0,
-        0.0,
-        -1.6292067073209114e-05,
-        99.99999999999866,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "name": "Octahedron Sphere 6 R1"
+      "name": "Sphere3D.OBJ.cleaner.materialmerger.gles"
     },
     {
       "mesh": 0,
-      "name": "Octahedron Sphere 6 R1_SphereMaterial_0"
+      "name": ""
     }
   ],
   "scene": 0,
   "scenes": [
     {
-      "name": "Sketchfab_Scene",
+      "name": "OSG_Scene",
       "nodes": [
         0
       ]
     }
   ]
 }
+

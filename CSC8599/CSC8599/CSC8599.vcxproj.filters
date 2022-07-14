@@ -30,7 +30,7 @@
     <ClCompile Include="src\io\Keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
+    <ClCompile Include="src\io\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\Shader.cpp">
@@ -60,12 +60,62 @@
     <ClCompile Include="src\physics\Environment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\physics\CollisionMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\algorithms\Bounds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\algorithms\tree\Octree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\algorithms\Linalg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\CollisionModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\algorithms\Ray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\algorithms\tree\avl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\Cubemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\Text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\managers\SceneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\object_fs.glsl" />
-    <None Include="assets\object_vs.glsl" />
-    <None Include="assets\lamp_fs.glsl" />
-    <None Include="assets\red.png" />
+    <None Include="assets\shaders\object_fs.glsl" />
+    <None Include="assets\shaders\object_vs.glsl" />
+    <None Include="assets\shaders\lamp_fs.glsl" />
+    <None Include="assets\images\red.png" />
+    <None Include="assets\shaders\instanced\box_fs.glsl" />
+    <None Include="assets\shaders\instanced\box_vs.glsl" />
+    <None Include="assets\shaders\instanced\instanced_vs.glsl" />
+    <None Include="assets\shaders\buffer_fs.glsl" />
+    <None Include="assets\shaders\buffer_vs.glsl" />
+    <None Include="assets\shaders\defaultHead.glsl" />
+    <None Include="assets\shaders\depth_fs.glsl" />
+    <None Include="assets\shaders\outline_fs.glsl" />
+    <None Include="assets\shaders\outline_vs.glsl" />
+    <None Include="assets\shaders\test.vs" />
+    <None Include="assets\shaders\text.fs" />
+    <None Include="assets\shaders\text.vs" />
+    <None Include="assets\shaders\sky_fs.glsl" />
+    <None Include="assets\shaders\skybox_fs.glsl" />
+    <None Include="assets\shaders\skybox_vs.glsl" />
+    <None Include="assets\shaders\shadows\pointSpotShadow.fs" />
+    <None Include="assets\shaders\shadows\dirShadow.fs" />
+    <None Include="assets\shaders\shadows\dirSpotShadow.vs" />
+    <None Include="assets\shaders\shadows\pointShadow.gs" />
+    <None Include="assets\shaders\shadows\pointShadow.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\io\Mouse.h">
@@ -74,7 +124,7 @@
     <ClInclude Include="src\io\Keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Camera.h">
+    <ClInclude Include="src\io\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\Shader.h">
@@ -116,21 +166,105 @@
     <ClInclude Include="src\physics\Environment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\models\ModelArray.hpp">
+    <ClInclude Include="src\physics\CollisionMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\Bounds.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\tree\Octree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\Linalg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\CollisionModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\States.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\Ray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\List.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\tree\avl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\tree\Trie.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\buffer\FrameBuffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\buffer\UniformBuffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\buffer\VertexBuffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\Cubemap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\models\Box.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\Text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\models\Plane.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\models\Brickwall.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\managers\SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="assets\takagi.jpg">
+    <Image Include="assets\images\takagi.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="assets\takagi2.jpg">
+    <Image Include="assets\images\takagi2.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="assets\container2.png">
+    <Image Include="assets\textures\container2.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="assets\container2_specular.png">
+    <Image Include="assets\textures\container2_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\textures\brickwall_diffuse.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\textures\brickwall_normal.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\textures\brickwall_specular.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\skybox\back.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\skybox\bottom.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\skybox\front.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\skybox\left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\skybox\right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\skybox\skybox_template.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\skybox\top.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

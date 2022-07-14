@@ -1,165 +1,164 @@
 #include <iostream>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "managers/SceneManager.h"
 
-#include <stb/stb_image.h>
-
-#include <fstream>
-#include <sstream>
-#include <streambuf>
-#include <string>
-#include <stack>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include "graphics/Shader.h"
-#include "graphics/Texture.h"
-#include "graphics/Light.h"
-#include "graphics/Model.h"
-
-#include "io/Mouse.h"
-#include "io/Keyboard.h"
-
-#include "Camera.h"
-#include "Scene.h"
-
-#include "graphics/models/Cube.hpp"
-#include "graphics/models/Lamp.hpp"
-#include "graphics/models/Gun.hpp"
-#include "graphics/models/Sphere.hpp"
-
-#include "physics/Environment.h"
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(double dt);
-void LaunchedItem(float dt);
-
-//============================================================================================//
-//Settings
-//============================================================================================//
-
-unsigned int SCR_WIDTH = 1000;
-unsigned int SCR_HEIGHT = 1000;
-
-Scene scene;
-
-float mixVal = 0.5f;
-
-glm::mat4 mouseTransform = glm::mat4(1.0f);
-Camera Camera::defaultCamera(glm::vec3(-3.0f, 0.0f, -.0f));
-
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
-
-SphereArray launchSpheres;
+std::string Shader::defaultDirectory = "assets/shaders";
 
 int main() 
 {
-	glfwInit();
+	std::cout << "I hate OpenGL!" << std::endl;
 
-	// OpenGL Ver3.3
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif // __APPLE__
+	/*
+	scene = Scene(3, 3, "OpenGL Tutorial", 1280, 720);
 
 	// GLFW window creation
 	if (!scene.Init())
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
+		std::cout << "Failed to create window" << std::endl;
+		scene.Cleanup();
 		return -1;
 	}
 
-	// GLAD: load all OpenGL function pointers
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
-
-	scene.SetParametres();
-	glEnable(GL_DEPTH_TEST);
-
+	// Set camera
+	scene.cameras.push_back(&cam);
+	scene.activeCamera = 0;
 
 	//============================================================================================//
 	//SHADERS
 	//============================================================================================//
 
-	Shader shader("assets/object_vs.glsl", "assets/object_fs.glsl");
-	Shader lampShader("assets/object_vs.glsl", "assets/lamp_fs.glsl");
+	Shader::LoadIntoDefault("defaultHead.glsl");
+
+	Shader shader(true, "instanced/instanced_vs.glsl", "object_fs.glsl");
+	Shader boxShader(false, "instanced/box_vs.glsl", "instanced/box_fs.glsl");
+
+	Shader dirShadowShader(false, "shadows/dirSpotShadow.vs", "shadows/dirShadow.fs");
+	Shader spotShadowShader(false, "shadows/dirSpotShadow.vs", "shadows/pointSpotShadow.fs");
+	Shader pointShadowShader(false, "shadows/pointShadow.vs", "shadows/pointSpotShadow.fs", "shadows/pointShadow.gs");
+
+	Shader::ClearDefault();
+
+	//============================================================================================//
+	//FONTS
+	//============================================================================================//
+
+	TextRenderer font(32);
+	if (!scene.RegisterFont(&font, "comic", "assets/fonts/comic.ttf")) 
+	{
+		std::cout << "Could not load font" << std::endl;
+	}
 
 	//============================================================================================//
 	//MODELS
 	//============================================================================================//
 
-	//Model m(glm::vec3(0.0f), glm::vec3(0.03f), true);
-	//m.LoadModel("assets/models/gun/scene.gltf");
-	//m.LoadModel("assets/models/kirby/scene.gltf");
-	//m.LoadModel("assets/models/kirby2/Kirby.fbx");
-	//m.LoadModel("assets/models/nanosuit/nanosuit.obj");
-	//m.LoadModel("assets/models/pbr_helmet/scene.gltf");
-	//m.LoadModel("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
-	//Gun g;
-	//g.LoadModel("assets/models/gun/scene.gltf");
+	scene.RegisterModel(&lamp);
 
-	launchSpheres.Init();
+	scene.RegisterModel(&wall);
+
+	scene.RegisterModel(&sphere);
+
+	//scene.RegisterModel(&cube);
+
+	Box box;
+	box.Init();
+
+	// load all model data
+	scene.LoadModels();
 
 	//============================================================================================//
 	//LIGHTS
 	//============================================================================================//
 
-	glm::vec3 pointLightPositions[] = {
-			glm::vec3(0.7f,  0.2f,  2.0f),
-			glm::vec3(2.3f, -3.3f, -4.0f),
-			glm::vec3(-4.0f,  2.0f, -12.0f),
-			glm::vec3(0.0f,  0.0f, -3.0f)
-	};
+	// directional light
+	DirLight dirLight(glm::vec3(-0.2f, -0.9f, -0.2f),
+		glm::vec4(0.1f, 0.1f, 0.1f, 1.0f),
+		glm::vec4(0.6f, 0.6f, 0.6f, 1.0f),
+		glm::vec4(0.7f, 0.7f, 0.7f, 1.0f),
+		BoundingRegion(glm::vec3(-20.0f, -20.0f, 0.5f), glm::vec3(20.0f, 20.0f, 50.0f)));
+	scene.dirLight = &dirLight;
+	States::Activate(&scene.dirLightActive, true);
 
-	glm::vec4 ambient	= glm::vec4(0.05f, 0.05f, 0.05f, 1.0f);
-	glm::vec4 diffuse	= glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);
-	glm::vec4 specular	= glm::vec4(1.0f);
-	float constant		= 1.0f;
-	float linear		= 0.09f;
-	float quadratic		= 0.03f;
-
-	DirLight dirLight = { glm::vec3(-0.2f, -0.1f, -0.3f), 
-		glm::vec4(0.1f, 0.1f, 0.1f, 1.0f), 
-		glm::vec4(0.4f, 0.4f, 0.4f, 1.0f), 
-		glm::vec4(0.75f, 0.75f, 0.75f, 1.0f) 
-	};
-
-	/*Lamp lamps[4];
-	for (int i = 0; i < 4; i++) {
-		lamps[i] = Lamp(glm::vec3(1.0f),
-			ambient, diffuse, specular,
-			constant, linear, quadratic,
-			pointLightPositions[i], glm::vec3(0.25f));
-		lamps[i].Init();
-	}*/
-
-	LampArray lamps;
-	lamps.Init();
-	for (int i = 0; i < 4; i++) 
+	// point lights
+	glm::vec3 pointLightPositions[] = 
 	{
-		lamps.instances.push_back({
+		glm::vec3(1.0f, 1.0f, 0.0f),
+		glm::vec3(0.0f,  15.0f,  0.0f),
+		glm::vec3(-4.0f,  2.0f, -12.0f),
+		glm::vec3(0.0f,  0.0f, -3.0f)
+	};
+
+	glm::vec4 ambient = glm::vec4(0.05f, 0.05f, 0.05f, 1.0f);
+	glm::vec4 diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);
+	glm::vec4 specular = glm::vec4(1.0f);
+	float k0 = 1.0f;
+	float k1 = 0.0014f;
+	float k2 = 0.000007f;
+
+	PointLight pointLights[4];
+
+	for (unsigned int i = 0; i < 1; i++) 
+	{
+		pointLights[i] = PointLight(
 			pointLightPositions[i],
-			constant, linear, quadratic,
+			k0, k1, k2,
 			ambient, diffuse, specular,
-			});
+			0.5f, 50.0f
+		);
+		// create physical model for each lamp
+		//scene.GenerateInstance(lamp.id, glm::vec3(10.0f, 0.25f, 10.0f), 0.25f, pointLightPositions[i]);
+		// add lamp to scene's light source
+		scene.pointLights.push_back(&pointLights[i]);
+		// activate lamp in scene
+		States::ActivateIndex(&scene.activePointLights, i);
 	}
 
-	SpotLight spotLight = { Camera::defaultCamera.cameraPos, Camera::defaultCamera.cameraFront,
-		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(20.0f)),	// Cut off
-		1.0f, 0.07f, 0.032f,	// Attenuation constants
-		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), glm::vec4(1.0f), glm::vec4(1.0f) };
+	// spot light
+	SpotLight spotLight(
+		//glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f),
+		cam.cameraPos, cam.cameraFront, cam.cameraUp,
+		glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(20.0f)),
+		1.0f, 0.0014f, 0.000007f,
+		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), glm::vec4(1.0f), glm::vec4(1.0f),
+		0.1f, 100.0f
+	);
+	scene.spotLights.push_back(&spotLight);
+	//scene.activeSpotLights = 1; // 0b00000001
 
+	//scene.GenerateInstance(cube.id, glm::vec3(20.0f, 0.1f, 20.0f), 100.0f, glm::vec3(0.0f, -3.0f, 0.0f));
+
+	glm::vec3 cubePositions[] = 
+	{
+		{ 1.0f, 3.0f, -5.0f },
+		{ -7.25f, 2.1f, 1.5f },
+		{ -15.0f, 2.55f, 9.0f },
+		{ 4.0f, -3.5f, 5.0f },
+		{ 2.8f, 1.9f, -6.2f },
+		{ 3.5f, 6.3f, -1.0f },
+		{ -3.4f, 10.9f, -5.5f },
+		{ 0.0f, 11.0f, 0.0f },
+		{ 0.0f, 5.0f, 0.0f }
+	};
+	for (unsigned int i = 0; i < 9; i++) 
+	{
+		//scene.GenerateInstance(cube.id, glm::vec3(0.5f), 1.0f, cubePositions[i]);
+	}
+
+	// instantiate the brickwall plane
+	scene.GenerateInstance(wall.id, glm::vec3(1.0f), 1.0f,
+		{ 0.0f, 0.0f, 2.0f }, { -1.0f, glm::pi<float>(), 0.0f });
+
+	scene.GenerateInstance(sphere.id, glm::vec3(1.0f), 1.0f, { 0.0f, 0.0f, -2.0f });
+
+	// instantiate instances
+	scene.InitInstances();
+
+	// finish preparations (octree, etc)
+	scene.Prepare(box, { shader });
+
+	scene.variableLog["time"] = (double)0.0;
+
+	scene.defaultFBO.Bind(); // bind default framebuffer
 
 	//============================================================================================//
 	//Render loop
@@ -167,189 +166,77 @@ int main()
 
 	while (!scene.ShouldClose())
 	{
-		double currentTime = glfwGetTime();
-		deltaTime = currentTime - lastFrame;
-		lastFrame = currentTime;
+		double currentTime	= glfwGetTime();
+		dt					= currentTime - lastFrame;
+		lastFrame			= currentTime;
 
-		processInput(deltaTime);
+		scene.variableLog["time"] += dt;
+		scene.variableLog["fps"] = 1 / dt;
+
+		ProcessInput(dt);
 
 		// Render
 		scene.Update();
 
-		// Create transformation for screen
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
-		view = Camera::defaultCamera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(Camera::defaultCamera.GetZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		// activate the directional light's FBO
 
-		shader.Activate();
-		shader.Set3Float("viewPos", Camera::defaultCamera.cameraPos);
-
-		/*dirLight.direction = glm::vec3(
-			glm::rotate(model, glm::radians(0.5f), glm::vec3(1.0f, 0.0f, 0.0f)) *
-			glm::vec4(dirLight.direction, 1.0f));*/
-		dirLight.Render(shader);
-
-		for (int i = 0; i < 4; i++)
+		// remove launch objects if too far
+		for (int i = 0; i < sphere.currentNumInstances; i++) 
 		{
-			lamps.instances[i].Render(i, shader);
-		}
-		shader.SetInt("numPointLights", 4);
-
-		/*spotLight.position = Camera::defaultCamera.cameraPos;
-		spotLight.direction = Camera::defaultCamera.cameraFront;
-		spotLight.Render(0, shader);
-		shader.SetInt("numSpotLights", 1);*/
-
-		shader.SetMat4("model", model);
-		shader.SetMat4("view", view);
-		shader.SetMat4("projection", projection);
-
-		//m.Render(shader);
-		//g.Render(shader);
-
-		std::stack<int> removeObjects;
-		for (int i = 0; i < launchSpheres.instances.size(); i++)
-		{
-			if (glm::length(Camera::defaultCamera.cameraPos - launchSpheres.instances[i].pos) > 50.0f)
+			if (glm::length(cam.cameraPos - sphere.instances[i]->pos) > 250.0f) 
 			{
-				removeObjects.push(i);
-				continue;
+				scene.MarkForDeletion(sphere.instances[i]->instanceId);
 			}
 		}
-		for (int i = 0; i < removeObjects.size(); i++)
-		{
-			launchSpheres.instances.erase(launchSpheres.instances.begin() + removeObjects.top());
-			removeObjects.pop();
+
+		// render scene to dirlight FBO
+		dirLight.shadowFBO.Activate();
+		scene.RenderDirLightShader(dirShadowShader);
+		RenderScene(dirShadowShader);
+
+		// render scene to point light FBOs
+		for (unsigned int i = 0, len = scene.pointLights.size(); i < len; i++) {
+		    if (States::IsIndexActive(&scene.activePointLights, i)) {
+		        scene.pointLights[i]->shadowFBO.Activate();
+		        scene.RenderPointLightShader(pointShadowShader, i);
+		        RenderScene(pointShadowShader);
+		    }
 		}
 
-		if (launchSpheres.instances.size() > 0)
-		{
-			launchSpheres.Render(shader, deltaTime);
-		}
+		//// render scene to spot light FBOs
+		//for (unsigned int i = 0, len = scene.spotLights.size(); i < len; i++) {
+		//    if (States::isIndexActive(&scene.activeSpotLights, i)) {
+		//        scene.spotLights[i]->shadowFBO.activate();
+		//        scene.renderSpotLightShader(spotShadowShader, i);
+		//        renderScene(spotShadowShader);
+		//    }
+		//}
 
-		lampShader.Activate();
-		lampShader.SetMat4("model", model);
-		lampShader.SetMat4("view", view);
-		lampShader.SetMat4("projection", projection);
-		
-		lamps.Render(lampShader, deltaTime);
+		// render scene normally
+		scene.defaultFBO.Activate();
+		scene.RenderShader(shader);
+		RenderScene(shader);
 
-		// GLFW: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		scene.NewFrame();
+		// render boxes
+		scene.RenderShader(boxShader, false);
+		box.render(boxShader);
+
+		// send new frame to window
+		scene.NewFrame(box);
+
+		// clear instances that have been marked for deletion
+		scene.ClearDeadInstances();
 	}
+	
+	
+	scene.Cleanup();
+	*/
 
-	//m.Cleanup();
-	//g.Cleanup();
+	SceneManager sm;
 
-	lamps.Cleanup();
-
-	launchSpheres.Cleanup();
-
-	glfwTerminate();
+	sm.Start();
+	sm.Update();
+	sm.Cleanup();
 
 	return 0;
-}
-
-/**
- * @brief GLFW: whenever the window size changed (by OS or user resize) this callback function executes
- * @param window 
- * @param width 
- * @param height 
-*/
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	// Make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
-	SCR_WIDTH = width;
-	SCR_HEIGHT = height;
-}
-
-/**
- * @brief Process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
- * @param dt 
-*/
-void processInput(double dt)
-{
-	if (Keyboard::Key(GLFW_KEY_ESCAPE))
-		scene.SetShouldClose(true);
-		
-	if (Keyboard::Key(GLFW_KEY_UP))
-	{
-		mixVal += 0.1f;
-		if (mixVal > 1)
-		{
-			mixVal = 1.0f;
-		}
-	}
-	if (Keyboard::Key(GLFW_KEY_DOWN))
-	{
-		mixVal -= 0.1f;
-		if (mixVal < 0)
-		{
-			mixVal = 0.0f;
-		}
-	}
-
-	//============================================================================================//
-	//Move camera
-	//============================================================================================//
-
-	if (Keyboard::Key(GLFW_KEY_W))
-	{
-		Camera::defaultCamera.UpdateCameraPos(CameraDirection::FORWARD, dt);
-	}
-	if (Keyboard::Key(GLFW_KEY_S))
-	{
-		Camera::defaultCamera.UpdateCameraPos(CameraDirection::BACKWARD, dt);
-	}
-	if (Keyboard::Key(GLFW_KEY_A))
-	{
-		Camera::defaultCamera.UpdateCameraPos(CameraDirection::LEFT, dt);
-	}
-	if (Keyboard::Key(GLFW_KEY_D))
-	{
-		Camera::defaultCamera.UpdateCameraPos(CameraDirection::RIGHT, dt);
-	}
-	if (Keyboard::Key(GLFW_KEY_SPACE))
-	{
-		Camera::defaultCamera.UpdateCameraPos(CameraDirection::UP, dt);
-	}
-	if (Keyboard::Key(GLFW_KEY_LEFT_SHIFT))
-	{
-		Camera::defaultCamera.UpdateCameraPos(CameraDirection::DOWN, dt);
-	}
-
-	double dx = Mouse::GetDX();
-	double dy = Mouse::GetDY();
-	if (dx != 0 || dy != 0)
-	{
-		Camera::defaultCamera.UpdateCameraDirection(dx, dy);
-	}
-	double scrollDy = Mouse::GetScrollDY();
-	if (scrollDy != 0)
-	{
-		Camera::defaultCamera.UpdateCameraZoom(scrollDy);
-	}
-
-
-	//============================================================================================//
-	//Apply force
-	//============================================================================================//
-
-	if (Keyboard::KeyWentDown(GLFW_KEY_L))
-	{
-		LaunchedItem(dt);
-	}
-}
-
-void LaunchedItem(float dt)
-{
-	RigidBody rb(1.0f, Camera::defaultCamera.cameraPos);
-	rb.TransferEnergy(100.0f, Camera::defaultCamera.cameraFront);
-	rb.ApplyImpulse(Camera::defaultCamera.cameraFront, 10000.0f, dt);
-	rb.ApplyAcceleration(Environment::gravity);
-	launchSpheres.instances.push_back(rb);
 }

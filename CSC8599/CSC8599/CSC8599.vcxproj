@@ -122,7 +122,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GLFW\glfw3.lib;assimp\assimp-vc142-mtd.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;assimp\assimp-vc142-mtd.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,7 +144,14 @@
   <ItemGroup>
     <ClCompile Include="lib\glad.c" />
     <ClCompile Include="lib\stb.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\algorithms\tree\avl.cpp" />
+    <ClCompile Include="src\algorithms\Bounds.cpp" />
+    <ClCompile Include="src\algorithms\Linalg.cpp" />
+    <ClCompile Include="src\algorithms\tree\Octree.cpp" />
+    <ClCompile Include="src\algorithms\Ray.cpp" />
+    <ClCompile Include="src\graphics\Cubemap.cpp" />
+    <ClCompile Include="src\graphics\Text.cpp" />
+    <ClCompile Include="src\io\Camera.cpp" />
     <ClCompile Include="src\graphics\Light.cpp" />
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
@@ -154,18 +161,57 @@
     <ClCompile Include="src\io\Mouse.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
+    <ClCompile Include="src\managers\SceneManager.cpp" />
+    <ClCompile Include="src\physics\CollisionMesh.cpp" />
+    <ClCompile Include="src\physics\CollisionModel.cpp" />
     <ClCompile Include="src\physics\Environment.cpp" />
     <ClCompile Include="src\physics\Rigidbody.cpp" />
     <ClCompile Include="src\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\lamp_fs.glsl" />
-    <None Include="assets\object_fs.glsl" />
-    <None Include="assets\object_vs.glsl" />
-    <None Include="assets\red.png" />
+    <None Include="assets\shaders\buffer_fs.glsl" />
+    <None Include="assets\shaders\buffer_vs.glsl" />
+    <None Include="assets\shaders\defaultHead.glsl" />
+    <None Include="assets\shaders\depth_fs.glsl" />
+    <None Include="assets\shaders\instanced\box_fs.glsl" />
+    <None Include="assets\shaders\instanced\box_vs.glsl" />
+    <None Include="assets\shaders\instanced\instanced_vs.glsl" />
+    <None Include="assets\shaders\lamp_fs.glsl" />
+    <None Include="assets\shaders\object_fs.glsl" />
+    <None Include="assets\shaders\object_vs.glsl" />
+    <None Include="assets\images\red.png" />
+    <None Include="assets\shaders\outline_fs.glsl" />
+    <None Include="assets\shaders\outline_vs.glsl" />
+    <None Include="assets\shaders\shadows\dirShadow.fs" />
+    <None Include="assets\shaders\shadows\dirSpotShadow.vs" />
+    <None Include="assets\shaders\shadows\pointShadow.gs" />
+    <None Include="assets\shaders\shadows\pointShadow.vs" />
+    <None Include="assets\shaders\shadows\pointSpotShadow.fs" />
+    <None Include="assets\shaders\test.vs" />
+    <None Include="assets\shaders\text.fs" />
+    <None Include="assets\shaders\text.vs" />
+    <None Include="assets\shaders\sky_fs.glsl" />
+    <None Include="assets\shaders\skybox_fs.glsl" />
+    <None Include="assets\shaders\skybox_vs.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\algorithms\tree\avl.h" />
+    <ClInclude Include="src\algorithms\Bounds.h" />
+    <ClInclude Include="src\algorithms\Linalg.h" />
+    <ClInclude Include="src\algorithms\List.hpp" />
+    <ClInclude Include="src\algorithms\tree\Octree.h" />
+    <ClInclude Include="src\algorithms\Ray.h" />
+    <ClInclude Include="src\algorithms\States.hpp" />
+    <ClInclude Include="src\algorithms\tree\Trie.hpp" />
+    <ClInclude Include="src\graphics\buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\graphics\buffer\UniformBuffer.hpp" />
+    <ClInclude Include="src\graphics\buffer\VertexBuffer.hpp" />
+    <ClInclude Include="src\graphics\Cubemap.h" />
+    <ClInclude Include="src\graphics\models\Box.hpp" />
+    <ClInclude Include="src\graphics\models\Brickwall.hpp" />
+    <ClInclude Include="src\graphics\models\Plane.hpp" />
+    <ClInclude Include="src\graphics\Text.h" />
+    <ClInclude Include="src\io\Camera.h" />
     <ClInclude Include="src\graphics\Light.h" />
     <ClInclude Include="src\graphics\Material.h" />
     <ClInclude Include="src\graphics\Mesh.h" />
@@ -173,21 +219,33 @@
     <ClInclude Include="src\graphics\models\Cube.hpp" />
     <ClInclude Include="src\graphics\models\Gun.hpp" />
     <ClInclude Include="src\graphics\models\Lamp.hpp" />
-    <ClInclude Include="src\graphics\models\ModelArray.hpp" />
     <ClInclude Include="src\graphics\models\Sphere.hpp" />
     <ClInclude Include="src\graphics\Texture.h" />
     <ClInclude Include="src\io\Keyboard.h" />
     <ClInclude Include="src\io\Mouse.h" />
     <ClInclude Include="src\graphics\Shader.h" />
+    <ClInclude Include="src\managers\SceneManager.h" />
+    <ClInclude Include="src\physics\CollisionMesh.h" />
+    <ClInclude Include="src\physics\CollisionModel.h" />
     <ClInclude Include="src\physics\Environment.h" />
     <ClInclude Include="src\physics\Rigidbody.h" />
     <ClInclude Include="src\Scene.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="assets\container2.png" />
-    <Image Include="assets\container2_specular.png" />
-    <Image Include="assets\takagi.jpg" />
-    <Image Include="assets\takagi2.jpg" />
+    <Image Include="assets\skybox\back.png" />
+    <Image Include="assets\skybox\bottom.png" />
+    <Image Include="assets\skybox\front.png" />
+    <Image Include="assets\skybox\left.png" />
+    <Image Include="assets\skybox\right.png" />
+    <Image Include="assets\skybox\skybox_template.png" />
+    <Image Include="assets\skybox\top.png" />
+    <Image Include="assets\textures\brickwall_diffuse.jpg" />
+    <Image Include="assets\textures\brickwall_normal.jpg" />
+    <Image Include="assets\textures\brickwall_specular.jpg" />
+    <Image Include="assets\textures\container2.png" />
+    <Image Include="assets\textures\container2_specular.png" />
+    <Image Include="assets\images\takagi.jpg" />
+    <Image Include="assets\images\takagi2.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
