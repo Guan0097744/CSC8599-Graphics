@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "../physics/Environment.h"
 
 SceneManager::SceneManager()
 {
@@ -11,7 +12,7 @@ SceneManager::~SceneManager()
 
 	delete shader;
 	delete boxShader;
-	delete dirShadowShader;
+	delete pbrShader;
 
 	delete dirLight;
 	delete pointLight;
@@ -34,17 +35,6 @@ void SceneManager::Start()
 	}
 
 	Setup();
-
-	box.Init();
-
-	scene.InitInstances();
-
-	// finish preparations (octree, etc)
-	scene.Prepare(box, { *shader });
-
-	scene.variableLog["time"] = (double)0.0;
-
-	scene.defaultFBO.Bind(); // bind default framebuffer
 }
 
 void SceneManager::Update()
@@ -93,9 +83,14 @@ void SceneManager::Update()
 		scene.RenderShader(*shader);
 		RenderScene(*shader);
 
+		//// Render PBR scene
+		//scene.defaultFBO.Activate();
+		//scene.RenderShader(*pbrShader);
+		//RenderScene(*pbrShader);
+
 		// render boxes
 		scene.RenderShader(*boxShader, false);
-		box.render(*boxShader);
+		box.Render(*boxShader);
 
 		// send new frame to window
 		scene.NewFrame(box);
@@ -114,9 +109,21 @@ void SceneManager::Setup()
 {
 	SetCamera();
 	SetFonts();
+
 	SetShaders();
 	SetLightings();
 	SetModels();
+
+	box.Init();
+
+	scene.InitInstances();
+
+	// finish preparations (octree, etc)
+	scene.Prepare(box, { *shader });
+
+	scene.variableLog["time"] = (double)0.0;
+
+	scene.defaultFBO.Bind(); // bind default framebuffer
 }
 
 void SceneManager::SetCamera()
@@ -141,9 +148,7 @@ void SceneManager::SetShaders()
 	shader				= new Shader(true, "instanced/instanced_vs.glsl", "object_fs.glsl");
 	boxShader			= new Shader(false, "instanced/box_vs.glsl", "instanced/box_fs.glsl");
 
-	dirShadowShader		= new Shader(false, "shadows/dirSpotShadow.vs", "shadows/dirShadow.fs");
-	spotShadowShader	= new Shader(false, "shadows/dirSpotShadow.vs", "shadows/pointSpotShadow.fs");
-	pointShadowShader	= new Shader(false, "shadows/pointShadow.vs", "shadows/pointSpotShadow.fs", "shadows/pointShadow.gs");
+	//pbrShader			= new Shader(true, "instanced/instanced_vs.glsl", "pbr/pbr_fs.glsl");
 
 	Shader::ClearDefault();
 }
@@ -160,7 +165,6 @@ void SceneManager::SetLightings()
 		glm::vec4(0.7f, 0.7f, 0.7f, 1.0f),
 		BoundingRegion(glm::vec3(-20.0f, -20.0f, 0.5f), glm::vec3(20.0f, 20.0f, 50.0f)));
 	scene.dirLight = dirLight;
-	
 	
 	//============================================================================================//
 	// Point lights
@@ -209,11 +213,14 @@ void SceneManager::SetLightings()
 
 void SceneManager::SetModels()
 {
-	sphere = new Sphere();
-	AddModel(sphere, glm::vec3(1.0f), 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	sphere	= new Sphere(10);
+	scene.RegisterModel(sphere);
+	//AddModel(sphere, glm::vec3(1.0f), 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	/*lamp = new Lamp();
-	AddModel(lamp, glm::vec3(1.0f), 0.25f, glm::vec3(0.0f, 5.0f, 0.0f));*/
+	kirby	= new Model("Kirby", 1);
+	//kirby->LoadModel("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
+	kirby->LoadModel("assets/models/pbr_kirby_2/scene.gltf");
+	AddModel(kirby, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	scene.LoadModels();
 }
@@ -226,8 +233,25 @@ void SceneManager::AddModel(Model* m, glm::vec3 size, float mass, glm::vec3 pos,
 
 void SceneManager::RenderScene(Shader& shader)
 {
-	scene.RenderInstances(sphere->id, shader, dt);
+	//scene.RenderInstances(sphere->id, shader, dt);
+	if (sphere->currentNumInstances > 0) 
+	{
+		scene.RenderInstances(sphere->id, shader, dt);
+	}
+
+	scene.RenderInstances(kirby->id, shader, dt);
 	//scene.RenderInstances(lamp->id, shader, dt);
+}
+
+void SceneManager::LaunchItem(float dt)
+{
+	RigidBody* rb = scene.GenerateInstance(sphere->id, glm::vec3(0.1f), 1.0f, cam.cameraPos);
+	if (rb) 
+	{
+		// instance generated successfully
+		rb->TransferEnergy(25.0f, cam.cameraFront);
+		rb->ApplyAcceleration(Environment::gravity);
+	}
 }
 
 void SceneManager::ProcessInput(double dt)
@@ -253,6 +277,12 @@ void SceneManager::ProcessInput(double dt)
 	if (Keyboard::KeyWentDown(GLFW_KEY_L))
 	{
 		States::ToggleIndex(&scene.activeSpotLights, 0); // toggle spot light
+	}
+
+	// launch sphere
+	if (Keyboard::KeyWentDown(GLFW_KEY_F)) 
+	{
+		LaunchItem(dt);
 	}
 
 	//// determine if each lamp should be toggled

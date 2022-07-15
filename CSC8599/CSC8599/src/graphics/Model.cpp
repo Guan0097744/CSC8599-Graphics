@@ -229,14 +229,16 @@ unsigned int Model::GetIdx(std::string id)
 void Model::ProcessNode(aiNode* node, const aiScene* scene)
 {
 	// process all meshes
-	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+	for (unsigned int i = 0; i < node->mNumMeshes; i++) 
+	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		Mesh newMesh = ProcessMesh(mesh, scene);
 		AddMesh(&newMesh);
 	}
 
 	// process all child nodes
-	for (unsigned int i = 0; i < node->mNumChildren; i++) {
+	for (unsigned int i = 0; i < node->mNumChildren; i++) 
+	{
 		ProcessNode(node->mChildren[i], scene);
 	}
 }
@@ -294,11 +296,16 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 
 		// tangent vector
-		vertices[i].tangent = {
-			mesh->mTangents[i].x,
-			mesh->mTangents[i].y,
-			mesh->mTangents[i].z
-		};
+		if (mesh->mTangents)
+		{
+			vertices[i].tangent = 
+			{
+				mesh->mTangents[i].x,
+				mesh->mTangents[i].y,
+				mesh->mTangents[i].z
+			};
+		}	
+		
 	}
 
 	//============================================================================================//

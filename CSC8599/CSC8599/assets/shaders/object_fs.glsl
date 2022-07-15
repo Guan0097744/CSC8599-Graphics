@@ -77,7 +77,7 @@ void main() {
 	// =========================
 
 	// directional
-	//result += calcDirLight(norm, viewDir, diffMap, specMap);
+	result += calcDirLight(norm, viewDir, viewVec, diffMap, specMap);
 
 	// point lights
 	//for (int i = 0; i < noPointLights; i++) {
@@ -163,7 +163,8 @@ vec4 calcDirLight(vec3 norm, vec3 viewDir, vec3 viewVec, vec4 diffMap, vec4 spec
 
 	// specular
 	vec4 specular = vec4(0.0, 0.0, 0.0, 1.0);
-	if (diff > 0) {
+	if (diff > 0) 
+	{
 		// if diff <= 0, object is "behind" light
 
 		float dotProd = 0.0;

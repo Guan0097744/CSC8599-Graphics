@@ -88,7 +88,7 @@ public:
         ArrayObject::Clear();
     }
 
-    void render(Shader shader) 
+    void Render(Shader shader) 
     {
         shader.SetMat4("model", glm::mat4(1.0f));
 
@@ -114,23 +114,23 @@ public:
         ArrayObject::Clear();
     }
 
-    void addInstance(BoundingRegion br, glm::vec3 pos, glm::vec3 size) 
+    void AddInstance(BoundingRegion br, glm::vec3 pos, glm::vec3 size) 
     {
         positions.push_back(br.CalculateCenter() * size + pos);
 
         sizes.push_back(br.CalculateDimensions() * size);
     }
 
-    void cleanup() 
+    void Cleanup() 
     {
         VAO.Cleanup();
     }
 
 private:
-    ArrayObject VAO;
+    ArrayObject                 VAO;
 
-    std::vector<float> vertices;
-    std::vector<unsigned int> indices;
+    std::vector<float>          vertices;
+    std::vector<unsigned int>   indices;
 };
 
 #endif

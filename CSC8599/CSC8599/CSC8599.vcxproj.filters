@@ -105,17 +105,11 @@
     <None Include="assets\shaders\depth_fs.glsl" />
     <None Include="assets\shaders\outline_fs.glsl" />
     <None Include="assets\shaders\outline_vs.glsl" />
-    <None Include="assets\shaders\test.vs" />
-    <None Include="assets\shaders\text.fs" />
-    <None Include="assets\shaders\text.vs" />
     <None Include="assets\shaders\sky_fs.glsl" />
     <None Include="assets\shaders\skybox_fs.glsl" />
     <None Include="assets\shaders\skybox_vs.glsl" />
-    <None Include="assets\shaders\shadows\pointSpotShadow.fs" />
-    <None Include="assets\shaders\shadows\dirShadow.fs" />
-    <None Include="assets\shaders\shadows\dirSpotShadow.vs" />
-    <None Include="assets\shaders\shadows\pointShadow.gs" />
-    <None Include="assets\shaders\shadows\pointShadow.vs" />
+    <None Include="assets\shaders\pbr\pbr_vs.glsl" />
+    <None Include="assets\shaders\pbr\pbr_fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\io\Mouse.h">

@@ -25,6 +25,7 @@ protected:
 	void AddModel(Model* m, glm::vec3 size = glm::vec3(1.0f), float mass = 1.0f, glm::vec3 pos = glm::vec3(0.0f), glm::vec3 rot = glm::vec3(0.0f));
 	void RenderScene(Shader& shader);
 
+	void LaunchItem(float dt);
 	void ProcessInput(double dt);
 
 	float			dt = 0.0f;
@@ -38,9 +39,7 @@ protected:
 
 	Shader*			shader;
 	Shader*			boxShader;
-	Shader*			dirShadowShader;
-	Shader*			spotShadowShader;
-	Shader*			pointShadowShader;
+	Shader*			pbrShader;
 
 	DirLight*		dirLight;
 	PointLight*		pointLight;
@@ -48,4 +47,5 @@ protected:
 
 	Sphere*			sphere;
 	Lamp*			lamp;
+	Model*			kirby;
 };
