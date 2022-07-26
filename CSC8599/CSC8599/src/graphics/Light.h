@@ -51,6 +51,7 @@ struct PointLight
 
 	static glm::vec3	directions[6];			// list of directions
 	static glm::vec3	ups[6];					// list of up vectors
+	
 
 	PointLight();
 	PointLight(glm::vec3 position,

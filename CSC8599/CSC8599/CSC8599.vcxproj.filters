@@ -90,6 +90,12 @@
     <ClCompile Include="src\managers\SceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\models\PBRModel.hpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PBRScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\object_fs.glsl" />
@@ -110,6 +116,14 @@
     <None Include="assets\shaders\skybox_vs.glsl" />
     <None Include="assets\shaders\pbr\pbr_vs.glsl" />
     <None Include="assets\shaders\pbr\pbr_fs.glsl" />
+    <None Include="assets\shaders\pbr\prefilter_fs.glsl" />
+    <None Include="assets\shaders\pbr\irradiance_fs.glsl" />
+    <None Include="assets\shaders\pbr\equirectangular_fs.glsl" />
+    <None Include="assets\shaders\pbr\cubemap_vs.glsl" />
+    <None Include="assets\shaders\pbr\brdf_vs.glsl" />
+    <None Include="assets\shaders\pbr\brdf_fs.glsl" />
+    <None Include="assets\shaders\pbr\background_vs.glsl" />
+    <None Include="assets\shaders\pbr\background_fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\io\Mouse.h">
@@ -215,6 +229,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\managers\SceneManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PBRScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

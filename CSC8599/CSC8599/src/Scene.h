@@ -62,7 +62,8 @@ public:
 	bool Init();
 	void SetParametres();
 	bool RegisterFont(TextRenderer* tr, std::string name, std::string path);
-	void Prepare(Box& box, std::vector<Shader> shaders);
+	void OctreePrepare(Box& box, std::vector<Shader> shaders);
+	void SetLightsUBO(std::vector<Shader> shaders);
 
 	//============================================================================================//
 	//Main Loop

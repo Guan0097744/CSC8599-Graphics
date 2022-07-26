@@ -6,54 +6,71 @@
 
 #include <map>
 
-/*
-    class for buffer objects
-    - VBOs, EBOs, etc
-*/
+//============================================================================================//
+//Class for buffer objects: VBOs, EBOs, etc
+//============================================================================================//
 
 class BufferObject 
 {
 public:
-    // value/location
-    GLuint val;
-    // type of buffer (GL_ARRAY_BUFFER || GL_ELEMENT_ARRAY_BUFFER, etc)
-    GLenum type;
+    GLuint val;     // Value/Location
+    GLenum type;    // Buffer Type (GL_ARRAY_BUFFER || GL_ELEMENT_ARRAY_BUFFER, etc)
 
-    /*
-        constructor
-    */
-
-    // default and initialize with type
     BufferObject(GLenum type = GL_ARRAY_BUFFER) 
         : type(type) {}
 
-    // generate object
+    /**
+     * @brief Generate Object: glGenBuffers()
+    */
     void Generate() 
     {
         glGenBuffers(1, &val);
     }
 
-    // bind object
+    /**
+     * @brief Bind Object: glBindBuffer()
+    */
     void Bind() 
     {
         glBindBuffer(type, val);
     }
 
-    // set data (glBufferData)
+    /**
+     * @brief Set data: glBufferData()
+     * @tparam T 
+     * @param numElements 
+     * @param data 
+     * @param usage 
+    */
     template<typename T>
-    void SetData(GLuint noElements, T* data, GLenum usage) 
+    void SetData(GLuint numElements, T* data, GLenum usage) 
     {
-        glBufferData(type, noElements * sizeof(T), data, usage);
+        glBufferData(type, numElements * sizeof(T), data, usage);
     }
 
-    // update data (glBufferSubData)
+    /**
+     * @brief Update data: glBufferSubData()
+     * @tparam T 
+     * @param offset 
+     * @param numElements 
+     * @param data 
+    */
     template<typename T>
-    void UpdateData(GLintptr offset, GLuint noElements, T* data) 
+    void UpdateData(GLintptr offset, GLuint numElements, T* data)
     {
-        glBufferSubData(type, offset, noElements * sizeof(T), data);
+        glBufferSubData(type, offset, numElements * sizeof(T), data);
     }
 
-    // set attribute pointers
+    /**
+     * @brief Set attribute pointers: glVertexAttribPointer(), glEnableVertexAttribArray(), glVertexAttribDivisor()
+     * @tparam T 
+     * @param idx 
+     * @param size 
+     * @param type 
+     * @param stride 
+     * @param offset 
+     * @param divisor 
+    */
     template<typename T>
     void SetAttPointer(GLuint idx, GLint size, GLenum type, GLuint stride, GLuint offset, GLuint divisor = 0) 
     {
@@ -61,68 +78,99 @@ public:
         glEnableVertexAttribArray(idx);
         if (divisor > 0) 
         {
-            // reset _idx_ attribute every _divisor_ iteration (instancing)
+            // Reset idx attribute every divisor iteration (instancing)
             glVertexAttribDivisor(idx, divisor);
         }
     }
 
-    // clear buffer objects (bind 0)
+    /**
+     * @brief Clear buffer objects: glBindBuffer(type, 0);
+    */
     void Clear() 
     {
         glBindBuffer(type, 0);
     }
 
-    // cleanup
+    /**
+     * @brief glDeleteBuffers()
+    */
     void Cleanup() 
     {
         glDeleteBuffers(1, &val);
     }
 };
 
-/*
-    class for array objects
-    - VAO
+/**
+ * @brief Class for array objects: VAO
 */
 class ArrayObject 
 {
 public:
-    // value/location
     GLuint val;
 
-    // map of names to buffers
-    std::map<const char*, BufferObject> buffers;
+    std::map<const char*, BufferObject> buffers;    // Map of names to buffers
 
-    // get buffer (override [])
+    /**
+     * @brief Get buffer (override [])
+     * @param key 
+     * @return 
+    */
     BufferObject& operator[](const char* key) 
     {
         return buffers[key];
     }
 
-    // generate object
+    /**
+     * @brief Generate Object: glGenVertexArrays()
+    */
     void Generate() 
     {
         glGenVertexArrays(1, &val);
     }
 
-    // bind
+    /**
+     * @brief Bind: glBindVertexArray()
+    */
     void Bind() 
     {
         glBindVertexArray(val);
     }
 
-    // draw arrays
+    /**
+     * @brief Draw Arrays: glDrawArrays()
+     * @param mode 
+     * @param first 
+     * @param count 
+    */
     void Draw(GLenum mode, GLuint first, GLuint count) 
     {
         glDrawArrays(mode, first, count);
     }
 
-    // draw
+    /**
+     * @brief Draw Elements: glDrawElementsInstanced()
+     * @param mode 
+     * @param count 
+     * @param type 
+     * @param indices 
+     * @param instancecount 
+    */
     void Draw(GLenum mode, GLuint count, GLenum type, GLint indices, GLuint instancecount = 1) 
     {
         glDrawElementsInstanced(mode, count, type, (void*)indices, instancecount);
     }
 
-    // cleanup
+    /**
+     * @brief Clear array object: glBindVertexArray(0)
+    */
+    static void Clear() 
+    {
+        glBindVertexArray(0);
+    }
+
+    /**
+     * @brief glDeleteVertexArrays()
+    */
     void Cleanup() 
     {
         glDeleteVertexArrays(1, &val);
@@ -130,12 +178,6 @@ public:
         {
             pair.second.Cleanup();
         }
-    }
-
-    // clear array object (bind 0)
-    static void Clear() 
-    {
-        glBindVertexArray(0);
     }
 };
 

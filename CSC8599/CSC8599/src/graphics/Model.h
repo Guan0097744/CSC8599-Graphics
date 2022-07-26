@@ -15,7 +15,6 @@
 
 #include "Mesh.h"
 
-#include "models/Box.hpp"
 #include "../physics/Rigidbody.h"
 #include "../physics/CollisionModel.h"
 #include "../algorithms/Bounds.h"
@@ -44,7 +43,7 @@ public:
 	Model(std::string id, unsigned int maxNumInstances, unsigned int flags = 0);
 
 	virtual void Init() {};
-	virtual void Render(Shader& shader, float dt, Scene* scene);
+	virtual void Render(Shader& shader, float dt);
 
 	void LoadModel(std::string path);
 	void EnableCollisionModel();
@@ -79,7 +78,7 @@ protected:
 		unsigned int numCollisionFaces = 0, unsigned int* collisionIndices = NULL,
 		bool pad = false);	// proces a custom mesh
 
-	std::vector<Texture> LoadTextures(aiMaterial* mat, aiTextureType type);
+	//std::vector<Texture> LoadTextures(aiMaterial* mat, aiTextureType type);
 	std::vector<Texture> LoadTextures(aiMaterial* mat, aiTextureType type, const aiScene* scene);
 };
 

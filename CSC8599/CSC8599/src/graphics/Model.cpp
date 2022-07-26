@@ -40,7 +40,7 @@ void Model::AddMesh(Mesh* mesh)
 	boundingRegions.push_back(mesh->br);
 }
 
-void Model::Render(Shader& shader, float dt, Scene* scene)
+void Model::Render(Shader& shader, float dt)
 {
 	if (!States::IsActive(&switches, CONST_INSTANCES)) 
 	{
@@ -356,7 +356,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	//Process material
 	//============================================================================================//
 
-	// process material
 	if (mesh->mMaterialIndex >= 0) 
 	{
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -388,6 +387,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			// .obj, use aiTextureType_HEIGHT
 			std::vector<Texture> normalMaps = LoadTextures(material, aiTextureType_NORMALS, scene);
 			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+			// 4. 
+			// 5. 
 
 			ret = Mesh(br, textures);
 		}
@@ -446,7 +447,7 @@ Mesh Model::ProcessMesh(BoundingRegion br,
 	return ret;
 }
 
-std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type)
+/*std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type)
 {
 	std::vector<Texture> textures;
 
@@ -479,7 +480,7 @@ std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type)
 	}
 
 	return textures;
-}
+}*/
 
 std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type, const aiScene* scene)
 {

@@ -34,12 +34,18 @@ void Texture::Load(bool flip)
 	case 1:
 		colorMode = GL_RED;
 		break;
+	case 2:
+		colorMode = GL_GREEN;
+		break;
+	case 3:
+		colorMode = GL_BLUE;
+		break;
 	case 4:
 		colorMode = GL_RGBA;
 		break;
 	};
 
-	if (data) 
+	/*if (data) 
 	{
 		glBindTexture(GL_TEXTURE_2D, id);
 		glTexImage2D(GL_TEXTURE_2D, 0, colorMode, width, height, 0, colorMode, GL_UNSIGNED_BYTE, data);
@@ -51,6 +57,22 @@ void Texture::Load(bool flip)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 	else 
+	{
+		std::cout << "Failed to load texture. Image not loaded at " << path << std::endl;
+	}*/
+
+	try
+	{
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexImage2D(GL_TEXTURE_2D, 0, colorMode, width, height, 0, colorMode, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+	catch(std::string e)
 	{
 		std::cout << "Failed to load texture. Image not loaded at " << path << std::endl;
 	}
@@ -80,6 +102,12 @@ void Texture::LoadFromAssimp(const aiTexture* aiTex, bool flip)
 	{
 	case 1:
 		colorMode = GL_RED;
+		break;
+	case 2:
+		colorMode = GL_GREEN;
+		break;
+	case 3:
+		colorMode = GL_BLUE;
 		break;
 	case 4:
 		colorMode = GL_RGBA;

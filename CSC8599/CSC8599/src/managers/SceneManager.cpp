@@ -13,6 +13,11 @@ SceneManager::~SceneManager()
 	delete shader;
 	delete boxShader;
 	delete pbrShader;
+	delete equirectangularShader;
+	delete prefilterShader;
+	delete irradianceShader;
+	delete brdfShader;
+	delete backgroundShader;
 
 	delete dirLight;
 	delete pointLight;
@@ -20,11 +25,13 @@ SceneManager::~SceneManager()
 
 	delete sphere;
 	delete lamp;
+	delete pbrModel;
 }
 
 void SceneManager::Start()
 {
 	scene = Scene(3, 3, "OpenGL Tutorial", 1280, 720);
+	//scene = PBRScene(3, 3, "OpenGL Tutorial", 1280, 720);
 
 	// GLFW window creation
 	if (!scene.Init())
@@ -53,40 +60,15 @@ void SceneManager::Update()
 		// Render
 		scene.Update();
 
-		// activate the directional light's FBO
-
-		//// render scene to dirlight FBO
-		//dirLight->shadowFBO.Activate();
-		//scene.RenderDirLightShader(*dirShadowShader);
-		//RenderScene(*dirShadowShader);
-
-		//// render scene to point light FBOs
-		//for (unsigned int i = 0, len = scene.pointLights.size(); i < len; i++) {
-		//	if (States::IsIndexActive(&scene.activePointLights, i)) {
-		//		scene.pointLights[i]->shadowFBO.Activate();
-		//		scene.RenderPointLightShader(pointShadowShader, i);
-		//		RenderScene(pointShadowShader);
-		//	}
-		//}
-
-		//// render scene to spot light FBOs
-		//for (unsigned int i = 0, len = scene.spotLights.size(); i < len; i++) {
-		//    if (States::isIndexActive(&scene.activeSpotLights, i)) {
-		//        scene.spotLights[i]->shadowFBO.activate();
-		//        scene.renderSpotLightShader(spotShadowShader, i);
-		//        renderScene(spotShadowShader);
-		//    }
-		//}
-
-		// render scene normally
-		scene.defaultFBO.Activate();
-		scene.RenderShader(*shader);
-		RenderScene(*shader);
-
-		//// Render PBR scene
+		//// render scene normally
 		//scene.defaultFBO.Activate();
-		//scene.RenderShader(*pbrShader);
-		//RenderScene(*pbrShader);
+		//scene.RenderShader(*shader);
+		//RenderScene(*shader);
+
+		// Render PBR scene
+		scene.defaultFBO.Activate();
+		scene.RenderShader(*pbrShader);
+		RenderScene(*pbrShader);
 
 		// render boxes
 		scene.RenderShader(*boxShader, false);
@@ -118,8 +100,10 @@ void SceneManager::Setup()
 
 	scene.InitInstances();
 
-	// finish preparations (octree, etc)
-	scene.Prepare(box, { *shader });
+	//// finish preparations (octree, etc)
+	//scene.OctreePrepare(box, { *shader });
+	//scene.OctreePrepare(box, { *pbrShader });
+
 
 	scene.variableLog["time"] = (double)0.0;
 
@@ -143,12 +127,16 @@ void SceneManager::SetFonts()
 
 void SceneManager::SetShaders()
 {
-	Shader::LoadIntoDefault("defaultHead.glsl");
+	//Shader::LoadIntoDefault("defaultHead.glsl");
 
-	shader				= new Shader(true, "instanced/instanced_vs.glsl", "object_fs.glsl");
+	//shader				= new Shader(true, "instanced/instanced_vs.glsl", "object_fs.glsl");
+	pbrShader			= new Shader(false, "pbr/pbr_vs.glsl", "pbr/pbr_fs.glsl");
 	boxShader			= new Shader(false, "instanced/box_vs.glsl", "instanced/box_fs.glsl");
-
-	//pbrShader			= new Shader(true, "instanced/instanced_vs.glsl", "pbr/pbr_fs.glsl");
+	equirectangularShader = new Shader(false, "pbr/cubemap_vs.glsl", "pbr/equirectangular_fs.glsl");
+	prefilterShader		= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/prefilter_fs.glsl");
+	irradianceShader	= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/irradiance_fs.glsl");
+	brdfShader			= new Shader(false, "pbr/brdf_vs.glsl", "pbr/brdf_fs.glsl");
+	backgroundShader	= new Shader(false, "pbr/background_vs.glsl", "pbr/background_fs.glsl");
 
 	Shader::ClearDefault();
 }
@@ -213,14 +201,13 @@ void SceneManager::SetLightings()
 
 void SceneManager::SetModels()
 {
-	sphere	= new Sphere(10);
+	sphere		= new Sphere(10);
 	scene.RegisterModel(sphere);
 	//AddModel(sphere, glm::vec3(1.0f), 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	kirby	= new Model("Kirby", 1);
-	//kirby->LoadModel("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
-	kirby->LoadModel("assets/models/pbr_kirby_2/scene.gltf");
-	AddModel(kirby, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	pbrModel	= new PBRModel("Kirby");
+	pbrModel->Init("assets/models/pbr_kirby_2/scene.gltf");
+	AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	scene.LoadModels();
 }
@@ -239,19 +226,8 @@ void SceneManager::RenderScene(Shader& shader)
 		scene.RenderInstances(sphere->id, shader, dt);
 	}
 
-	scene.RenderInstances(kirby->id, shader, dt);
+	scene.RenderInstances(pbrModel->id, shader, dt);
 	//scene.RenderInstances(lamp->id, shader, dt);
-}
-
-void SceneManager::LaunchItem(float dt)
-{
-	RigidBody* rb = scene.GenerateInstance(sphere->id, glm::vec3(0.1f), 1.0f, cam.cameraPos);
-	if (rb) 
-	{
-		// instance generated successfully
-		rb->TransferEnergy(25.0f, cam.cameraFront);
-		rb->ApplyAcceleration(Environment::gravity);
-	}
 }
 
 void SceneManager::ProcessInput(double dt)
@@ -278,19 +254,4 @@ void SceneManager::ProcessInput(double dt)
 	{
 		States::ToggleIndex(&scene.activeSpotLights, 0); // toggle spot light
 	}
-
-	// launch sphere
-	if (Keyboard::KeyWentDown(GLFW_KEY_F)) 
-	{
-		LaunchItem(dt);
-	}
-
-	//// determine if each lamp should be toggled
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	if (Keyboard::KeyWentDown(GLFW_KEY_1 + i))
-	//	{
-	//		//States::toggleIndex(&scene.activePointLights, i);
-	//	}
-	//}
 }

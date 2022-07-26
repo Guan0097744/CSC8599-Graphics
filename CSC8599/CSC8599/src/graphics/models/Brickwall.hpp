@@ -22,14 +22,6 @@ public:
 
         Plane::Init(textures);
     }
-
-    /*
-    void render(Shader shader, float dt, Scene* scene, glm::mat4 model = glm::mat4(1.0f)) {
-        model = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), { 1.0f, 0.0f, 0.0f });
-
-        Model::render(shader, dt, scene, model);
-    }
-    */
 };
 
 #endif

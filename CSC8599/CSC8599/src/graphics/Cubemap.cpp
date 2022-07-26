@@ -1,4 +1,4 @@
-#include "cubemap.h"
+#include "Cubemap.h"
 
 #include "../Scene.h"
 
@@ -10,7 +10,8 @@ void Cubemap::Generate()
     glGenTextures(1, &id);
 }
 
-void Cubemap::Bind() {
+void Cubemap::Bind() 
+{
     glBindTexture(GL_TEXTURE_CUBE_MAP, id);
 }
 

@@ -150,6 +150,7 @@
     <ClCompile Include="src\algorithms\tree\Octree.cpp" />
     <ClCompile Include="src\algorithms\Ray.cpp" />
     <ClCompile Include="src\graphics\Cubemap.cpp" />
+    <ClCompile Include="src\graphics\models\PBRModel.hpp" />
     <ClCompile Include="src\graphics\Text.cpp" />
     <ClCompile Include="src\io\Camera.cpp" />
     <ClCompile Include="src\graphics\Light.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\managers\SceneManager.cpp" />
+    <ClCompile Include="src\PBRScene.cpp" />
     <ClCompile Include="src\physics\CollisionMesh.cpp" />
     <ClCompile Include="src\physics\CollisionModel.cpp" />
     <ClCompile Include="src\physics\Environment.cpp" />
@@ -182,8 +184,16 @@
     <None Include="assets\images\red.png" />
     <None Include="assets\shaders\outline_fs.glsl" />
     <None Include="assets\shaders\outline_vs.glsl" />
+    <None Include="assets\shaders\pbr\background_fs.glsl" />
+    <None Include="assets\shaders\pbr\background_vs.glsl" />
+    <None Include="assets\shaders\pbr\brdf_fs.glsl" />
+    <None Include="assets\shaders\pbr\brdf_vs.glsl" />
+    <None Include="assets\shaders\pbr\cubemap_vs.glsl" />
+    <None Include="assets\shaders\pbr\equirectangular_fs.glsl" />
+    <None Include="assets\shaders\pbr\irradiance_fs.glsl" />
     <None Include="assets\shaders\pbr\pbr_fs.glsl" />
     <None Include="assets\shaders\pbr\pbr_vs.glsl" />
+    <None Include="assets\shaders\pbr\prefilter_fs.glsl" />
     <None Include="assets\shaders\sky_fs.glsl" />
     <None Include="assets\shaders\skybox_fs.glsl" />
     <None Include="assets\shaders\skybox_vs.glsl" />
@@ -219,6 +229,7 @@
     <ClInclude Include="src\io\Mouse.h" />
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\managers\SceneManager.h" />
+    <ClInclude Include="src\PBRScene.h" />
     <ClInclude Include="src\physics\CollisionMesh.h" />
     <ClInclude Include="src\physics\CollisionModel.h" />
     <ClInclude Include="src\physics\Environment.h" />

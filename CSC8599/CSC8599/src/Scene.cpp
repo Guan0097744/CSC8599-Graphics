@@ -32,12 +32,10 @@ Scene::Scene(int glfwVersionMajor, int glfwVersionMinor, const char* title, unsi
 	activePointLights(0), activeSpotLights(0),
 	currentId("aaaaaaaa"), lightUBO(0) 
 {
-	// window dimensions
-	SCR_WIDTH = scrWidth;
-	SCR_HEIGHT = scrHeight;
-	defaultFBO = FramebufferObject(scrWidth, scrHeight, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	SCR_WIDTH	= scrWidth;
+	SCR_HEIGHT	= scrHeight;
+	defaultFBO	= FramebufferObject(scrWidth, scrHeight, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	// window color
 	SetWindowColor(0.1f, 0.15f, 0.15f, 1.0f);
 }
 
@@ -139,13 +137,16 @@ bool Scene::RegisterFont(TextRenderer* tr, std::string name, std::string path)
  * @param box 
  * @param shaders 
 */
-void Scene::Prepare(Box& box, std::vector<Shader> shaders)
+void Scene::OctreePrepare(Box& box, std::vector<Shader> shaders)
 {
 	// close FT library
 	FT_Done_FreeType(ft);
 	// process current instances
 	octree->Update(box);
+}
 
+void Scene::SetLightsUBO(std::vector<Shader> shaders)
+{
 	// setup lighting UBO
 	lightUBO = UBO::UBO(0, {
 		UBO::NewStruct({ // dir light
@@ -199,7 +200,8 @@ void Scene::Prepare(Box& box, std::vector<Shader> shaders)
 		});
 
 	// attach the UBO to specified shaders
-	for (Shader s : shaders) {
+	for (Shader s : shaders)
+	{
 		lightUBO.AttachToShader(s, "Lights");
 	}
 
@@ -224,7 +226,8 @@ void Scene::Prepare(Box& box, std::vector<Shader> shaders)
 	numPointLights = std::min<unsigned int>(pointLights.size(), MAX_POINT_LIGHTS);
 	lightUBO.WriteElement<unsigned int>(&numPointLights);
 	unsigned int i = 0;
-	for (; i < numPointLights; i++) {
+	for (; i < numPointLights; i++)
+	{
 		lightUBO.WriteElement<glm::vec3>(&pointLights[i]->position);
 		lightUBO.WriteElement<glm::vec4>(&pointLights[i]->ambient);
 		lightUBO.WriteElement<glm::vec4>(&pointLights[i]->diffuse);
@@ -256,7 +259,6 @@ void Scene::Prepare(Box& box, std::vector<Shader> shaders)
 	}
 
 	lightUBO.Clear();
-
 }
 
 void Scene::Update()
@@ -423,7 +425,7 @@ void Scene::RenderInstances(std::string modelId, Shader& shader, float dt)
 	{
 		// render each mesh in specified model
 		shader.Activate();
-		((Model*)val)->Render(shader, dt, this);
+		((Model*)val)->Render(shader, dt);
 	}
 }
 

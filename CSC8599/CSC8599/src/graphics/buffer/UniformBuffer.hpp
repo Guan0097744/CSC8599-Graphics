@@ -25,11 +25,16 @@ namespace UBO
         INVALID
     };
 
-    // round up val to the next multiple of 2^n
+    /**
+     * @brief Round up val to the next multiple of 2^n
+     * @param val 
+     * @param n 
+     * @return 
+    */
     inline unsigned int RoundUpPow2(unsigned int val, unsigned char n) 
     {
-        unsigned int pow2n = 0b1 << n; // = 1 * 2^n = 2^n
-        unsigned int divisor = pow2n - 1; // = 0b0111...111 (n 1s)
+        unsigned int pow2n      = 0b1 << n;     // = 1 * 2^n = 2^n
+        unsigned int divisor    = pow2n - 1;    // = 0b0111...111 (n 1s)
 
         // last n bits = remainder of val / 2^n
         // add (2^n - rem) to get to the next multiple of 2^n
@@ -44,51 +49,48 @@ namespace UBO
 
     typedef struct Element 
     {
-        Type type;
-        unsigned int baseAlign;
-        unsigned int length; // length of the array or num elements in structure
-        std::vector<Element> list; // for struct (list of sub-elements), or array (1st slot is the type)
+        Type                    type;
+        unsigned int            baseAlign;
+        unsigned int            length;     // Length of the array or num elements in structure
+        std::vector<Element>    list;       // For struct (list of sub-elements), or array (1st slot is the type)
     
         std::string TypeStr() 
         {
-            switch (type) {
-            case Type::SCALAR: return "scalar";
-            case Type::VEC2: return "vec2";
-            case Type::VEC3: return "vec3";
-            case Type::VEC4: return "vec4";
-            case Type::ARRAY: return "array<" + list[0].TypeStr() + ">";
-            case Type::STRUCT: return "struct";
-            default: return "invalid";
+            switch (type) 
+            {
+            case Type::SCALAR:  return "scalar";
+            case Type::VEC2:    return "vec2";
+            case Type::VEC3:    return "vec3";
+            case Type::VEC4:    return "vec4";
+            case Type::ARRAY:   return "array<" + list[0].TypeStr() + ">";
+            case Type::STRUCT:  return "struct";
+            default:            return "invalid";
             };
         }
 
         unsigned int AlignPow2() 
         {
-            switch (baseAlign) {
-            case 2: return 1;
-            case 4: return 2;
-            case 8: return 3;
-            case 16: return 4;
-            default: return 0;
+            switch (baseAlign) 
+            {
+            case 2:     return 1;
+            case 4:     return 2;
+            case 8:     return 3;
+            case 16:    return 4;
+            default:    return 0;
             };
         }
 
         unsigned int CalcSize() 
         {
-            switch (type) {
-            case Type::SCALAR:
-                return N;
-            case Type::VEC2:
-                return 2 * N;
-            case Type::VEC3:
-                return 3 * N;
-            case Type::VEC4:
-                return 4 * N;
+            switch (type) 
+            {
+            case Type::SCALAR:  return N;
+            case Type::VEC2:    return 2 * N;
+            case Type::VEC3:    return 3 * N;
+            case Type::VEC4:    return 4 * N;
             case Type::ARRAY:
-            case Type::STRUCT:
-                return CalcPaddedSize();
-            default:
-                return 0;
+            case Type::STRUCT:  return CalcPaddedSize();
+            default:            return 0;
             };
         }
 
@@ -122,14 +124,18 @@ namespace UBO
             switch (type) 
             {
             case Type::SCALAR:
-                baseAlign = N; break;
+                baseAlign = N;
+                break;
             case Type::VEC2:
-                baseAlign = 2 * N; break;
+                baseAlign = 2 * N;
+                break;
             case Type::VEC3:
             case Type::VEC4:
-                baseAlign = 4 * N; break;
+                baseAlign = 4 * N;
+                break;
             default:
-                baseAlign = 0; break;
+                baseAlign = 0;
+                break;
             };
         }
     } Element;
@@ -211,7 +217,7 @@ namespace UBO
     class UBO : public BufferObject 
     {
     public:
-        Element         block; // root element of the UBO (struct)
+        Element         block;              // Root element of the UBO
         unsigned int    calculatedSize;
         GLuint          bindingPos;
 
@@ -227,13 +233,13 @@ namespace UBO
             calculatedSize(0),
             bindingPos(bindingPos) {}
 
-        void AttachToShader(Shader shader, std::string name) 
+        void AttachToShader(Shader shader, std::string name)
         {
             GLuint blockIdx = glGetUniformBlockIndex(shader.id, name.c_str());
             glUniformBlockBinding(shader.id, blockIdx, bindingPos);
         }
 
-        void InitNullData(GLenum usage) 
+        void InitNullData(GLenum usage)
         {
             if (!calculatedSize) 
             {
@@ -275,9 +281,9 @@ namespace UBO
         // initialize iterator
         void StartWrite() 
         {
-            currentDepth = 0;
-            offset = 0;
-            poppedOffset = 0;
+            currentDepth    = 0;
+            offset          = 0;
+            poppedOffset    = 0;
             indexStack.clear();
             indexStack.push_back({ 0, &block });
         }

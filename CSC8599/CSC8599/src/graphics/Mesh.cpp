@@ -59,7 +59,7 @@ void Vertex::CalcTanVectors(std::vector<Vertex>& list, std::vector<unsigned int>
 		counts[i] = 0;
 	}
 
-	// iterate through indices and calculate vectors for each face
+	// Iterate through indices and calculate vectors for each face
 	for (unsigned int i = 0, len = indices.size(); i < len; i += 3) 
 	{
 		// 3 vertices corresponding to the face
@@ -67,11 +67,11 @@ void Vertex::CalcTanVectors(std::vector<Vertex>& list, std::vector<unsigned int>
 		Vertex v2 = list[indices[i + 1]];
 		Vertex v3 = list[indices[i + 2]];
 
-		// calculate edges
+		// Calculate edges
 		glm::vec3 edge1 = v2.pos - v1.pos;
 		glm::vec3 edge2 = v3.pos - v1.pos;
 
-		// calculate dUVs
+		// Calculate delta UVs
 		glm::vec2 deltaUV1 = v2.texCoord - v1.texCoord;
 		glm::vec2 deltaUV2 = v3.texCoord - v1.texCoord;
 
@@ -170,7 +170,7 @@ void Mesh::LoadData(std::vector<Vertex> vertices, std::vector<unsigned int> indi
 	// Normal ray
 	VAO["VBO"].SetAttPointer<GLfloat>(1, 3, GL_FLOAT, 11, 3);
 	// Vertex texture coords
-	VAO["VBO"].SetAttPointer<GLfloat>(2, 3, GL_FLOAT, 11, 6);
+	VAO["VBO"].SetAttPointer<GLfloat>(2, 2, GL_FLOAT, 11, 6);
 	// Tangent vector
 	VAO["VBO"].SetAttPointer<GLfloat>(3, 3, GL_FLOAT, 11, 8);
 
@@ -218,7 +218,7 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 	}
 	else
 	{
-		// Textures
+		// Set Textures
 		unsigned int diffuseIdx		= 0;
 		unsigned int normalIdx		= 0;
 		unsigned int specularIdx	= 0;
@@ -239,6 +239,10 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 				break;
 			case aiTextureType_SPECULAR:
 				name = "specular" + std::to_string(specularIdx++);
+				break;
+			case aiTextureType_DIFFUSE_ROUGHNESS:
+				break;
+			case aiTextureType_METALNESS:
 				break;
 			default:
 				name = textures[i].name;
@@ -263,7 +267,8 @@ void Mesh::Cleanup()
 {
 	VAO.Cleanup();
 
-	for (Texture t : textures) {
+	for (Texture t : textures) 
+	{
 		t.Cleanup();
 	}
 }
