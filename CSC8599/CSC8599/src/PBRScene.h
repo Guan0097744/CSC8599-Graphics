@@ -40,11 +40,11 @@ class Model;
 class PBRScene
 {
 public:
-	avl* models;					//Store models
+	avl*					models;					//Store models
 	trie::Trie<RigidBody*>	instances;				//Store instances
 
 	std::vector<RigidBody*> instancesToDelete;		// list of instances that should be deleted
-	Octree::node* octree;					// pointer to root node in octree
+	Octree::node*			octree;					// pointer to root node in octree
 
 	jsoncpp::json			variableLog;			// map for logged variables
 
@@ -61,13 +61,17 @@ public:
 	bool Init();
 	void SetParametres();
 	bool RegisterFont(TextRenderer* tr, std::string name, std::string path);
-	void OctreePrepare(Box& box, std::vector<Shader> shaders);
+	void OctreePrepare(Box& box);
 
 	//============================================================================================//
 	//PBR Setting
 	//============================================================================================//
 
-	void SetPBR(Shader& shader);
+	template<typename T>
+	void SetPBRUniform(Shader* shader, std::string mapID, T value)
+	{
+		shader->SetInt(mapID, value);
+	}
 
 	//============================================================================================//
 	//Main Loop
@@ -76,12 +80,9 @@ public:
 	void Update();
 	void NewFrame(Box& box);
 	void ProcessInput(float dt);
-	void RenderShader(Shader& shader, bool applyLighting = true);			// set uniform shader varaibles (lighting, etc)
-	void RenderDirLightShader(Shader& shader);								// set uniform shader variables for directional light render
-	void RenderPointLightShader(Shader& shader, unsigned int idx);			// set uniform shader variables for point light render
-	void RenderSpotLightShader(Shader& shader, unsigned int idx);			// set uniform shader variables for spot light render
-	void RenderInstances(std::string modelId, Shader& shader, float dt);	// render specified model's instances
-	void RenderText(std::string font, Shader& shader, std::string text, float x, float y, glm::vec2 scale, glm::vec3 color);	// render text
+	void RenderShader(Shader& shader, bool applyOctree = false);
+	void RenderInstances(std::string modelId, Shader& shader, float dt);	// Render specified model's instances
+	void RenderText(std::string font, Shader& shader, std::string text, float x, float y, glm::vec2 scale, glm::vec3 color);
 
 	void SetShouldClose(bool shouldClose);
 	void SetWindowColor(float r, float g, float b, float a);
@@ -115,13 +116,10 @@ public:
 	//Lights
 	//============================================================================================//
 
-	glm::vec3 lightPositions[4];
-	glm::vec3 lightColors[4];
-	//std::vector<glm::vec3>	lightPositions;
-	//std::vector<glm::vec3>	lightColors;
-	int						nrRows = 7;
-	int						nrColumns = 7;
-	float					spacing = 2.5;
+	/*glm::vec3				lightPositions[4];
+	glm::vec3				lightColors[4];*/
+	std::vector<glm::vec3>	lightPositions;
+	std::vector<glm::vec3>	lightColors;
 
 	//============================================================================================//
 	//Camera Variables

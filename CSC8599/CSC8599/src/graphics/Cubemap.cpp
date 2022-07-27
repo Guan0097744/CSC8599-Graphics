@@ -153,14 +153,15 @@ void Cubemap::Render(Shader shader, Scene* scene)
 {
     glDepthMask(GL_FALSE);
 
-    shader.Activate();
+    shader.Use();
 
     // remove translation from view matrix
     glm::mat4 view = glm::mat4(glm::mat3(scene->GetActiveCamera()->GetViewMatrix()));
     shader.SetMat4("view", view);
     shader.SetMat4("projection", scene->projection);
 
-    if (hasTextures) {
+    if (hasTextures) 
+    {
         Bind();
     }
 

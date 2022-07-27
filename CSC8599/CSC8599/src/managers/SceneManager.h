@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../Scene.h"
-#include "../PBRScene.h"
 
 #include "../graphics/models/Sphere.hpp"
 #include "../graphics/models/PBRModel.hpp"

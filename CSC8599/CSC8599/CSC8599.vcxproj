@@ -162,6 +162,7 @@
     <ClCompile Include="src\io\Mouse.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
+    <ClCompile Include="src\managers\PBRSceneManager.cpp" />
     <ClCompile Include="src\managers\SceneManager.cpp" />
     <ClCompile Include="src\PBRScene.cpp" />
     <ClCompile Include="src\physics\CollisionMesh.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="src\io\Keyboard.h" />
     <ClInclude Include="src\io\Mouse.h" />
     <ClInclude Include="src\graphics\Shader.h" />
+    <ClInclude Include="src\managers\PBRSceneManager.h" />
     <ClInclude Include="src\managers\SceneManager.h" />
     <ClInclude Include="src\PBRScene.h" />
     <ClInclude Include="src\physics\CollisionMesh.h" />

@@ -83,7 +83,7 @@ bool TextRenderer::LoadFont(FT_Library& ft, std::string path)
 
 void TextRenderer::Render(Shader shader, std::string text, float x, float y, glm::vec2 scale, glm::vec3 color) 
 {
-	shader.Activate();
+	shader.Use();
 	shader.Set3Float("textColor", color);
 
 	glActiveTexture(GL_TEXTURE0);

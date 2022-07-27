@@ -31,7 +31,6 @@ SceneManager::~SceneManager()
 void SceneManager::Start()
 {
 	scene = Scene(3, 3, "OpenGL Tutorial", 1280, 720);
-	//scene = PBRScene(3, 3, "OpenGL Tutorial", 1280, 720);
 
 	// GLFW window creation
 	if (!scene.Init())

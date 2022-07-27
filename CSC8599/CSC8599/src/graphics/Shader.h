@@ -33,7 +33,7 @@ public:
 		const char* geoShaderPath = nullptr);
 
 	// Activate shader
-	void Activate();
+	void Use();
 
 	// Clean up
 	void Cleanup();

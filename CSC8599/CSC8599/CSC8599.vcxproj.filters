@@ -96,6 +96,9 @@
     <ClCompile Include="src\PBRScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\managers\PBRSceneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\object_fs.glsl" />
@@ -232,6 +235,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\PBRScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\managers\PBRSceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

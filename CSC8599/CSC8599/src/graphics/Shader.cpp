@@ -33,7 +33,7 @@ void Shader::Generate(bool includeDefaultHeader, const char* vertexShaderPath, c
 	}
 }
 
-void Shader::Activate()
+void Shader::Use()
 {
 	glUseProgram(id);
 }

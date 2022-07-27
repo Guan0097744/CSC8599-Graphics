@@ -346,7 +346,7 @@ void Scene::ProcessInput(float dt)
 void Scene::RenderShader(Shader& shader, bool applyLighting)
 {
 	// activate shader
-	shader.Activate();
+	shader.Use();
 
 	// set camera values
 	shader.SetMat4("view", view);
@@ -391,13 +391,13 @@ void Scene::RenderShader(Shader& shader, bool applyLighting)
 
 void Scene::RenderDirLightShader(Shader& shader)
 {
-	shader.Activate();
+	shader.Use();
 	shader.SetMat4("lightSpaceMatrix", dirLight->lightSpaceMatrix);
 }
 
 void Scene::RenderPointLightShader(Shader& shader, unsigned int idx)
 {
-	shader.Activate();
+	shader.Use();
 
 	// light space matrices
 	for (unsigned int i = 0; i < 6; i++) 
@@ -411,7 +411,7 @@ void Scene::RenderPointLightShader(Shader& shader, unsigned int idx)
 
 void Scene::RenderSpotLightShader(Shader& shader, unsigned int idx)
 {
-	shader.Activate();
+	shader.Use();
 
 	shader.SetMat4("lightSpaceMatrix", spotLights[idx]->lightSpaceMatrix);	// light space matrix
 	shader.Set3Float("lightPos", spotLights[idx]->position);				// light position
@@ -424,7 +424,7 @@ void Scene::RenderInstances(std::string modelId, Shader& shader, float dt)
 	if (val) 
 	{
 		// render each mesh in specified model
-		shader.Activate();
+		shader.Use();
 		((Model*)val)->Render(shader, dt);
 	}
 }
@@ -434,7 +434,7 @@ void Scene::RenderText(std::string font, Shader& shader, std::string text, float
 	void* val = avl_get(fonts, (void*)font.c_str());
 	if (val) 
 	{
-		shader.Activate();
+		shader.Use();
 		shader.SetMat4("projection", textProjection);
 
 		((TextRenderer*)val)->Render(shader, text, x, y, scale, color);

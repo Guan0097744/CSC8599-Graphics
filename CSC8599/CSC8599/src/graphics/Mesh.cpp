@@ -240,9 +240,23 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 			case aiTextureType_SPECULAR:
 				name = "specular" + std::to_string(specularIdx++);
 				break;
-			case aiTextureType_DIFFUSE_ROUGHNESS:
+			case aiTextureType_BASE_COLOR:
+				name = "albedoMap";
+				break;
+			case aiTextureType_NORMAL_CAMERA:
+				name = "normalMap";
+				break;
+			case aiTextureType_EMISSION_COLOR:
+				name = "emissionMap";
 				break;
 			case aiTextureType_METALNESS:
+				name = "metallicMap";
+				break;
+			case aiTextureType_DIFFUSE_ROUGHNESS:
+				name = "roughnessMap";
+				break;
+			case aiTextureType_AMBIENT_OCCLUSION:
+				name = "aoMap";
 				break;
 			default:
 				name = textures[i].name;

@@ -86,7 +86,8 @@ void Model::Render(Shader& shader, float dt)
 	shader.SetFloat("material.shininess", 0.5f);
 
 	// render each mesh
-	for (unsigned int i = 0, noMeshes = meshes.size(); i < noMeshes; i++) {
+	for (unsigned int i = 0, numMeshes = meshes.size(); i < numMeshes; i++) 
+	{
 		meshes[i].Render(shader, currentNumInstances);
 	}
 }
@@ -175,7 +176,7 @@ void Model::InitInstances()
 	{
 		meshes[i].VAO.Bind();
 
-		// set vertex attrib pointers
+		// Set vertex attrib pointers
 		modelVBO.Bind();
 		modelVBO.SetAttPointer<glm::vec4>(4, 4, GL_FLOAT, 4, 0, 1);
 		modelVBO.SetAttPointer<glm::vec4>(5, 4, GL_FLOAT, 4, 1, 1);
@@ -387,8 +388,33 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			// .obj, use aiTextureType_HEIGHT
 			std::vector<Texture> normalMaps = LoadTextures(material, aiTextureType_NORMALS, scene);
 			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-			// 4. 
-			// 5. 
+
+			//============================================================================================//
+			//PBR Texture
+			//============================================================================================//
+
+			// albedoMap
+			std::vector<Texture> pbrBaseColorMaps	= LoadTextures(material, aiTextureType_BASE_COLOR, scene);
+			textures.insert(textures.end(), pbrBaseColorMaps.begin(), pbrBaseColorMaps.end());
+
+			// normalMap
+			std::vector<Texture> pbrNormalMaps		= LoadTextures(material, aiTextureType_NORMAL_CAMERA, scene);
+			textures.insert(textures.end(), pbrNormalMaps.begin(), pbrNormalMaps.end());
+
+			std::vector<Texture> pbrEmissionMaps	= LoadTextures(material, aiTextureType_EMISSION_COLOR, scene);
+			textures.insert(textures.end(), pbrEmissionMaps.begin(), pbrEmissionMaps.end());
+
+			// metallicMap
+			std::vector<Texture> pbrMetalinessMaps	= LoadTextures(material, aiTextureType_METALNESS, scene);
+			textures.insert(textures.end(), pbrMetalinessMaps.begin(), pbrMetalinessMaps.end());
+
+			// roughnessMap
+			std::vector<Texture> pbrRoughnessMaps	= LoadTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, scene);
+			textures.insert(textures.end(), pbrRoughnessMaps.begin(), pbrRoughnessMaps.end());
+
+			// aoMap
+			std::vector<Texture> pbrAOMaps		= LoadTextures(material, aiTextureType_AMBIENT_OCCLUSION, scene);
+			textures.insert(textures.end(), pbrAOMaps.begin(), pbrAOMaps.end());
 
 			ret = Mesh(br, textures);
 		}
@@ -446,41 +472,6 @@ Mesh Model::ProcessMesh(BoundingRegion br,
 
 	return ret;
 }
-
-/*std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type)
-{
-	std::vector<Texture> textures;
-
-	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-	{
-		aiString str;
-		mat->GetTexture(type, i, &str);
-		std::cout << str.C_Str() << std::endl;
-
-		// Prevent duplicate load
-		bool skip = false;
-		for (unsigned int j = 0; j < texsLoaded.size(); j++)
-		{
-			if (std::strcmp(texsLoaded[j].path.data(), str.C_Str()) == 0)
-			{
-				textures.push_back(texsLoaded[j]);
-				skip = true;
-				break;
-			}
-		}
-
-		if (!skip)
-		{
-			// Not loaded yet
-			Texture tex(directory, str.C_Str(), type);
-			tex.Load(false);
-			textures.push_back(tex);
-			texsLoaded.push_back(tex);
-		}
-	}
-
-	return textures;
-}*/
 
 std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type, const aiScene* scene)
 {

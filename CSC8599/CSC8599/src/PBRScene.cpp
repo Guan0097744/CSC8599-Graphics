@@ -112,9 +112,9 @@ void PBRScene::SetParametres()
 	//Init model/instance trees
 	//============================================================================================//
 
-	models = avl_createEmptyRoot(strkeycmp);
-	instances = trie::Trie<RigidBody*>(trie::ascii_lowercase);
-	octree = new Octree::node(BoundingRegion(glm::vec3(-16.0f), glm::vec3(16.0f)));
+	models		= avl_createEmptyRoot(strkeycmp);
+	instances	= trie::Trie<RigidBody*>(trie::ascii_lowercase);
+	octree		= new Octree::node(BoundingRegion(glm::vec3(-16.0f), glm::vec3(16.0f)));
 
 }
 
@@ -136,25 +136,12 @@ bool PBRScene::RegisterFont(TextRenderer* tr, std::string name, std::string path
  * @param box
  * @param shaders
 */
-void PBRScene::OctreePrepare(Box& box, std::vector<Shader> shaders)
+void PBRScene::OctreePrepare(Box& box)
 {
 	// close FT library
 	FT_Done_FreeType(ft);
 	// process current instances
 	octree->Update(box);
-}
-
-void PBRScene::SetPBR(Shader& shader)
-{
-	shader.Activate();
-	shader.SetInt("irradianceMap", 0);
-	shader.SetInt("prefilterMap", 1);
-	shader.SetInt("brdfLUT", 2);
-	shader.SetInt("albedoMap", 3);
-	shader.SetInt("normalMap", 4);
-	shader.SetInt("metallicMap", 5);
-	shader.SetInt("roughnessMap", 6);
-	shader.SetInt("aoMap", 7);
 }
 
 void PBRScene::Update()
@@ -239,51 +226,33 @@ void PBRScene::ProcessInput(float dt)
 	}
 }
 
-void PBRScene::RenderShader(Shader& shader, bool applyLighting)
+void PBRScene::RenderShader(Shader& shader, bool applyOctree)
 {
-	// activate shader
-	shader.Activate();
+	// Activate shader
+	shader.Use();
 
-	// set camera values
+	// Set camera values
 	shader.SetMat4("view", view);
 	shader.SetMat4("projection", projection);
-	shader.Set3Float("viewPos", cameraPos);
+	shader.Set3Float("camPos", cameraPos);
 
-	/*
-	// lighting
-	if (applyLighting)
+	// Set PBR
+	if (!applyOctree)
 	{
-		unsigned int textureIdx = 31;
-
-		// directional light
-		dirLight->Render(shader, textureIdx--);
-
-		// point lights
-		unsigned int numLights = pointLights.size();
-		unsigned int numActiveLights = 0;
-		for (unsigned int i = 0; i < numLights; i++)
+		for (unsigned int i = 0; i < lightPositions.size(); ++i)
 		{
-			if (States::IsIndexActive(&activePointLights, i))
-			{
-				// i'th light is active
-				pointLights[i]->Render(shader, numActiveLights, textureIdx--);
-				numActiveLights++;
-			}
-		}
-		shader.SetInt("noPointLights", numActiveLights);
+			glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
+			newPos = lightPositions[i];
+			shader.Set3Float("lightPositions[" + std::to_string(i) + "]", newPos);
+			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lightColors[i]);
 
-		// spot lights
-		numLights = spotLights.size();
-		numActiveLights = 0;
-		for (unsigned int i = 0; i < numLights; i++) {
-			if (States::IsIndexActive(&activeSpotLights, i)) {
-				// i'th spot light active
-				spotLights[i]->Render(shader, numActiveLights, textureIdx--);
-				numActiveLights++;
-			}
+			/*model = glm::mat4(1.0f);
+			model = glm::translate(model, newPos);
+			model = glm::scale(model, glm::vec3(0.5f));
+			shader.SetMat4("model", model);*/
 		}
-		shader.SetInt("noSpotLights", numActiveLights);
-	}*/
+	}
+	
 }
 
 void PBRScene::RenderInstances(std::string modelId, Shader& shader, float dt)
@@ -292,7 +261,7 @@ void PBRScene::RenderInstances(std::string modelId, Shader& shader, float dt)
 	if (val)
 	{
 		// render each mesh in specified model
-		shader.Activate();
+		shader.Use();
 		((Model*)val)->Render(shader, dt/*, this*/);
 	}
 }
@@ -302,7 +271,7 @@ void PBRScene::RenderText(std::string font, Shader& shader, std::string text, fl
 	void* val = avl_get(fonts, (void*)font.c_str());
 	if (val)
 	{
-		shader.Activate();
+		shader.Use();
 		shader.SetMat4("projection", textProjection);
 
 		((TextRenderer*)val)->Render(shader, text, x, y, scale, color);

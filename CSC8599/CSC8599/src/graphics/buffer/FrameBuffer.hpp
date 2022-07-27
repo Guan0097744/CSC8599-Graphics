@@ -86,7 +86,7 @@ public:
         Clear();
     }
 
-    void AllocateAndAttachRBO(GLenum attachType, GLenum format) 
+    void AllocateAndAttachRBO(GLenum attachType, GLenum format, GLuint w = 512, GLuint h = 512)
     {
         GLuint rbo;
 
@@ -95,7 +95,8 @@ public:
         glBindRenderbuffer(GL_RENDERBUFFER, rbo);
 
         // attach
-        glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);
+        glRenderbufferStorage(GL_RENDERBUFFER, format, w, h);
+        //glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachType, GL_RENDERBUFFER, rbo);
 
         // add to list
@@ -139,16 +140,16 @@ public:
 
     void Cleanup() 
     {
-        // delete RBOs
+        // Delete RBOs
         glDeleteRenderbuffers(rbos.size(), &rbos[0]);
 
-        // delete generated textures
+        // Delete generated textures
         for (Texture t : textures) 
         {
             t.Cleanup();
         }
 
-        // delete FBO
+        // Delete FBO
         glDeleteFramebuffers(1, &val);
     }
 };
