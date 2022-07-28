@@ -67,11 +67,7 @@ public:
 	//PBR Setting
 	//============================================================================================//
 
-	template<typename T>
-	void SetPBRUniform(Shader* shader, std::string mapID, T value)
-	{
-		shader->SetInt(mapID, value);
-	}
+	
 
 	//============================================================================================//
 	//Main Loop

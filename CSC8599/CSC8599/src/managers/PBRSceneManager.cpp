@@ -127,22 +127,6 @@ void PBRSceneManager::SetShaders()
 	irradianceShader		= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/irradiance_fs.glsl");
 	brdfShader				= new Shader(false, "pbr/brdf_vs.glsl", "pbr/brdf_fs.glsl");
 
-	pbrShader->Use();
-	scene.SetPBRUniform(pbrShader, "irradianceMap", 0);
-	scene.SetPBRUniform(pbrShader, "prefilterMap", 1);
-	scene.SetPBRUniform(pbrShader, "brdfLUT", 2);
-	scene.SetPBRUniform(pbrShader, "albedoMap", 3);
-	scene.SetPBRUniform(pbrShader, "normalMap", 4);
-	scene.SetPBRUniform(pbrShader, "metallicMap", 5);
-	scene.SetPBRUniform(pbrShader, "roughnessMap", 6);
-	scene.SetPBRUniform(pbrShader, "aoMap", 7);
-
-	backgroundShader->Use();
-	scene.SetPBRUniform(backgroundShader, "environmentMap", 0);
-
-	equirectangularShader->Use();
-	scene.SetPBRUniform(equirectangularShader, "equirectangularMap", 0);
-
 	Shader::ClearDefault();
 }
 
@@ -163,6 +147,7 @@ void PBRSceneManager::SetModels()
 {
 	pbrModel = new PBRModel("Kirby");
 	pbrModel->Init("assets/models/pbr_kirby_2/scene.gltf");
+	//pbrModel->Init("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
 	AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	scene.LoadModels();

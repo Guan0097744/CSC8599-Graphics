@@ -218,6 +218,7 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 	}
 	else
 	{
+		/*
 		// Set Textures
 		unsigned int diffuseIdx		= 0;
 		unsigned int normalIdx		= 0;
@@ -240,13 +241,33 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 			case aiTextureType_SPECULAR:
 				name = "specular" + std::to_string(specularIdx++);
 				break;
+			default:
+				name = textures[i].name;
+				break;
+			}
+
+			shader.SetInt(name, i);
+			textures[i].Bind();
+		}*/
+
+		//============================================================================================//
+		//PBR Texture
+		//============================================================================================//
+
+		for (int i = 0; i < textures.size(); i++)
+		{
+			glActiveTexture(GL_TEXTURE0 + i);
+
+			std::string name;
+			switch (textures[i].type)
+			{
 			case aiTextureType_BASE_COLOR:
 				name = "albedoMap";
 				break;
-			case aiTextureType_NORMAL_CAMERA:
+			case aiTextureType_NORMALS:
 				name = "normalMap";
 				break;
-			case aiTextureType_EMISSION_COLOR:
+			case aiTextureType_EMISSIVE:
 				name = "emissionMap";
 				break;
 			case aiTextureType_METALNESS:
@@ -257,9 +278,6 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 				break;
 			case aiTextureType_AMBIENT_OCCLUSION:
 				name = "aoMap";
-				break;
-			default:
-				name = textures[i].name;
 				break;
 			}
 

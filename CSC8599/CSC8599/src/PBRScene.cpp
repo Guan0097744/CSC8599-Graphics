@@ -213,8 +213,8 @@ void PBRScene::ProcessInput(float dt)
 		}
 
 		// set matrices
-		view = cameras[activeCamera]->GetViewMatrix();
-		projection = glm::perspective(
+		view		= cameras[activeCamera]->GetViewMatrix();
+		projection	= glm::perspective(
 			glm::radians(cameras[activeCamera]->GetZoom()),	    // FOV
 			(float)SCR_WIDTH / (float)SCR_HEIGHT,				// aspect ratio
 			0.1f, 100.0f										// near and far bounds
@@ -262,7 +262,7 @@ void PBRScene::RenderInstances(std::string modelId, Shader& shader, float dt)
 	{
 		// render each mesh in specified model
 		shader.Use();
-		((Model*)val)->Render(shader, dt/*, this*/);
+		((Model*)val)->Render(shader, dt);
 	}
 }
 
