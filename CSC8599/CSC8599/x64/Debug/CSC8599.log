@@ -1,20 +1,4 @@
-﻿  Mesh.cpp
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\VertexBuffer.hpp(160,1): warning C4312: 'type cast': conversion from 'GLint' to 'void *' of greater size
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(64,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(70,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(113,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Mesh.cpp(57,2): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Mesh.cpp(63,2): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Mesh.cpp(151,84): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Mesh.cpp(158,43): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Mesh.cpp(292,73): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Mesh.cpp(320,72): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Mesh.cpp(326,74): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-  Model.cpp
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\VertexBuffer.hpp(160,1): warning C4312: 'type cast': conversion from 'GLint' to 'void *' of greater size
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(64,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(70,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(113,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+﻿  PBRSceneManager.cpp
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(68,49): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(91,76): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(196,1): warning C4244: '+=': conversion from 'const float' to 'int', possible loss of data
@@ -22,17 +6,16 @@ C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.h
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(242,35): warning C4018: '<': signed/unsigned mismatch
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(259,1): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(300,25): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\VertexBuffer.hpp(160,1): warning C4312: 'type cast': conversion from 'GLint' to 'void *' of greater size
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\FrameBuffer.hpp(144,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(198,37): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(341,33): warning C4018: '>=': signed/unsigned mismatch
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(400,31): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(57,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(89,2): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(108,2): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(175,2): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(220,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(261,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(344,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\Model.cpp(347,21): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(64,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(70,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(113,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\PBRSceneManager.cpp(44,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\PBRSceneManager.cpp(45,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\PBRSceneManager.cpp(177,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   CSC8599.vcxproj -> C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe

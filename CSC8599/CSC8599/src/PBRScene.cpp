@@ -108,6 +108,8 @@ void PBRScene::SetParametres()
 	glEnable(GL_STENCIL_TEST);													// Stencil testing
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);									// Keep fragments if either stencil or depth fails, replace if both pass
 
+	//glEnable(GL_TEXTURE_2D);
+
 	//============================================================================================//
 	//Init model/instance trees
 	//============================================================================================//
@@ -212,7 +214,7 @@ void PBRScene::ProcessInput(float dt)
 			cameras[activeCamera]->UpdateCameraPos(CameraDirection::DOWN, dt);
 		}
 
-		// set matrices
+		// Set matrices
 		view		= cameras[activeCamera]->GetViewMatrix();
 		projection	= glm::perspective(
 			glm::radians(cameras[activeCamera]->GetZoom()),	    // FOV

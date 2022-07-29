@@ -484,7 +484,7 @@ std::vector<Texture> Model::LoadTextures(aiMaterial* mat, aiTextureType type, co
 	{
 		aiString str;
 		mat->GetTexture(type, i, &str);
-		std::cout << str.C_Str() << std::endl;
+		//std::cout << "Directory: " << directory << ". Texture path: " << str.C_Str() << std::endl;
 
 		// Prevent duplicate load
 		bool skip = false;

@@ -94,6 +94,11 @@ void Vertex::CalcTanVectors(std::vector<Vertex>& list, std::vector<unsigned int>
 Mesh::Mesh()
 	: collision(NULL) {}
 
+Mesh::Mesh(std::vector<Texture> textures)
+{
+	SetupTextures(textures);
+}
+
 /**
  * @brief Intialize with a bounding region
  * @param br 
@@ -170,7 +175,7 @@ void Mesh::LoadData(std::vector<Vertex> vertices, std::vector<unsigned int> indi
 	// Normal ray
 	VAO["VBO"].SetAttPointer<GLfloat>(1, 3, GL_FLOAT, 11, 3);
 	// Vertex texture coords
-	VAO["VBO"].SetAttPointer<GLfloat>(2, 2, GL_FLOAT, 11, 6);
+	VAO["VBO"].SetAttPointer<GLfloat>(2, 3, GL_FLOAT, 11, 6);
 	// Tangent vector
 	VAO["VBO"].SetAttPointer<GLfloat>(3, 3, GL_FLOAT, 11, 8);
 

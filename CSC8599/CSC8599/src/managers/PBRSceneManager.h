@@ -5,6 +5,7 @@
 #include "../graphics/models/Sphere.hpp"
 #include "../graphics/models/PBRModel.hpp"
 #include "../graphics/models/Lamp.hpp"
+#include "../graphics/models/Brickwall.hpp"
 
 class PBRSceneManager
 {
@@ -62,5 +63,7 @@ protected:
 	//============================================================================================//
 	
 	PBRModel* pbrModel;
+	Sphere* sphere;
+	Brickwall* wall;
 
 };

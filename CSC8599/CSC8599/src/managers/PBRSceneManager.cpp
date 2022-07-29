@@ -145,10 +145,17 @@ void PBRSceneManager::SetLightings()
 
 void PBRSceneManager::SetModels()
 {
-	pbrModel = new PBRModel("Kirby");
-	pbrModel->Init("assets/models/pbr_kirby_2/scene.gltf");
-	//pbrModel->Init("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
-	AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	//pbrModel = new PBRModel("Kirby");
+	//pbrModel->Init("assets/models/pbr_kirby_2/scene.gltf");
+	////pbrModel->Init("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
+	//AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+
+	/*sphere = new Sphere();
+	sphere->AddPBRTextures();
+	AddModel(sphere);*/
+
+	wall = new Brickwall();
+	AddModel(wall);
 
 	scene.LoadModels();
 }
@@ -161,7 +168,7 @@ void PBRSceneManager::AddModel(Model* m, glm::vec3 size, float mass, glm::vec3 p
 
 void PBRSceneManager::RenderScene(Shader& shader)
 {
-	scene.RenderInstances(pbrModel->id, shader, dt);
+	scene.RenderInstances(wall->id, shader, dt);
 }
 
 void PBRSceneManager::ProcessInput(double dt)

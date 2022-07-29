@@ -48,6 +48,7 @@ public:
 	Mesh(BoundingRegion br, std::vector<Texture> textures);
 	Mesh(BoundingRegion br, aiColor4D diff, aiColor4D spec);
 	Mesh(BoundingRegion br, Material m);
+	Mesh(std::vector<Texture> textures);
 
 	void LoadData(std::vector<Vertex> vertices, std::vector<unsigned int> indices, bool pad = false);
 	void LoadCollisionMesh(unsigned int noPoints, float* coordinates, unsigned int noFaces, unsigned int* indices);
