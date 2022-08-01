@@ -272,6 +272,9 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 			case aiTextureType_NORMALS:
 				name = "normalMap";
 				break;
+			case aiTextureType_HEIGHT:
+				name = "normalMap";
+				break;
 			case aiTextureType_EMISSIVE:
 				name = "emissionMap";
 				break;

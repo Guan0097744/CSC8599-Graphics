@@ -63,7 +63,7 @@ protected:
 	//============================================================================================//
 	
 	PBRModel* pbrModel;
-	Sphere* sphere;
-	Brickwall* wall;
+	/*Sphere* sphere;
+	Brickwall* wall;*/
 
 };

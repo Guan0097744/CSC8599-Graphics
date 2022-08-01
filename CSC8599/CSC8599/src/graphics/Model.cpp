@@ -394,13 +394,12 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			std::vector<Texture> pbrBaseColorMaps	= LoadTextures(material, aiTextureType_BASE_COLOR, scene);
 			textures.insert(textures.end(), pbrBaseColorMaps.begin(), pbrBaseColorMaps.end());
 			
-			/*// normalMap
-			std::vector<Texture> pbrNormalMaps		= LoadTextures(material, aiTextureType_NORMAL_CAMERA, scene);
-			textures.insert(textures.end(), pbrNormalMaps.begin(), pbrNormalMaps.end());*/
 			// 3. normal maps
 			// .obj, use aiTextureType_HEIGHT
 			std::vector<Texture> normalMaps = LoadTextures(material, aiTextureType_NORMALS, scene);
 			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+			std::vector<Texture> heightMaps = LoadTextures(material, aiTextureType_HEIGHT, scene);
+			textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 			/*std::vector<Texture> pbrEmissionMaps = LoadTextures(material, aiTextureType_EMISSION_COLOR, scene);
 			textures.insert(textures.end(), pbrEmissionMaps.begin(), pbrEmissionMaps.end());*/

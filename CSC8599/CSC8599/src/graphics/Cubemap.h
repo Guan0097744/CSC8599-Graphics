@@ -43,12 +43,12 @@ public:
 	void Cleanup();
 
 private:
-	std::string dir;
-	std::vector<std::string> faces;
-	bool hasTextures;
+	std::string					dir;
+	std::vector<std::string>	faces;
+	bool						hasTextures;
 
 	// cube object
-	ArrayObject VAO;
+	ArrayObject					VAO;
 };
 
 #endif

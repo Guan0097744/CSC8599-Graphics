@@ -26,20 +26,15 @@ void Texture::Load(bool flip)
 
 	int width, height, nChannels;
 
-	std::cout << "Textue data: " << (dir + "/" + path) << std::endl;
+	std::cout << "Texture data: " << (dir + "/" + path) << std::endl;
 	unsigned char* data = stbi_load((dir + "/" + path).c_str(), &width, &height, &nChannels, 0);
 
 	GLenum colorMode = GL_RGB;
+
 	switch (nChannels) 
 	{
 	case 1:
 		colorMode = GL_RED;
-		break;
-	case 2:
-		colorMode = GL_GREEN;
-		break;
-	case 3:
-		colorMode = GL_BLUE;
 		break;
 	case 4:
 		colorMode = GL_RGBA;
