@@ -99,6 +99,15 @@ struct SpotLight
 
 };
 
+struct PBRLight
+{
+	glm::vec3			position;
+	glm::vec3			color;
+
+	//void Render(Shader& shader, int index, unsigned int textureIdx);
+};
+
+/*
 class Light
 {
 public:
@@ -110,7 +119,7 @@ public:
 
 	virtual void Render();
 	virtual void UpdateMatrices();
-};
+};*/
 
 #endif
 

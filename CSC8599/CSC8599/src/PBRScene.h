@@ -52,6 +52,7 @@ public:
 	avl* fonts;
 
 	FramebufferObject		defaultFBO;
+	UBO::UBO				lightUBO;
 
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -67,7 +68,8 @@ public:
 	//PBR Setting
 	//============================================================================================//
 
-	
+	void SetPBRLight(Shader& shader);
+	void SetPBRCubemap();
 
 	//============================================================================================//
 	//Main Loop
@@ -104,7 +106,6 @@ public:
 	void InitInstances();							// initialize model instances
 	void LoadModels();								// load model data
 	void RemoveInstance(std::string instanceId);	// delete instance
-	void MarkForDeletion(std::string instanceId);	// mark instance for deletion
 	void ClearDeadInstances();						// clear all instances marked for deletion
 
 
@@ -112,10 +113,8 @@ public:
 	//Lights
 	//============================================================================================//
 
-	/*glm::vec3				lightPositions[4];
-	glm::vec3				lightColors[4];*/
-	std::vector<glm::vec3>	lightPositions;
-	std::vector<glm::vec3>	lightColors;
+	unsigned int			numPBRLights;
+	std::vector<PBRLight>	lights;
 
 	//============================================================================================//
 	//Camera Variables

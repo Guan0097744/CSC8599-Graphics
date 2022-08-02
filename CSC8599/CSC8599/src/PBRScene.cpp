@@ -22,14 +22,14 @@ void PBRScene::framebuffer_size_callback(GLFWwindow* window, int scrWidth, int s
 }
 
 PBRScene::PBRScene()
-	: currentId("PBR") {}
+	: currentId("PBR"), lightUBO(0) {}
 
 PBRScene::PBRScene(int glfwVersionMajor, int glfwVersionMinor, const char* title, unsigned int scrWidth, unsigned int scrHeight)
 	: glfwVersionMajor(glfwVersionMajor), glfwVersionMinor(glfwVersionMinor), // GLFW version
 	title(title), // window title
 	// default indices/vals
 	activeCamera(-1),
-	currentId("PBR")
+	currentId("PBR"), lightUBO(0)
 {
 	SCR_WIDTH = scrWidth;
 	SCR_HEIGHT = scrHeight;
@@ -147,6 +147,38 @@ void PBRScene::OctreePrepare(Box& box)
 	octree->Update(box);
 }
 
+void PBRScene::SetPBRLight(Shader& shader)
+{
+	// setup lighting UBO
+	lightUBO = UBO::UBO(0, {
+		UBO::Type::VEC3,
+		UBO::Type::VEC3
+		});
+
+	lightUBO.AttachToShader(shader, "Lights");
+
+	// Setup memory
+	lightUBO.Generate();
+	lightUBO.Bind();
+	lightUBO.InitNullData(GL_STATIC_DRAW);
+	lightUBO.BindRange();
+
+	// Write initial values
+	lightUBO.StartWrite();
+
+	numPBRLights = std::min<unsigned int>(lights.size(), MAX_POINT_LIGHTS);
+	//lightUBO.WriteElement<unsigned int>(&numPBRLights);
+	unsigned int i = 0;
+	for (; i < numPBRLights; i++)
+	{
+		lightUBO.WriteElement<glm::vec3>(&lights[i].position);
+		lightUBO.WriteElement<glm::vec3>(&lights[i].color);
+	}
+	lightUBO.AdvanceArray(MAX_POINT_LIGHTS - i); // Advance to finish array
+
+	lightUBO.Clear();
+}
+
 void PBRScene::Update()
 {
 	/*glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -154,6 +186,7 @@ void PBRScene::Update()
 
 	// set background color
 	glClearColor(bgColor[0], bgColor[1], bgColor[2], bgColor[4]);
+	//glClearColor(0.1f, 0.15f, 0.15f, 1.0f);
 	// clear occupied bits
 	defaultFBO.Clear();
 }
@@ -242,14 +275,15 @@ void PBRScene::RenderShader(Shader& shader, bool applyOctree)
 	// Set PBR
 	if (!applyOctree)
 	{
-		for (unsigned int i = 0; i < lightPositions.size(); ++i)
+		for (unsigned int i = 0; i < lights.size(); ++i)
 		{
-			glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
-			newPos = lightPositions[i];
-			shader.Set3Float("lightPositions[" + std::to_string(i) + "]", newPos);
-			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lightColors[i]);
+			//glm::vec3 newPos = lights[i].position + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
 
-			/*model = glm::mat4(1.0f);
+			/*glm::vec3 newPos = lights[i].position;
+			shader.Set3Float("lightPositions[" + std::to_string(i) + "]", newPos);
+			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);
+
+			model = glm::mat4(1.0f);
 			model = glm::translate(model, newPos);
 			model = glm::scale(model, glm::vec3(0.5f));
 			shader.SetMat4("model", model);*/
@@ -406,20 +440,6 @@ void PBRScene::RemoveInstance(std::string instanceId)
 	instances[instanceId] = NULL;
 	instances.Erase(instanceId);
 	free(instance);
-}
-
-/**
- * @brief mark instance for deletion
- * @param instanceId
-*/
-void PBRScene::MarkForDeletion(std::string instanceId)
-{
-	RigidBody* instance = instances[instanceId];
-
-	// activate kill switch
-	States::Activate(&instance->state, INSTANCE_DEAD);
-	// push to list
-	instancesToDelete.push_back(instance);
 }
 
 void PBRScene::ClearDeadInstances()

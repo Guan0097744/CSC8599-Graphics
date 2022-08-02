@@ -412,7 +412,7 @@ namespace UBO
             }
         }
 
-        void AdvanceArray(unsigned int noElements) 
+        void AdvanceArray(unsigned int numElements) 
         {
             if (currentDepth < 0) 
             {
@@ -450,8 +450,8 @@ namespace UBO
             }
 
             // at an array, advance number of elements
-            unsigned int finalIdx = indexStack[currentDepth].first + noElements;
-            unsigned int advanceCount = noElements;
+            unsigned int finalIdx = indexStack[currentDepth].first + numElements;
+            unsigned int advanceCount = numElements;
             if (finalIdx >= indexStack[currentDepth].second->length) 
             {
                 // advance to the end of array
