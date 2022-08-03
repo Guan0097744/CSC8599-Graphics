@@ -1,57 +1,4 @@
-﻿  PBRScene.cpp
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(68,49): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(91,76): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(196,1): warning C4244: '+=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(241,1): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(242,35): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(259,1): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(300,25): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\VertexBuffer.hpp(160,1): warning C4312: 'type cast': conversion from 'GLint' to 'void *' of greater size
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\FrameBuffer.hpp(144,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(198,37): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(341,33): warning C4018: '>=': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(400,31): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(64,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(70,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(113,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\PBRScene.cpp(169,71): warning C4267: 'argument': conversion from 'size_t' to 'const _Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned int
-          ]
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\PBRScene.cpp(363,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(137,39): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(116): message : while compiling class template member function 'bool trie::Trie<RigidBody *>::Insert(std::string,T)'
-          with
-          [
-              T=RigidBody *
-          ]
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\PBRScene.cpp(398): message : see reference to function template instantiation 'bool trie::Trie<RigidBody *>::Insert(std::string,T)' being compiled
-          with
-          [
-              T=RigidBody *
-          ]
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\PBRScene.h(44): message : see reference to class template instantiation 'trie::Trie<RigidBody *>' being compiled
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(108,31): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(95): message : while compiling class template member function 'trie::Trie<RigidBody *>::Trie(trie::charset)'
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\PBRScene.cpp(25): message : see reference to function template instantiation 'trie::Trie<RigidBody *>::Trie(trie::charset)' being compiled
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(292,31): warning C4018: '<': signed/unsigned mismatch
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(287): message : while compiling class template member function 'void trie::Trie<RigidBody *>::UnloadNode(trie::node<T> *)'
-          with
-          [
-              T=RigidBody *
-          ]
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(180): message : see reference to function template instantiation 'void trie::Trie<RigidBody *>::UnloadNode(trie::node<T> *)' being compiled
-          with
-          [
-              T=RigidBody *
-          ]
-  PBRModel.hpp
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\VertexBuffer.hpp(160,1): warning C4312: 'type cast': conversion from 'GLint' to 'void *' of greater size
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(64,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(70,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(113,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
-  PBRSceneManager.cpp
+﻿  PBRSceneManager.cpp
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(68,49): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(91,76): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(196,1): warning C4244: '+=': conversion from 'const float' to 'int', possible loss of data
@@ -69,7 +16,5 @@ C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Bo
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(113,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\PBRSceneManager.cpp(44,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\PBRSceneManager.cpp(45,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\PBRSceneManager.cpp(174,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Generating Code...
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\CSC8599\src\managers\PBRSceneManager.cpp(170,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   CSC8599.vcxproj -> C:\Users\c0097744\GitHub\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe

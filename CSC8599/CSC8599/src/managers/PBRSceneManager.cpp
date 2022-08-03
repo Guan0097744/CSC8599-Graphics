@@ -10,7 +10,7 @@ PBRSceneManager::~PBRSceneManager()
 {
 	delete font;
 
-	delete boxShader;
+	//delete boxShader;
 	delete pbrShader;
 	delete equirectangularShader;
 	delete prefilterShader;
@@ -64,9 +64,10 @@ void PBRSceneManager::Update()
 		scene.RenderShader(*pbrShader);
 		RenderScene(*pbrShader);
 
-		// render boxes
+		
+		/*// render boxes
 		scene.RenderShader(*boxShader, true);
-		box.Render(*boxShader);
+		box.Render(*boxShader);*/
 
 		// send new frame to window
 		scene.NewFrame(box);
@@ -118,7 +119,7 @@ void PBRSceneManager::SetFonts()
 
 void PBRSceneManager::SetShaders()
 {
-	boxShader				= new Shader(false, "instanced/box_vs.glsl", "instanced/box_fs.glsl");
+	//boxShader				= new Shader(false, "instanced/box_vs.glsl", "instanced/box_fs.glsl");
 
 	pbrShader				= new Shader(false, "pbr/pbr_vs.glsl", "pbr/pbr_fs.glsl");
 	backgroundShader		= new Shader(false, "pbr/background_vs.glsl", "pbr/background_fs.glsl");
@@ -132,16 +133,10 @@ void PBRSceneManager::SetShaders()
 
 void PBRSceneManager::SetLightings()
 {
-
-	/*for (unsigned int i = 0; i < 4; i++)
-	{
-		scene.pbrLights[i].position = glm::vec3(-10.0f, 10.0f, 10.0f);
-	}*/
-
 	scene.lights.push_back({ glm::vec3(-10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
-	scene.lights.push_back({ glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
+	/*scene.lights.push_back({ glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
 	scene.lights.push_back({ glm::vec3(-10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
-	scene.lights.push_back({ glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
+	scene.lights.push_back({ glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });*/
 
 	scene.SetPBRLight(*pbrShader);
 }
@@ -149,10 +144,11 @@ void PBRSceneManager::SetLightings()
 void PBRSceneManager::SetModels()
 {
 	pbrModel = new PBRModel("PBRModel");
-	//pbrModel->Init("assets/models/pbr_benz_300sl/source/300SL.fbx");
-	pbrModel->Init("assets/models/pbr_kirby_2/scene.gltf");
-	//pbrModel->Init("assets/models/pbr_kirby/source/Robobo_Kirby.obj");
-	AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	//pbrModel->Init("assets/models/pbr_benz_300sl/scene.gltf");
+	pbrModel->Init("assets/models/pbr_kirby/scene.gltf");
+	//pbrModel->Init("assets/models/pbr_phone/scene.gltf");
+
+	AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(-90.0f, 0.0f, 0.0f));
 
 	scene.LoadModels();
 }

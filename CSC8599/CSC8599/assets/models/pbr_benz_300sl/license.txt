@@ -1,0 +1,8 @@
+Model Information:
+* title:	Mercedes-Benz 300SL Gullwing
+* source:	https://sketchfab.com/3d-models/mercedes-benz-300sl-gullwing-a71262c0f6e24e21bcc1deaf9829767b
+* author:	RCC Design (https://sketchfab.com/retrovalorem)
+
+Model License:
+* license type:	SKETCHFAB Editorial (https://sketchfab.com/licenses)
+* requirements:	Use only in connection with events that are newsworthy or of public interest

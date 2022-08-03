@@ -13,6 +13,7 @@ class Texture
 public:
 	Texture(std::string name);
 	Texture(std::string dir, std::string path, aiTextureType type);
+	Texture(std::string dirPath, aiTextureType type);
 
 	void Generate();
 

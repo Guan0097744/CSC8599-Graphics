@@ -6,6 +6,7 @@
 class PBRModel: public Model
 {
 public:
+
 	PBRModel(std::string id, unsigned int maxNumInstances = 1, unsigned int flags = 0)
 		: Model(id, maxNumInstances, flags) {};
 	
@@ -13,6 +14,14 @@ public:
 	{
 		LoadModel(path);
 	}
+
+	/*void LoadTexture(std::string path, aiTextureType type)
+	{
+		Texture t(path, type);
+		t.Load();
+
+		//this;
+	}*/
 };
 
 

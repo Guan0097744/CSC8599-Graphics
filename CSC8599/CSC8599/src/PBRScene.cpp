@@ -1,5 +1,6 @@
 #include "PBRScene.h"
 
+#define MAX_LIGHTS 100
 #define MAX_POINT_LIGHTS 10
 #define MAX_SPOT_LIGHTS 2
 
@@ -151,6 +152,7 @@ void PBRScene::SetPBRLight(Shader& shader)
 {
 	// setup lighting UBO
 	lightUBO = UBO::UBO(0, {
+		UBO::Type::SCALAR,
 		UBO::Type::VEC3,
 		UBO::Type::VEC3
 		});
@@ -166,15 +168,15 @@ void PBRScene::SetPBRLight(Shader& shader)
 	// Write initial values
 	lightUBO.StartWrite();
 
-	numPBRLights = std::min<unsigned int>(lights.size(), MAX_POINT_LIGHTS);
-	//lightUBO.WriteElement<unsigned int>(&numPBRLights);
+	numPBRLights = std::min<unsigned int>(lights.size(), MAX_LIGHTS);
+	lightUBO.WriteElement<unsigned int>(&numPBRLights);
 	unsigned int i = 0;
 	for (; i < numPBRLights; i++)
 	{
 		lightUBO.WriteElement<glm::vec3>(&lights[i].position);
 		lightUBO.WriteElement<glm::vec3>(&lights[i].color);
 	}
-	lightUBO.AdvanceArray(MAX_POINT_LIGHTS - i); // Advance to finish array
+	lightUBO.AdvanceArray(MAX_LIGHTS - i); // Advance to finish array
 
 	lightUBO.Clear();
 }
@@ -279,11 +281,11 @@ void PBRScene::RenderShader(Shader& shader, bool applyOctree)
 		{
 			//glm::vec3 newPos = lights[i].position + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
 
-			/*glm::vec3 newPos = lights[i].position;
+			glm::vec3 newPos = lights[i].position;
 			shader.Set3Float("lightPositions[" + std::to_string(i) + "]", newPos);
 			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);
 
-			model = glm::mat4(1.0f);
+			/*model = glm::mat4(1.0f);
 			model = glm::translate(model, newPos);
 			model = glm::scale(model, glm::vec3(0.5f));
 			shader.SetMat4("model", model);*/

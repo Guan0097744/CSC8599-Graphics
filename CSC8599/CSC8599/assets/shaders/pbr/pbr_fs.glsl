@@ -21,10 +21,12 @@ uniform sampler2D aoMap;
 // lights
 //uniform vec3 lightPositions[4];
 //uniform vec3 lightColors[4];
+#define MAX_LIGHTS 100
 layout (std140) uniform Lights 
 {
-	vec3 lightPositions[4];
-    vec3 lightColors[4];
+    int numLights;
+	vec3 lightPositions[MAX_LIGHTS];
+    vec3 lightColors[MAX_LIGHTS];
 };
 
 uniform vec3 camPos;
@@ -110,7 +112,7 @@ void main()
 
     // Calculate integral
     vec3 Lo             = vec3(0.0);
-    for(int i = 0; i < 4; ++i) 
+    for(int i = 0; i < numLights; ++i) 
     {
         // Calculate per-light radiance
         vec3 L              = normalize(lightPositions[i] - WorldPos);

@@ -15,6 +15,15 @@ Texture::Texture(std::string dir, std::string path, aiTextureType type) :
 	Generate();
 }
 
+Texture::Texture(std::string dirPath, aiTextureType type)
+{
+	dir = dirPath.substr(0, dirPath.find_last_of("/"));
+	path = dirPath.substr(dir.length(), dirPath.length() - 1);
+	std::cout << "DIR: " << dir << ". PATH: " << path << std::endl;
+
+	Generate();
+}
+
 void Texture::Generate()
 {
 	glGenTextures(1, &id);
@@ -79,21 +88,16 @@ void Texture::LoadFromAssimp(const aiTexture* aiTex, bool flip)
 	}
 
 	GLenum colorMode = GL_RGB;
+
 	switch (nChannels)
 	{
 	case 1:
 		colorMode = GL_RED;
 		break;
-	case 2:
-		colorMode = GL_GREEN;
-		break;
-	case 3:
-		colorMode = GL_BLUE;
-		break;
 	case 4:
 		colorMode = GL_RGBA;
 		break;
-	}
+	};
 
 	if (image_data)
 	{

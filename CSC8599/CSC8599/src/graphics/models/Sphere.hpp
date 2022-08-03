@@ -14,7 +14,7 @@ public:
 		LoadModel("assets/models/sphere/scene.gltf");
 	}
 
-    /**/void AddPBRTextures()
+    /*void AddPBRTextures()
     {
         std::vector<Texture> textures =
         {
@@ -30,7 +30,7 @@ public:
 
         Mesh ret(textures);
         AddMesh(&ret);
-    }
+    }*/
 };
 
 #endif // !SPHERE_HPP

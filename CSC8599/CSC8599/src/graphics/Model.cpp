@@ -411,11 +411,11 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			textures.insert(textures.end(), pbrMetalinessMaps.begin(), pbrMetalinessMaps.end());
 
 			// roughnessMap
-			std::vector<Texture> pbrRoughnessMaps	= LoadTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, scene);
+			std::vector<Texture> pbrRoughnessMaps = LoadTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, scene);
 			textures.insert(textures.end(), pbrRoughnessMaps.begin(), pbrRoughnessMaps.end());
 
 			// aoMap
-			std::vector<Texture> pbrAOMaps		= LoadTextures(material, aiTextureType_AMBIENT_OCCLUSION, scene);
+			std::vector<Texture> pbrAOMaps = LoadTextures(material, aiTextureType_AMBIENT_OCCLUSION, scene);
 			textures.insert(textures.end(), pbrAOMaps.begin(), pbrAOMaps.end());
 
 			ret = Mesh(br, textures);

@@ -59,7 +59,7 @@ public:
 	//Utility
 	//============================================================================================//
 
-	Camera(glm::vec3 position = glm::vec3(0.0f));
+	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 10.0f));
 	void UpdateCameraDirection(double dx, double dy);
 	void UpdateCameraPos(CameraDirection direction, double dt);
 	void UpdateCameraZoom(double dy);

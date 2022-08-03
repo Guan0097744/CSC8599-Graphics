@@ -1,0 +1,8 @@
+Model Information:
+* title:	Kirby's Robobot from -  Planet Robobot
+* source:	https://sketchfab.com/3d-models/kirbys-robobot-from-planet-robobot-9fe53ce43c474990abf10231edf73f5c
+* author:	Miaru3d (https://sketchfab.com/miaru3d)
+
+Model License:
+* license type:	SKETCHFAB Editorial (https://sketchfab.com/licenses)
+* requirements:	Use only in connection with events that are newsworthy or of public interest

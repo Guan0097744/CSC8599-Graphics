@@ -43,8 +43,7 @@ protected:
 	//Shaders
 	//============================================================================================//
 
-	Shader* boxShader;
-
+	//Shader* boxShader;
 	Shader* pbrShader;
 	Shader* equirectangularShader;
 	Shader* prefilterShader;
