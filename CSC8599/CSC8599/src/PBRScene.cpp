@@ -176,9 +176,15 @@ void PBRScene::SetPBRLight(Shader& shader)
 		lightUBO.WriteElement<glm::vec3>(&lights[i].position);
 		lightUBO.WriteElement<glm::vec3>(&lights[i].color);
 	}
-	lightUBO.AdvanceArray(MAX_LIGHTS - i); // Advance to finish array
+	//lightUBO.AdvanceArray(MAX_LIGHTS - i); // Advance to finish array
+	
 
 	lightUBO.Clear();
+}
+
+void PBRScene::SetPBRCubemap()
+{
+
 }
 
 void PBRScene::Update()
@@ -281,9 +287,9 @@ void PBRScene::RenderShader(Shader& shader, bool applyOctree)
 		{
 			//glm::vec3 newPos = lights[i].position + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
 
-			glm::vec3 newPos = lights[i].position;
+			/*glm::vec3 newPos = lights[i].position;
 			shader.Set3Float("lightPositions[" + std::to_string(i) + "]", newPos);
-			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);
+			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);*/
 
 			/*model = glm::mat4(1.0f);
 			model = glm::translate(model, newPos);

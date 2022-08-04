@@ -59,7 +59,7 @@ public:
 protected:
 	std::string					directory;
 	std::vector<Texture>		texsLoaded;
-	bool						noTex;
+	//bool						noTex;
 
 	//============================================================================================//
 	//VBOs for model matrices

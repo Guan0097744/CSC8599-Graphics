@@ -60,7 +60,7 @@ public:
 	void Cleanup();
 
 private:
-	bool noTex;
+	//bool noTex;
 
 	void Setup();
 };

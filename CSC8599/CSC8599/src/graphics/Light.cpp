@@ -129,3 +129,14 @@ void SpotLight::UpdateMatrices()
 	glm::mat4 lightView		= glm::lookAt(position, position + direction, up);
 	lightSpaceMatrix		= proj * lightView;
 }
+
+//PBRLight::PBRLight(glm::vec3 pos, glm::vec3 col)
+//	: position(pos), color(col)
+//{
+//
+//}
+//
+//void PBRLight::Render(Shader& shader, int index)
+//{
+//
+//}

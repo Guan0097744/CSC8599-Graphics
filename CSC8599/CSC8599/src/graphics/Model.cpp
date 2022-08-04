@@ -82,9 +82,6 @@ void Model::Render(Shader& shader, float dt)
 		}
 	}
 
-	// set shininess
-	shader.SetFloat("material.shininess", 0.5f);
-
 	// render each mesh
 	for (unsigned int i = 0, numMeshes = meshes.size(); i < numMeshes; i++) 
 	{

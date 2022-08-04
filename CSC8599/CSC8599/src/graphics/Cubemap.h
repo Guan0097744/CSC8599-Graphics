@@ -47,7 +47,7 @@ private:
 	std::vector<std::string>	faces;
 	bool						hasTextures;
 
-	// cube object
+	// Cube object
 	ArrayObject					VAO;
 };
 

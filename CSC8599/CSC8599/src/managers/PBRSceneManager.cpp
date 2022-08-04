@@ -134,9 +134,9 @@ void PBRSceneManager::SetShaders()
 void PBRSceneManager::SetLightings()
 {
 	scene.lights.push_back({ glm::vec3(-10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
-	/*scene.lights.push_back({ glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
+	scene.lights.push_back({ glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
 	scene.lights.push_back({ glm::vec3(-10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
-	scene.lights.push_back({ glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });*/
+	scene.lights.push_back({ glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
 
 	scene.SetPBRLight(*pbrShader);
 }
@@ -144,8 +144,8 @@ void PBRSceneManager::SetLightings()
 void PBRSceneManager::SetModels()
 {
 	pbrModel = new PBRModel("PBRModel");
-	//pbrModel->Init("assets/models/pbr_benz_300sl/scene.gltf");
 	pbrModel->Init("assets/models/pbr_kirby/scene.gltf");
+	//pbrModel->Init("assets/models/pbr_benz_300sl/scene.gltf");
 	//pbrModel->Init("assets/models/pbr_phone/scene.gltf");
 
 	AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(-90.0f, 0.0f, 0.0f));

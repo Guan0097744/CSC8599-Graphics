@@ -192,108 +192,95 @@ void Mesh::LoadCollisionMesh(unsigned int noPoints, float* coordinates, unsigned
 
 void Mesh::SetupTextures(std::vector<Texture> textures)
 {
-	this->noTex			= false;
+	//this->noTex			= false;
 	this->textures.insert(this->textures.end(), textures.begin(), textures.end());
 }
 
 void Mesh::SetupColors(aiColor4D diff, aiColor4D spec)
 {
-	this->noTex			= true;
+	//this->noTex			= true;
 	this->diffuse		= diff;
 	this->specular		= spec;
 }
 
 void Mesh::SetupMaterial(Material mat)
 {
-	this->noTex			= true;
+	//this->noTex			= true;
 	this->diffuse		= { mat.diffuse.r, mat.diffuse.g, mat.diffuse.b, 1.0f };
 	this->specular		= { mat.specular.r, mat.specular.g, mat.specular.b, 1.0f };
 }
 
 void Mesh::Render(Shader& shader, unsigned int numInstances)
 {
-	shader.SetBool("noNormalMap", true);
+	/*
+	// Set Textures
+	unsigned int diffuseIdx		= 0;
+	unsigned int normalIdx		= 0;
+	unsigned int specularIdx	= 0;
 
-	if (noTex)
+	for (int i = 0; i < textures.size(); i++)
 	{
-		// Set materials
-		shader.Set4Float("material.diffuse", diffuse);
-		shader.Set4Float("material.specular", specular);
-		shader.SetInt("noTex", 1);
-	}
-	else
-	{
-		/*
-		// Set Textures
-		unsigned int diffuseIdx		= 0;
-		unsigned int normalIdx		= 0;
-		unsigned int specularIdx	= 0;
+		glActiveTexture(GL_TEXTURE0 + i);
 
-		for (int i = 0; i < textures.size(); i++)
+		std::string name;
+		switch (textures[i].type)
 		{
-			glActiveTexture(GL_TEXTURE0 + i);
-
-			std::string name;
-			switch (textures[i].type)
-			{
-			case aiTextureType_DIFFUSE:
-				name = "diffuse" + std::to_string(diffuseIdx++);
-				break;
-			case aiTextureType_NORMALS:
-				name = "normal" + std::to_string(normalIdx++);
-				shader.SetBool("noNormalMap", false);
-				break;
-			case aiTextureType_SPECULAR:
-				name = "specular" + std::to_string(specularIdx++);
-				break;
-			default:
-				name = textures[i].name;
-				break;
-			}
-
-			shader.SetInt(name, i);
-			textures[i].Bind();
-		}*/
-
-		//============================================================================================//
-		//PBR Texture
-		//============================================================================================//
-
-		for (int i = 0; i < textures.size(); i++)
-		{
-			glActiveTexture(GL_TEXTURE0 + i);
-
-			std::string name;
-			switch (textures[i].type)
-			{
-			case aiTextureType_BASE_COLOR:
-				name = "albedoMap";
-				break;
-			case aiTextureType_NORMALS:
-				name = "normalMap";
-				break;
-			case aiTextureType_HEIGHT:
-				name = "normalMap";
-				break;
-			case aiTextureType_EMISSIVE:
-				name = "emissionMap";
-				break;
-			case aiTextureType_METALNESS:
-				name = "metallicMap";
-				break;
-			case aiTextureType_DIFFUSE_ROUGHNESS:
-				name = "roughnessMap";
-				break;
-			case aiTextureType_AMBIENT_OCCLUSION:
-				name = "aoMap";
-				break;
-			}
-
-			shader.SetInt(name, i);
-			textures[i].Bind();
+		case aiTextureType_DIFFUSE:
+			name = "diffuse" + std::to_string(diffuseIdx++);
+			break;
+		case aiTextureType_NORMALS:
+			name = "normal" + std::to_string(normalIdx++);
+			shader.SetBool("noNormalMap", false);
+			break;
+		case aiTextureType_SPECULAR:
+			name = "specular" + std::to_string(specularIdx++);
+			break;
+		default:
+			name = textures[i].name;
+			break;
 		}
 
-		shader.SetBool("noTex", false);
+		shader.SetInt(name, i);
+		textures[i].Bind();
+	}
+	*/	
+
+	//============================================================================================//
+	//PBR Texture
+	//============================================================================================//
+
+	for (int i = 0; i < textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+
+		std::string name;
+		switch (textures[i].type)
+		{
+		case aiTextureType_BASE_COLOR:
+			name = "albedoMap";
+			break;
+		case aiTextureType_NORMALS:
+			name = "normalMap";
+			break;
+		case aiTextureType_HEIGHT:
+			name = "normalMap";
+			break;
+		case aiTextureType_EMISSIVE:
+			name = "emissionMap";
+			break;
+		case aiTextureType_METALNESS:
+			name = "metallicMap";
+			break;
+		case aiTextureType_DIFFUSE_ROUGHNESS:
+			name = "roughnessMap";
+			break;
+		case aiTextureType_AMBIENT_OCCLUSION:
+			name = "aoMap";
+			break;
+		}
+
+		shader.SetInt(name, i);
+		textures[i].Bind();
 	}
 
 	VAO.Bind();
