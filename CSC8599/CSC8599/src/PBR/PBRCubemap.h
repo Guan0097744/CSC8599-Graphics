@@ -15,13 +15,19 @@
 class PBRCubemap
 {
 public:
+	unsigned int id;
+
+	PBRCubemap();
 
 	void SetBuffer();
 	void LoadMap();
+	void Allocate(GLenum format, GLuint width, GLuint height, GLenum type);
 
 	void Generate();
 	void Bind();
 	void Init();
+
+	void Cleanup();
 
 private:
 	FramebufferObject captureFBO;

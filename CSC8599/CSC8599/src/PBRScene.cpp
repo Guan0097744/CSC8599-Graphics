@@ -193,8 +193,8 @@ void PBRScene::Update()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
 
 	// set background color
-	glClearColor(bgColor[0], bgColor[1], bgColor[2], bgColor[4]);
-	//glClearColor(0.1f, 0.15f, 0.15f, 1.0f);
+	//glClearColor(bgColor[0], bgColor[1], bgColor[2], bgColor[4]);
+	glClearColor(0.1f, 0.15f, 0.15f, 1.0f);
 	// clear occupied bits
 	defaultFBO.Clear();
 }
@@ -283,13 +283,14 @@ void PBRScene::RenderShader(Shader& shader, bool applyOctree)
 	// Set PBR
 	if (!applyOctree)
 	{
+		shader.SetInt("numLights", lights.size());
 		for (unsigned int i = 0; i < lights.size(); ++i)
 		{
 			//glm::vec3 newPos = lights[i].position + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
 
-			/*glm::vec3 newPos = lights[i].position;
+			glm::vec3 newPos = lights[i].position;
 			shader.Set3Float("lightPositions[" + std::to_string(i) + "]", newPos);
-			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);*/
+			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);
 
 			/*model = glm::mat4(1.0f);
 			model = glm::translate(model, newPos);

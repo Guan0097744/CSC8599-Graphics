@@ -130,6 +130,7 @@
     <None Include="assets\shaders\pbr\brdf_fs.glsl" />
     <None Include="assets\shaders\pbr\background_vs.glsl" />
     <None Include="assets\shaders\pbr\background_fs.glsl" />
+    <None Include="assets\skybox\pink_sunrise_2k.hdr" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\io\Mouse.h">

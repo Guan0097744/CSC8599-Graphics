@@ -133,12 +133,28 @@ void PBRSceneManager::SetShaders()
 
 void PBRSceneManager::SetLightings()
 {
-	scene.lights.push_back({ glm::vec3(-10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
-	scene.lights.push_back({ glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
-	scene.lights.push_back({ glm::vec3(-10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
-	scene.lights.push_back({ glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f) });
+	glm::vec3 lightsPos[2] = {
+		glm::vec3(-10.0f, 10.0f, 10.0f),
+		glm::vec3(10.0f, 10.0f, 10.0f),
+		//glm::vec3(-10.0f, -10.0f, 10.0f),
+		//glm::vec3(10.0f, -10.0f, 10.0f)
+	};
+	glm::vec3 lightColor[2] = {
+		glm::vec3(300.0f, 300.0f, 300.0f),
+		glm::vec3(300.0f, 300.0f, 300.0f),
+		//glm::vec3(300.0f, 300.0f, 300.0f),
+		//glm::vec3(300.0f, 300.0f, 300.0f)
+	};
 
-	scene.SetPBRLight(*pbrShader);
+	PBRLight lights[2];
+	for (int i = 0; i < 2; i++)
+	{
+		lights[i].position = lightsPos[i];
+		lights[i].color = lightColor[i];
+		scene.lights.push_back(lights[i]);
+	}
+
+	//scene.SetPBRLight(*pbrShader);
 }
 
 void PBRSceneManager::SetModels()

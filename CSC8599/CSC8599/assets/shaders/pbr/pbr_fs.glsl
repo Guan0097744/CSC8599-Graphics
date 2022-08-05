@@ -19,15 +19,16 @@ uniform sampler2D aoMap;
 //uniform sampler2D   brdfLUT;
 
 // lights
-//uniform vec3 lightPositions[4];
-//uniform vec3 lightColors[4];
-#define MAX_LIGHTS 100
-layout (std140) uniform Lights 
-{
-    int numLights;
-	vec3 lightPositions[MAX_LIGHTS];
-    vec3 lightColors[MAX_LIGHTS];
-};
+#define MAX_LIGHTS 10
+uniform int numLights;
+uniform vec3 lightPositions[MAX_LIGHTS];
+uniform vec3 lightColors[MAX_LIGHTS];
+//layout (std140) uniform Lights 
+//{
+//    int numLights;
+//	vec3 lightPositions[MAX_LIGHTS];
+//    vec3 lightColors[MAX_LIGHTS];
+//};
 
 uniform vec3 camPos;
 
