@@ -160,11 +160,13 @@ void PBRSceneManager::SetLightings()
 void PBRSceneManager::SetModels()
 {
 	pbrModel = new PBRModel("PBRModel");
-	pbrModel->Init("assets/models/pbr_kirby/scene.gltf");
+	//pbrModel->Init("assets/models/pbr_kirby/scene.gltf");
+	pbrModel->Init("assets/models/pbr_kirby2/Robobo_Kirby.obj");
 	//pbrModel->Init("assets/models/pbr_benz_300sl/scene.gltf");
 	//pbrModel->Init("assets/models/pbr_phone/scene.gltf");
 
-	AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(-90.0f, 0.0f, 0.0f));
+	//AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(-90.0f, 0.0f, 0.0f));
+	AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	scene.LoadModels();
 }

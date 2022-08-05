@@ -7,7 +7,7 @@ PBRCubemap::PBRCubemap()
 
 void PBRCubemap::SetBuffer()
 {
-	captureFBO
+	//captureFBO;
 }
 
 void PBRCubemap::LoadMap()

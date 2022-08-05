@@ -1,0 +1,63 @@
+# Blender MTL File: 'Robobo_Kirby.blend'
+# Material Count: 5
+
+newmtl Fire
+Ns 506.250000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Kirby
+Ns 189.688000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.000000 0.046819
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Kirby_Body_Color.png
+
+newmtl Kirby-Face
+Ns 189.688000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.000000 0.046819
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Kirby-Face_suck.png
+
+newmtl Kirby_googles
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Kirby_Googles_albedo.png
+map_Ns Kirby_Googles_roughness.png
+refl Kirby_Googles_metalness.png
+map_Bump Kirby_Googles_normal.png
+
+newmtl Robobot
+Ns 506.250000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Kirby_robobot_albedo.png
+map_Ns Kirby_robobot_roughness.png
+refl Kirby_robobot_metalness.png
+map_Bump Kirby_robobot_normal.png
+

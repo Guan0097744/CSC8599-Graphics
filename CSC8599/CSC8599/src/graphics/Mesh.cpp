@@ -256,7 +256,22 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 		std::string name;
 		switch (textures[i].type)
 		{
-		case aiTextureType_BASE_COLOR:
+		case aiTextureType_DIFFUSE:
+			name = "albedoMap";
+			break;
+		/*case aiTextureType_SPECULAR:
+			name = */
+		case aiTextureType_NORMALS:
+			name = "normalMap";
+			break;
+		case aiTextureType_HEIGHT:
+			name = "normalMap";
+			break;
+		case aiTextureType_REFLECTION:
+			name = "metallicMap";
+			break;
+
+		/*case aiTextureType_BASE_COLOR:
 			name = "albedoMap";
 			break;
 		case aiTextureType_NORMALS:
@@ -276,6 +291,10 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 			break;
 		case aiTextureType_AMBIENT_OCCLUSION:
 			name = "aoMap";
+			break;*/
+
+		default:
+			name = textures[i].name;
 			break;
 		}
 
