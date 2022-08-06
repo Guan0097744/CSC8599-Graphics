@@ -1,6 +1,6 @@
 #include "PBRScene.h"
 
-#define MAX_LIGHTS 100
+#define MAX_LIGHTS 10
 #define MAX_POINT_LIGHTS 10
 #define MAX_SPOT_LIGHTS 2
 
@@ -152,9 +152,9 @@ void PBRScene::SetPBRLight(Shader& shader)
 {
 	// setup lighting UBO
 	lightUBO = UBO::UBO(0, {
-		UBO::Type::SCALAR,
-		UBO::Type::VEC3,
-		UBO::Type::VEC3
+		UBO::NewScalar(),
+		UBO::NewArray(MAX_LIGHTS, UBO::NewVec(3)),
+		UBO::NewArray(MAX_LIGHTS, UBO::NewVec(3))
 		});
 
 	lightUBO.AttachToShader(shader, "Lights");
@@ -168,16 +168,25 @@ void PBRScene::SetPBRLight(Shader& shader)
 	// Write initial values
 	lightUBO.StartWrite();
 
-	numPBRLights = std::min<unsigned int>(lights.size(), MAX_LIGHTS);
+	numPBRLights = std::min<unsigned int>((unsigned int)lights.size(), MAX_LIGHTS);
 	lightUBO.WriteElement<unsigned int>(&numPBRLights);
+	//lightUBO.WriteArray<glm::vec3>(&lights[0]->position, numPBRLights);
+	//lightUBO.WriteArray<glm::vec3>(&lights[0]->color, numPBRLights);
+
 	unsigned int i = 0;
 	for (; i < numPBRLights; i++)
 	{
-		lightUBO.WriteElement<glm::vec3>(&lights[i].position);
-		lightUBO.WriteElement<glm::vec3>(&lights[i].color);
+		lightUBO.WriteElement<glm::vec3>(&lights[i]->position);
+		//lightUBO.WriteElement<glm::vec3>(&lights[i]->color);
 	}
-	//lightUBO.AdvanceArray(MAX_LIGHTS - i); // Advance to finish array
-	
+	lightUBO.AdvanceArray(MAX_LIGHTS - i); // Advance to finish array
+	i = 0;
+	for (; i < numPBRLights; i++)
+	{
+		//lightUBO.WriteElement<glm::vec3>(&lights[i]->position);
+		lightUBO.WriteElement<glm::vec3>(&lights[i]->color);
+	}
+	lightUBO.AdvanceArray(MAX_LIGHTS - i); // Advance to finish array
 
 	lightUBO.Clear();
 }
@@ -280,7 +289,6 @@ void PBRScene::RenderShader(Shader& shader, bool applyOctree)
 	shader.SetMat4("projection", projection);
 	shader.Set3Float("camPos", cameraPos);
 
-	// Set PBR
 	if (!applyOctree)
 	{
 		shader.SetInt("numLights", lights.size());
@@ -288,9 +296,9 @@ void PBRScene::RenderShader(Shader& shader, bool applyOctree)
 		{
 			//glm::vec3 newPos = lights[i].position + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
 
-			glm::vec3 newPos = lights[i].position;
+			/*glm::vec3 newPos = lights[i].position;
 			shader.Set3Float("lightPositions[" + std::to_string(i) + "]", newPos);
-			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);
+			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);*/
 
 			/*model = glm::mat4(1.0f);
 			model = glm::translate(model, newPos);

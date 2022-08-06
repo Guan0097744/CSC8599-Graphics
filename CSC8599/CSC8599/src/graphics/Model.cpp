@@ -373,6 +373,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 		else 
 		{
+
+
 			// 1. diffuse maps
 			std::vector<Texture> diffuseMaps = LoadTextures(material, aiTextureType_DIFFUSE, scene);
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());

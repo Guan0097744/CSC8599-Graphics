@@ -360,9 +360,9 @@ namespace UBO
         void WriteElement(T* data) 
         {
             Element element = GetNextElement();
-            //std::cout << element.typeStr() << "--" << element.baseAlign << "--" << offset << "--";
+            std::cout << element.TypeStr() << "--" << element.baseAlign << "--" << offset << "--";
             offset = RoundUpPow2(offset, element.AlignPow2());
-            //std::cout << offset << std::endl;
+            std::cout << offset << std::endl;
 
             glBufferSubData(GL_UNIFORM_BUFFER, offset, sizeof(T), data);
 

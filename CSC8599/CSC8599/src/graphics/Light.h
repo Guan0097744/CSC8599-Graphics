@@ -104,9 +104,8 @@ struct PBRLight
 	glm::vec3			position;
 	glm::vec3			color;
 
-	/*PBRLight();
+	PBRLight();
 	PBRLight(glm::vec3 pos, glm::vec3 col);
-	void Render(Shader& shader, int index);*/
 };
 
 /*
