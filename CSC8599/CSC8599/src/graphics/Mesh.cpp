@@ -212,38 +212,6 @@ void Mesh::SetupMaterial(Material mat)
 
 void Mesh::Render(Shader& shader, unsigned int numInstances)
 {
-	/*
-	// Set Textures
-	unsigned int diffuseIdx		= 0;
-	unsigned int normalIdx		= 0;
-	unsigned int specularIdx	= 0;
-
-	for (int i = 0; i < textures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
-
-		std::string name;
-		switch (textures[i].type)
-		{
-		case aiTextureType_DIFFUSE:
-			name = "diffuse" + std::to_string(diffuseIdx++);
-			break;
-		case aiTextureType_NORMALS:
-			name = "normal" + std::to_string(normalIdx++);
-			shader.SetBool("noNormalMap", false);
-			break;
-		case aiTextureType_SPECULAR:
-			name = "specular" + std::to_string(specularIdx++);
-			break;
-		default:
-			name = textures[i].name;
-			break;
-		}
-
-		shader.SetInt(name, i);
-		textures[i].Bind();
-	}
-	*/	
 
 	//============================================================================================//
 	//PBR Texture
@@ -259,17 +227,21 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 		case aiTextureType_DIFFUSE:
 			name = "albedoMap";
 			break;
-		/*case aiTextureType_SPECULAR:
-			name = */
-		case aiTextureType_NORMALS:
-			name = "normalMap";
-			break;
 		case aiTextureType_HEIGHT:
 			name = "normalMap";
 			break;
-		case aiTextureType_REFLECTION:
+		case aiTextureType_SPECULAR:
 			name = "metallicMap";
 			break;
+		case aiTextureType_SHININESS:
+			name = "roughnessMap";
+			break;
+		case aiTextureType_AMBIENT:
+			name = "aoMap";
+			break;
+		/*case aiTextureType_LIGHTMAP:
+			name = "aoMap";
+			break;*/
 
 		/*case aiTextureType_BASE_COLOR:
 			name = "albedoMap";

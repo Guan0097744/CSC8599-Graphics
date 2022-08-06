@@ -373,9 +373,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 		else 
 		{
-			// use textures
-
-			/**/
 			// 1. diffuse maps
 			std::vector<Texture> diffuseMaps = LoadTextures(material, aiTextureType_DIFFUSE, scene);
 			textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
@@ -385,44 +382,54 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			// 3. normal maps
 			std::vector<Texture> normalMaps = LoadTextures(material, aiTextureType_HEIGHT, scene);
 			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-			// 4. height maps
+			// 4. height maps/ambient occlusion maps?
 			std::vector<Texture> heightMaps = LoadTextures(material, aiTextureType_AMBIENT, scene);
 			textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-			std::vector<Texture> refMaps = LoadTextures(material, aiTextureType_REFLECTION, scene);
-			textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+			// 5. metallic maps
+			std::vector<Texture> refMaps = LoadTextures(material, aiTextureType_SPECULAR, scene);
+			textures.insert(textures.end(), refMaps.begin(), refMaps.end());
+			// 6. roughness maps
+			std::vector<Texture> roughnessMaps = LoadTextures(material, aiTextureType_SHININESS, scene);
+			textures.insert(textures.end(), roughnessMaps.begin(), roughnessMaps.end());
 
+			// 7. emissive maps
+			std::vector<Texture> emitMaps = LoadTextures(material, aiTextureType_EMISSIVE, scene);
+			textures.insert(textures.end(), emitMaps.begin(), emitMaps.end());
+			
+			/*
 			//============================================================================================//
 			//PBR Texture
 			//============================================================================================//
 
-			//// albedoMap
-			//std::vector<Texture> pbrBaseColorMaps	= LoadTextures(material, aiTextureType_BASE_COLOR, scene);
-			//textures.insert(textures.end(), pbrBaseColorMaps.begin(), pbrBaseColorMaps.end());
-			//
-			//// 3. normal maps
-			//// .obj, use aiTextureType_HEIGHT
-			//std::vector<Texture> normalMaps = LoadTextures(material, aiTextureType_NORMALS, scene);
-			//textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-			//std::vector<Texture> heightMaps = LoadTextures(material, aiTextureType_HEIGHT, scene);
-			//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+			
+			// albedoMap
+			std::vector<Texture> pbrBaseColorMaps	= LoadTextures(material, aiTextureType_BASE_COLOR, scene);
+			textures.insert(textures.end(), pbrBaseColorMaps.begin(), pbrBaseColorMaps.end());
+			
+			// 3. normal maps
+			// .obj, use aiTextureType_HEIGHT
+			std::vector<Texture> normalMaps = LoadTextures(material, aiTextureType_NORMALS, scene);
+			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+			std::vector<Texture> heightMaps = LoadTextures(material, aiTextureType_HEIGHT, scene);
+			textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-			////std::vector<Texture> pbrEmissionMaps = LoadTextures(material, aiTextureType_EMISSION_COLOR, scene);
-			////textures.insert(textures.end(), pbrEmissionMaps.begin(), pbrEmissionMaps.end());
-			//std::vector<Texture> pbrEmissionMaps = LoadTextures(material, aiTextureType_EMISSIVE, scene);
+			//std::vector<Texture> pbrEmissionMaps = LoadTextures(material, aiTextureType_EMISSION_COLOR, scene);
 			//textures.insert(textures.end(), pbrEmissionMaps.begin(), pbrEmissionMaps.end());
+			std::vector<Texture> pbrEmissionMaps = LoadTextures(material, aiTextureType_EMISSIVE, scene);
+			textures.insert(textures.end(), pbrEmissionMaps.begin(), pbrEmissionMaps.end());
 
-			//// metallicMap
-			//std::vector<Texture> pbrMetalinessMaps	= LoadTextures(material, aiTextureType_METALNESS, scene);
-			//textures.insert(textures.end(), pbrMetalinessMaps.begin(), pbrMetalinessMaps.end());
+			// metallicMap
+			std::vector<Texture> pbrMetalinessMaps	= LoadTextures(material, aiTextureType_METALNESS, scene);
+			textures.insert(textures.end(), pbrMetalinessMaps.begin(), pbrMetalinessMaps.end());
 
-			//// roughnessMap
-			//std::vector<Texture> pbrRoughnessMaps = LoadTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, scene);
-			//textures.insert(textures.end(), pbrRoughnessMaps.begin(), pbrRoughnessMaps.end());
+			// roughnessMap
+			std::vector<Texture> pbrRoughnessMaps = LoadTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, scene);
+			textures.insert(textures.end(), pbrRoughnessMaps.begin(), pbrRoughnessMaps.end());
 
-			//// aoMap
-			//std::vector<Texture> pbrAOMaps = LoadTextures(material, aiTextureType_AMBIENT_OCCLUSION, scene);
-			//textures.insert(textures.end(), pbrAOMaps.begin(), pbrAOMaps.end());
+			// aoMap
+			std::vector<Texture> pbrAOMaps = LoadTextures(material, aiTextureType_AMBIENT_OCCLUSION, scene);
+			textures.insert(textures.end(), pbrAOMaps.begin(), pbrAOMaps.end());*/
 
 			ret = Mesh(br, textures);
 		}

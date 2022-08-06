@@ -44,8 +44,10 @@ d 1.000000
 illum 2
 map_Kd Kirby_Googles_albedo.png
 map_Ns Kirby_Googles_roughness.png
-refl Kirby_Googles_metalness.png
+map_Ks Kirby_Googles_metalness.png
 map_Bump Kirby_Googles_normal.png
+map_Ka Kirby_Googles_ao.png
+map_Ke Kirby_Googles_emit.png
 
 newmtl Robobot
 Ns 506.250000
@@ -58,6 +60,8 @@ d 1.000000
 illum 2
 map_Kd Kirby_robobot_albedo.png
 map_Ns Kirby_robobot_roughness.png
-refl Kirby_robobot_metalness.png
+map_Ks Kirby_robobot_metalness.png
 map_Bump Kirby_robobot_normal.png
+map_Ka Kirby_robobot_ao.png
+map_Ke Kirby_robobot_emit.png
 
