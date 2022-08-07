@@ -20,7 +20,7 @@ public:
 	PBRCubemap();
 
 	void SetBuffer();
-	void LoadMap();
+	void LoadMap(std::string path);
 	void Allocate(GLenum format, GLuint width, GLuint height, GLenum type);
 
 	void Generate();

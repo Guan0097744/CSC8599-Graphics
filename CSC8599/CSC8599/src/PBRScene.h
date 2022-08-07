@@ -70,7 +70,6 @@ public:
 
 	void SetPBRLight(Shader& shader);
 	void SetPBRCubemap();
-	
 
 	//============================================================================================//
 	//Main Loop

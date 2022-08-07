@@ -170,20 +170,16 @@ void PBRScene::SetPBRLight(Shader& shader)
 
 	numPBRLights = std::min<unsigned int>((unsigned int)lights.size(), MAX_LIGHTS);
 	lightUBO.WriteElement<unsigned int>(&numPBRLights);
-	//lightUBO.WriteArray<glm::vec3>(&lights[0]->position, numPBRLights);
-	//lightUBO.WriteArray<glm::vec3>(&lights[0]->color, numPBRLights);
 
 	unsigned int i = 0;
 	for (; i < numPBRLights; i++)
 	{
 		lightUBO.WriteElement<glm::vec3>(&lights[i]->position);
-		//lightUBO.WriteElement<glm::vec3>(&lights[i]->color);
 	}
 	lightUBO.AdvanceArray(MAX_LIGHTS - i); // Advance to finish array
 	i = 0;
 	for (; i < numPBRLights; i++)
 	{
-		//lightUBO.WriteElement<glm::vec3>(&lights[i]->position);
 		lightUBO.WriteElement<glm::vec3>(&lights[i]->color);
 	}
 	lightUBO.AdvanceArray(MAX_LIGHTS - i); // Advance to finish array
