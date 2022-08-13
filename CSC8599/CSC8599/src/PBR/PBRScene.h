@@ -12,24 +12,24 @@
 
 #include <jsoncpp/json.hpp>
 
-#include "graphics/buffer/FrameBuffer.hpp"
-#include "graphics/buffer/UniformBuffer.hpp"
+#include "../graphics/buffer/FrameBuffer.hpp"
+#include "../graphics/buffer/UniformBuffer.hpp"
 
-#include "graphics/models/Box.hpp"
+#include "../graphics/models/Box.hpp"
 
-#include "graphics/Model.h"
-#include "graphics/Light.h"
-#include "graphics/Shader.h"
-#include "graphics/Text.h"
+#include "../graphics/Model.h"
+#include "../graphics/Light.h"
+#include "../graphics/Shader.h"
+#include "../graphics/Text.h"
 
-#include "io/Camera.h"
-#include "io/Keyboard.h"
-#include "io/Mouse.h"
+#include "../io/Camera.h"
+#include "../io/Keyboard.h"
+#include "../io/Mouse.h"
 
-#include "algorithms/States.hpp"
-#include "algorithms/tree/avl.h"
-#include "algorithms/tree/Octree.h"
-#include "algorithms/tree/Trie.hpp"
+#include "../algorithms/States.hpp"
+#include "../algorithms/tree/avl.h"
+#include "../algorithms/tree/Octree.h"
+#include "../algorithms/tree/Trie.hpp"
 
 using namespace Octree;
 
@@ -49,9 +49,10 @@ public:
 	jsoncpp::json			variableLog;			// map for logged variables
 
 	FT_Library				ft;						//Freetype library
-	avl* fonts;
+	avl*					fonts;
 
 	FramebufferObject		defaultFBO;
+	FramebufferObject		captureFBO;
 	UBO::UBO				lightUBO;
 
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -69,6 +70,7 @@ public:
 	//============================================================================================//
 
 	void SetPBRLight(Shader& shader);
+	void SetIBLFrameBuffer();
 	void SetPBRCubemap();
 
 	//============================================================================================//
@@ -136,8 +138,8 @@ protected:
 	//Window vals
 	//============================================================================================//
 
-	GLFWwindow* window;
-	const char* title;
+	GLFWwindow*				window;
+	const char*				title;
 	static unsigned int		SCR_WIDTH;
 	static unsigned int		SCR_HEIGHT;
 	float					bgColor[4]; // background color

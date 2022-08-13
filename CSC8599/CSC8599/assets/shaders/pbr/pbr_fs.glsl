@@ -20,9 +20,6 @@ uniform sampler2D aoMap;
 
 // lights
 #define MAX_LIGHTS 10
-//uniform int numLights;
-//uniform vec3 lightPositions[MAX_LIGHTS];
-//uniform vec3 lightColors[MAX_LIGHTS];
 layout (std140) uniform Lights 
 {
     int numLights;

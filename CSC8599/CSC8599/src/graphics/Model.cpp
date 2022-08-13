@@ -393,7 +393,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			// 6. roughness maps
 			std::vector<Texture> roughnessMaps = LoadTextures(material, aiTextureType_SHININESS, scene);
 			textures.insert(textures.end(), roughnessMaps.begin(), roughnessMaps.end());
-
 			// 7. emissive maps
 			std::vector<Texture> emitMaps = LoadTextures(material, aiTextureType_EMISSIVE, scene);
 			textures.insert(textures.end(), emitMaps.begin(), emitMaps.end());

@@ -93,10 +93,10 @@
     <ClCompile Include="src\graphics\models\PBRModel.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\PBRScene.cpp">
+    <ClCompile Include="src\PBR\PBRScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\managers\PBRSceneManager.cpp">
+    <ClCompile Include="src\PBR\PBRSceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\PBR\PBRCubemap.cpp">
@@ -238,10 +238,10 @@
     <ClInclude Include="src\managers\SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\PBRScene.h">
+    <ClInclude Include="src\PBR\PBRScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\managers\PBRSceneManager.h">
+    <ClInclude Include="src\PBR\PBRSceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\PBR\PBRCubemap.h">

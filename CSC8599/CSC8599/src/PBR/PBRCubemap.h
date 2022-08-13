@@ -15,13 +15,16 @@
 class PBRCubemap
 {
 public:
-	unsigned int id;
+	unsigned int			id;
+
+    // pbr: set up projection and view matrices for capturing data onto the 6 cubemap face directions
+    glm::mat4				captureProjection;
+	std::vector<glm::mat4>	captureViews;
 
 	PBRCubemap();
 
-	void SetBuffer();
 	void LoadMap(std::string path);
-	void Allocate(GLenum format, GLuint width, GLuint height, GLenum type);
+	void Allocate(GLenum format1, GLenum format2, GLuint width, GLuint height, GLenum type);
 
 	void Generate();
 	void Bind();
@@ -30,10 +33,7 @@ public:
 	void Cleanup();
 
 private:
-	FramebufferObject captureFBO;
-
+	ArrayObject				VAO;
 };
-
-
 
 #endif

@@ -1,8 +1,6 @@
 #include "PBRScene.h"
 
 #define MAX_LIGHTS 10
-#define MAX_POINT_LIGHTS 10
-#define MAX_SPOT_LIGHTS 2
 
 unsigned int PBRScene::SCR_WIDTH = 1000;
 unsigned int PBRScene::SCR_HEIGHT = 1000;
@@ -35,6 +33,8 @@ PBRScene::PBRScene(int glfwVersionMajor, int glfwVersionMinor, const char* title
 	SCR_WIDTH = scrWidth;
 	SCR_HEIGHT = scrHeight;
 	defaultFBO = FramebufferObject(scrWidth, scrHeight, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	captureFBO = FramebufferObject();
 
 	SetWindowColor(0.1f, 0.15f, 0.15f, 1.0f);
 }
@@ -187,6 +187,13 @@ void PBRScene::SetPBRLight(Shader& shader)
 	lightUBO.Clear();
 }
 
+void PBRScene::SetIBLFrameBuffer()
+{
+	captureFBO.Generate();
+	captureFBO.Bind();
+	captureFBO.AllocateAndAttachRBO(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
+}
+
 void PBRScene::SetPBRCubemap()
 {
 
@@ -285,23 +292,23 @@ void PBRScene::RenderShader(Shader& shader, bool applyOctree)
 	shader.SetMat4("projection", projection);
 	shader.Set3Float("camPos", cameraPos);
 
-	if (!applyOctree)
+	/*if (!applyOctree)
 	{
 		shader.SetInt("numLights", lights.size());
 		for (unsigned int i = 0; i < lights.size(); ++i)
 		{
 			//glm::vec3 newPos = lights[i].position + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
 
-			/*glm::vec3 newPos = lights[i].position;
+			glm::vec3 newPos = lights[i].position;
 			shader.Set3Float("lightPositions[" + std::to_string(i) + "]", newPos);
-			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);*/
-
-			/*model = glm::mat4(1.0f);
+			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);
+			
+			model = glm::mat4(1.0f);
 			model = glm::translate(model, newPos);
 			model = glm::scale(model, glm::vec3(0.5f));
-			shader.SetMat4("model", model);*/
+			shader.SetMat4("model", model);
 		}
-	}
+	}*/
 	
 }
 

@@ -45,7 +45,7 @@ public:
 
     std::vector<GLuint>     rbos;
     std::vector<Texture>    textures;
-    Cubemap cubemap;
+    Cubemap                 cubemap;
 
     FramebufferObject()
         : val(0), width(0), height(0), bitCombo(0) {}

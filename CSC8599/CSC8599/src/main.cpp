@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "managers/SceneManager.h"
-#include "managers/PBRSceneManager.h"
+#include "PBR/PBRSceneManager.h"
+//#include "managers/SceneManager.h"
 
 std::string Shader::defaultDirectory = "assets/shaders";
 
