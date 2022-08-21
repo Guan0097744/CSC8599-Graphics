@@ -14,7 +14,7 @@ uniform sampler2D roughnessMap;
 uniform sampler2D aoMap;
 
 // IBL
-//uniform samplerCube irradianceMap;
+uniform samplerCube irradianceMap;
 //uniform samplerCube prefilterMap;
 //uniform sampler2D   brdfLUT;
 
@@ -120,29 +120,29 @@ void main()
         vec3 radiance       = lightColors[i] * attenuation;
 
         // Cook-Torrance BRDF
-        float NDF = DistributionGGX(N, H, roughness);   
-        float G = GeometrySmith(N, V, L, roughness);    
-        vec3 F = FresnelSchlick(max(dot(H, V), 0.0), F0);        
+        float NDF           = DistributionGGX(N, H, roughness);   
+        float G             = GeometrySmith(N, V, L, roughness);    
+        vec3 F              = FresnelSchlick(max(dot(H, V), 0.0), F0);        
         
-        vec3 nominator    = NDF * G * F;
-        float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001;
-        vec3 specular = nominator / denominator;
+        vec3 nominator      = NDF * G * F;
+        float denominator   = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001;
+        vec3 specular       = nominator / denominator;
         
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - metallic;	                
-        float NdotL = max(dot(N, L), 0.0);        
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL; 
+        vec3 kS             = F;
+        vec3 kD             = vec3(1.0) - kS;
+        kD                  *= 1.0 - metallic;	                
+        float NdotL         = max(dot(N, L), 0.0);        
+        Lo                  += (kD * albedo / PI + specular) * radiance * NdotL; 
     }   
     
-    vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+    vec3 F              = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
     
-    vec3 kS = F;
-    vec3 kD = 1.0 - kS;
-    kD *= 1.0 - metallic;	  
+    vec3 kS             = F;
+    vec3 kD             = 1.0 - kS;
+    kD                  *= 1.0 - metallic;	  
     
-//    vec3 irradiance = texture(irradianceMap, N).rgb;
-//    vec3 diffuse      = irradiance * albedo;
+    vec3 irradiance     = texture(irradianceMap, N).rgb;
+    vec3 diffuse        = irradiance * albedo;
 //    
 //    const float MAX_REFLECTION_LOD = 4.0;
 //    vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    
@@ -151,9 +151,10 @@ void main()
 //
 //    vec3 ambient = (kD * diffuse + specular) * ao;
 
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 ambient        = (kD * diffuse) * ao;
     
-    vec3 color = ambient + Lo;
+    //vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 color          = ambient + Lo;
 
     // HDR tonemapping
     color = color / (color + vec3(1.0));

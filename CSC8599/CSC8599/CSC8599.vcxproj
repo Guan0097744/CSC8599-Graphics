@@ -199,7 +199,9 @@
     <None Include="assets\shaders\sky_fs.glsl" />
     <None Include="assets\shaders\skybox_fs.glsl" />
     <None Include="assets\shaders\skybox_vs.glsl" />
-    <None Include="assets\skybox\pink_sunrise_2k.hdr" />
+    <None Include="assets\skybox\kiara_1_dawn_4k.hdr" />
+    <None Include="assets\skybox\newport_loft.hdr" />
+    <None Include="assets\skybox\quarry_04_4k.hdr" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\algorithms\tree\avl.h" />

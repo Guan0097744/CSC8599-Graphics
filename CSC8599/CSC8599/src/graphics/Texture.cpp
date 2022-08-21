@@ -3,6 +3,11 @@
 #include <iostream>
 
 
+Texture::Texture()
+{
+	Generate();
+}
+
 Texture::Texture(std::string name)
 	:name(name),type(aiTextureType_NONE)
 {
@@ -20,7 +25,6 @@ Texture::Texture(std::string dirPath, aiTextureType type)
 	dir = dirPath.substr(0, dirPath.find_last_of("/"));
 	path = dirPath.substr(dir.length(), dirPath.length() - 1);
 	std::cout << "DIR: " << dir << ". PATH: " << path << std::endl;
-
 	Generate();
 }
 
@@ -116,6 +120,29 @@ void Texture::LoadFromAssimp(const aiTexture* aiTex, bool flip)
 	}
 	stbi_image_free(image_data);
 
+}
+
+void Texture::LoadHDR(std::string dirPath)
+{
+	stbi_set_flip_vertically_on_load(true);
+	int width, height, nrComponents;
+	float* data = stbi_loadf(dirPath.c_str(), &width, &height, &nrComponents, 0);
+	if (data)
+	{
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "Failed to load HDR image." << std::endl;
+	}
 }
 
 void Texture::Allocate(GLenum format, GLuint width, GLuint height, GLenum type)

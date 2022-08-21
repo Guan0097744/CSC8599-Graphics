@@ -32,7 +32,6 @@ PBRScene::PBRScene(int glfwVersionMajor, int glfwVersionMinor, const char* title
 {
 	SCR_WIDTH = scrWidth;
 	SCR_HEIGHT = scrHeight;
-	defaultFBO = FramebufferObject(scrWidth, scrHeight, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	captureFBO = FramebufferObject();
 
@@ -104,7 +103,7 @@ void PBRScene::SetParametres()
 	glEnable(GL_DEPTH_TEST);													// Depth testing: doesn't show vertices not visible to camera (back of object)
 
 	glDepthFunc(GL_LEQUAL);														// Set depth function to less than AND equal for skybox depth trick.
-	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);										// Enable seamless cubemap sampling for lower mip levels in the pre-filter map.
+	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);										// Enable seamless cubemap sampling for lower mip levels in the pre-filter map.
 
 	glEnable(GL_BLEND);															// Blending for text textures
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -133,19 +132,6 @@ bool PBRScene::RegisterFont(TextRenderer* tr, std::string name, std::string path
 	{
 		return false;
 	}
-}
-
-/**
- * @brief To be called after instances have been generated/registered
- * @param box
- * @param shaders
-*/
-void PBRScene::OctreePrepare(Box& box)
-{
-	// close FT library
-	FT_Done_FreeType(ft);
-	// process current instances
-	octree->Update(box);
 }
 
 void PBRScene::SetPBRLight(Shader& shader)
@@ -202,24 +188,20 @@ void PBRScene::SetPBRCubemap()
 void PBRScene::Update()
 {
 	/*glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// set background color
-	//glClearColor(bgColor[0], bgColor[1], bgColor[2], bgColor[4]);
-	glClearColor(0.1f, 0.15f, 0.15f, 1.0f);
+	glClearColor(bgColor[0], bgColor[1], bgColor[2], bgColor[4]);
 	// clear occupied bits
-	defaultFBO.Clear();
+	defaultFBO.Clear();*/
+
+	glClearColor(0.1f, 0.15f, 0.15f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void PBRScene::NewFrame(Box& box)
+void PBRScene::NewFrame()
 {
-	box.positions.clear();
-	box.sizes.clear();
-
-	// process pending objects
-	octree->ProcessPending();
-	octree->Update(box);
-
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 }
@@ -282,33 +264,15 @@ void PBRScene::ProcessInput(float dt)
 	}
 }
 
-void PBRScene::RenderShader(Shader& shader, bool applyOctree)
+void PBRScene::RenderShader(Shader* shader)
 {
 	// Activate shader
-	shader.Use();
+	shader->Use();
 
 	// Set camera values
-	shader.SetMat4("view", view);
-	shader.SetMat4("projection", projection);
-	shader.Set3Float("camPos", cameraPos);
-
-	/*if (!applyOctree)
-	{
-		shader.SetInt("numLights", lights.size());
-		for (unsigned int i = 0; i < lights.size(); ++i)
-		{
-			//glm::vec3 newPos = lights[i].position + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
-
-			glm::vec3 newPos = lights[i].position;
-			shader.Set3Float("lightPositions[" + std::to_string(i) + "]", newPos);
-			shader.Set3Float("lightColors[" + std::to_string(i) + "]", lights[i].color);
-			
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, newPos);
-			model = glm::scale(model, glm::vec3(0.5f));
-			shader.SetMat4("model", model);
-		}
-	}*/
+	shader->SetMat4("view", view);
+	shader->SetMat4("projection", projection);
+	shader->Set3Float("camPos", cameraPos);
 	
 }
 
@@ -371,9 +335,6 @@ void PBRScene::Cleanup()
 		});
 	avl_free(fonts);
 
-	// destroy octree
-	octree->Destroy();
-
 	// terminate glfw
 	glfwTerminate();
 }
@@ -403,7 +364,7 @@ void PBRScene::RegisterModel(Model* model)
 
 RigidBody* PBRScene::GenerateInstance(std::string modelId, glm::vec3 size, float mass, glm::vec3 pos, glm::vec3 rot)
 {
-	// generate new rigid body
+	// Generate new rigid body
 	void* val = avl_get(models, (void*)modelId.c_str());
 	if (val)
 	{
@@ -425,7 +386,7 @@ RigidBody* PBRScene::GenerateInstance(std::string modelId, glm::vec3 size, float
 }
 
 /**
- * @brief initialize model instances
+ * @brief Initialize model instances
 */
 void PBRScene::InitInstances()
 {
@@ -436,7 +397,7 @@ void PBRScene::InitInstances()
 }
 
 /**
- * @brief load model data
+ * @brief Load model data
 */
 void PBRScene::LoadModels()
 {

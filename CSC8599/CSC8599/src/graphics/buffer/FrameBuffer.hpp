@@ -8,32 +8,33 @@
 
 #include "../Texture.h"
 #include "../Cubemap.h"
+#include "../../PBR/PBRCubemap.h"
 
-class RenderbufferObject 
-{
-public:
-    GLuint val;
-
-    void Generate() 
-    {
-        glGenRenderbuffers(1, &val);
-    }
-
-    void Bind() 
-    {
-        glBindRenderbuffer(GL_RENDERBUFFER, val);
-    }
-
-    void Allocate(GLenum format, GLuint width, GLuint height) 
-    {
-        glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);
-    }
-
-    void Cleanup() 
-    {
-        glDeleteRenderbuffers(1, &val);
-    }
-};
+//class RenderbufferObject 
+//{
+//public:
+//    GLuint val;
+//
+//    void Generate() 
+//    {
+//        glGenRenderbuffers(1, &val);
+//    }
+//
+//    void Bind() 
+//    {
+//        glBindRenderbuffer(GL_RENDERBUFFER, val);
+//    }
+//
+//    void Allocate(GLenum format, GLuint width, GLuint height) 
+//    {
+//        glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);
+//    }
+//
+//    void Cleanup() 
+//    {
+//        glDeleteRenderbuffers(1, &val);
+//    }
+//};
 
 class FramebufferObject 
 {
@@ -96,11 +97,16 @@ public:
 
         // attach
         glRenderbufferStorage(GL_RENDERBUFFER, format, w, h);
-        //glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachType, GL_RENDERBUFFER, rbo);
 
         // add to list
         rbos.push_back(rbo);
+    }
+
+    void AttachRBO(GLenum format, GLuint rbo, GLuint w = 32, GLuint h = 32)
+    {
+        glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+        glRenderbufferStorage(GL_RENDERBUFFER, format, w, h);
     }
 
     void AllocateAndAttachTexture(GLenum attachType, GLenum format, GLenum type) 
@@ -138,7 +144,8 @@ public:
         glFramebufferTexture(GL_FRAMEBUFFER, attachType, cubemap.id, 0);
     }
 
-    void Cleanup() 
+    void Cleanup()
+
     {
         // Delete RBOs
         glDeleteRenderbuffers(rbos.size(), &rbos[0]);

@@ -15,8 +15,6 @@
 #include "../graphics/buffer/FrameBuffer.hpp"
 #include "../graphics/buffer/UniformBuffer.hpp"
 
-#include "../graphics/models/Box.hpp"
-
 #include "../graphics/Model.h"
 #include "../graphics/Light.h"
 #include "../graphics/Shader.h"
@@ -40,6 +38,9 @@ class Model;
 class PBRScene
 {
 public:
+	static unsigned int		SCR_WIDTH;
+	static unsigned int		SCR_HEIGHT;
+
 	avl*					models;					//Store models
 	trie::Trie<RigidBody*>	instances;				//Store instances
 
@@ -51,7 +52,7 @@ public:
 	FT_Library				ft;						//Freetype library
 	avl*					fonts;
 
-	FramebufferObject		defaultFBO;
+	//FramebufferObject		defaultFBO;
 	FramebufferObject		captureFBO;
 	UBO::UBO				lightUBO;
 
@@ -63,7 +64,6 @@ public:
 	bool Init();
 	void SetParametres();
 	bool RegisterFont(TextRenderer* tr, std::string name, std::string path);
-	void OctreePrepare(Box& box);
 
 	//============================================================================================//
 	//PBR Setting
@@ -78,9 +78,9 @@ public:
 	//============================================================================================//
 
 	void Update();
-	void NewFrame(Box& box);
+	void NewFrame();
 	void ProcessInput(float dt);
-	void RenderShader(Shader& shader, bool applyOctree = false);
+	void RenderShader(Shader* shader);
 	void RenderInstances(std::string modelId, Shader& shader, float dt);	// Render specified model's instances
 	void RenderText(std::string font, Shader& shader, std::string text, float x, float y, glm::vec2 scale, glm::vec3 color);
 
@@ -140,8 +140,6 @@ protected:
 
 	GLFWwindow*				window;
 	const char*				title;
-	static unsigned int		SCR_WIDTH;
-	static unsigned int		SCR_HEIGHT;
 	float					bgColor[4]; // background color
 
 	int						glfwVersionMajor;

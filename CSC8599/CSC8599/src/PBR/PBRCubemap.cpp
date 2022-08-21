@@ -1,33 +1,13 @@
 #include "PBRCubemap.h"
 
-PBRCubemap::PBRCubemap()
+void PBRCubemap::DrawVAO()
 {
-
+    VAO.Bind();
+    VAO.Draw(GL_TRIANGLES, 0, 36);
+    ArrayObject::Clear();
 }
 
-void PBRCubemap::LoadMap(std::string path)
-{
-    stbi_set_flip_vertically_on_load(true);
-    int width, height, nrComponents;
-    float* data = stbi_loadf(path.c_str(), &width, &height, &nrComponents, 0);
-    if (data)
-    {
-        //glGenTextures(1, &id);
-        glBindTexture(GL_TEXTURE_2D, id);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        std::cout << "Failed to load HDR image." << std::endl;
-    }
-}
+PBRCubemap::PBRCubemap() {}
 
 void PBRCubemap::Allocate(GLenum format1, GLenum format2, GLuint width, GLuint height, GLenum type)
 {
@@ -37,8 +17,8 @@ void PBRCubemap::Allocate(GLenum format1, GLenum format2, GLuint width, GLuint h
             0, format1, width, height, 0, format2, type, NULL);
     }
 
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -112,16 +92,19 @@ void PBRCubemap::Init()
     VAO["VBO"].Bind();
     VAO["VBO"].SetData<float>(36 * 8, vertices, GL_STATIC_DRAW);
 
-    // set attribute pointers
+    // Vertex Positions
     VAO["VBO"].SetAttPointer<GLfloat>(0, 3, GL_FLOAT, 8, 0);
+    // Normal ray
+    VAO["VBO"].SetAttPointer<GLfloat>(1, 3, GL_FLOAT, 8, 3);
+    // Vertex texture coords
+    VAO["VBO"].SetAttPointer<GLfloat>(2, 3, GL_FLOAT, 8, 6);
 
     VAO["VBO"].Clear();
 
     ArrayObject::Clear();
-
 }
 
 void PBRCubemap::Cleanup()
 {
-    
+    VAO.Cleanup();
 }

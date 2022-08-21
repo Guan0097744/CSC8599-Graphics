@@ -25,7 +25,7 @@ protected:
 	void SetMap();
 	void SetModels();
 	void AddModel(Model* m, glm::vec3 size = glm::vec3(1.0f), float mass = 1.0f, glm::vec3 pos = glm::vec3(0.0f), glm::vec3 rot = glm::vec3(0.0f));
-	void RenderScene(Shader& shader);
+	void RenderInstances(Shader& shader);
 
 	void ProcessInput(double dt);
 
@@ -34,7 +34,6 @@ protected:
 
 	PBRScene		scene;
 	Camera			cam;
-	Box				box;
 
 	TextRenderer*	font;
 
@@ -42,7 +41,6 @@ protected:
 	//Shaders
 	//============================================================================================//
 
-	//Shader*			boxShader;
 	Shader*			pbrShader;
 	Shader*			equirectangularShader;
 	Shader*			prefilterShader;
@@ -55,7 +53,8 @@ protected:
 	//============================================================================================//
 
 	//unsigned int	hdrTexture;
-	//PBRCubemap		pbrMap;
+	PBRCubemap		envMap;
+	PBRCubemap		irrMap;
 
 	//============================================================================================//
 	//Models

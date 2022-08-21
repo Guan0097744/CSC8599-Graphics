@@ -10,7 +10,6 @@ PBRSceneManager::~PBRSceneManager()
 {
 	delete font;
 
-	//delete boxShader;
 	delete pbrShader;
 	delete equirectangularShader;
 	delete prefilterShader;
@@ -23,7 +22,7 @@ PBRSceneManager::~PBRSceneManager()
 
 void PBRSceneManager::Start()
 {
-	scene = PBRScene(4, 6, "OpenGL Tutorial", 1280, 720);
+	scene = PBRScene(4, 6, "PBR Scene", 1280, 720);
 
 	// GLFW window creation
 	if (!scene.Init())
@@ -60,16 +59,21 @@ void PBRSceneManager::Update()
 		scene.Update();
 
 		// Render PBR scene
-		scene.defaultFBO.Activate();
-		scene.RenderShader(*pbrShader);
-		RenderScene(*pbrShader);
-		
-		/*// render boxes
-		scene.RenderShader(*boxShader, true);
-		box.Render(*boxShader);*/
+		scene.RenderShader(pbrShader);
+
+		// Bind pre-computed IBL data
+		glActiveTexture(GL_TEXTURE8);
+		irrMap.Bind();
+
+		RenderInstances(*pbrShader);
+
+		scene.RenderShader(backgroundShader);
+		glActiveTexture(GL_TEXTURE0);
+		envMap.Bind();
+		envMap.DrawVAO();
 
 		// send new frame to window
-		scene.NewFrame(box);
+		scene.NewFrame();
 
 		// clear instances that have been marked for deletion
 		scene.ClearDeadInstances();
@@ -92,15 +96,12 @@ void PBRSceneManager::Setup()
 
 	scene.InitInstances();
 
-	box.Init();
-	scene.OctreePrepare(box);
 	scene.variableLog["time"] = (double)0.0;
 
-	// Bind default framebuffer
-	scene.defaultFBO.Bind();
-
 	scene.SetIBLFrameBuffer();
-	//SetMap();
+	SetMap();
+
+	glViewport(0, 0, scene.SCR_WIDTH, scene.SCR_HEIGHT);
 }
 
 void PBRSceneManager::SetCamera()
@@ -120,16 +121,24 @@ void PBRSceneManager::SetFonts()
 
 void PBRSceneManager::SetShaders()
 {
-	//boxShader				= new Shader(false, "instanced/box_vs.glsl", "instanced/box_fs.glsl");
-
 	pbrShader				= new Shader(false, "pbr/pbr_vs.glsl", "pbr/pbr_fs.glsl");
 	equirectangularShader	= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/equirectangular_fs.glsl");
-	prefilterShader			= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/prefilter_fs.glsl");
 	irradianceShader		= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/irradiance_fs.glsl");
-	brdfShader				= new Shader(false, "pbr/brdf_vs.glsl", "pbr/brdf_fs.glsl");
 	backgroundShader		= new Shader(false, "pbr/background_vs.glsl", "pbr/background_fs.glsl");
+	prefilterShader			= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/prefilter_fs.glsl");
+	brdfShader				= new Shader(false, "pbr/brdf_vs.glsl", "pbr/brdf_fs.glsl");
 
-	Shader::ClearDefault();
+	pbrShader->Use();
+	pbrShader->SetInt("albedoMap", 0);
+	pbrShader->SetInt("normalMap", 1);
+	pbrShader->SetInt("metallicMap", 2);
+	pbrShader->SetInt("roughnessMap", 3);
+	pbrShader->SetInt("aoMap", 4);
+	pbrShader->SetInt("irradianceMap", 8);
+
+	backgroundShader->Use();
+	backgroundShader->SetInt("environmentMap", 0);
+
 }
 
 void PBRSceneManager::SetLightings()
@@ -160,18 +169,13 @@ void PBRSceneManager::SetLightings()
 
 void PBRSceneManager::SetMap()
 {
-	// environment map
-	PBRCubemap hdrMap;
-	hdrMap.Generate();
-	hdrMap.LoadMap("assets/skybox/pink_sunrise_2k.hdr");
+	Texture hdrMap;
+	hdrMap.LoadHDR("assets/skybox/kiara_1_dawn_4k.hdr");
 
-	PBRCubemap envMap;
-	envMap.Generate();
-	envMap.Bind();
-	envMap.Allocate(GL_RGB16F, GL_RGB, 512, 512, GL_FLOAT);
+	//============================================================================================//
+	//Set up projection and view matrices for capturing data onto the 6 cubemap face directions
+	//============================================================================================//
 
-	// pbr: set up projection and view matrices for capturing data onto the 6 cubemap face directions
-	// ----------------------------------------------------------------------------------------------
 	glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
 	glm::mat4 captureViews[] =
 	{
@@ -183,29 +187,67 @@ void PBRSceneManager::SetMap()
 		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
 	};
 
+	//============================================================================================//
+	//Environment map
+	//============================================================================================//
+
+	//Setup cubemap
+	envMap.Generate();
+	envMap.Bind();
+	envMap.Allocate(GL_RGB16F, GL_RGB, 512, 512, GL_FLOAT);
+
+	//Convert HDR equirectangular environment map to cubemap equivalent
 	equirectangularShader->Use();
 	equirectangularShader->SetInt("equirectangularMap", 0);
 	equirectangularShader->SetMat4("projection", captureProjection);
-	glActiveTexture(GL_TEXTURE0);
-
 	hdrMap.Bind();
 
-	glViewport(0, 0, 512, 512);
+	//Attach to framebuffer
+	glViewport(0, 0, 512, 512);	//Configure the viewport to the capture dimensions
 	scene.captureFBO.Bind();
-
+	envMap.Init();
 	for (unsigned int i = 0; i < 6; ++i)
 	{
 		equirectangularShader->SetMat4("view", captureViews[i]);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envMap.id, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//renderCube();
+		envMap.DrawVAO();
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	// then let OpenGL generate mipmaps from first mip face (combatting visible dots artifact)
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.id);
-	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+	/*//Then let OpenGL generate mipmaps from first mip face (combatting visible dots artifact)
+	envMap.Bind();
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);*/
+
+	//============================================================================================//
+	//Irradiance cubemap
+	//============================================================================================//
+
+	irrMap.Generate();
+	irrMap.Bind();
+	irrMap.Allocate(GL_RGB16F, GL_RGB, 32, 32, GL_FLOAT);
+
+	scene.captureFBO.Bind();
+	scene.captureFBO.AttachRBO(GL_DEPTH_COMPONENT24, scene.captureFBO.rbos[0], 32, 32);
+
+	//Solve diffuse integral by convolution to create an irradiance (cube)map.
+	irradianceShader->Use();
+	irradianceShader->SetInt("environmentMap", 0);
+	irradianceShader->SetMat4("projection", captureProjection);
+	envMap.Bind();
+
+	//Attach to framebuffer
+	glViewport(0, 0, 32, 32);	//Configure the viewport to the capture dimensions
+	scene.captureFBO.Bind();
+	irrMap.Init();
+	for (unsigned int i = 0; i < 6; ++i)
+	{
+		irradianceShader->SetMat4("view", captureViews[i]);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irrMap.id, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		irrMap.DrawVAO();
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void PBRSceneManager::SetModels()
@@ -224,7 +266,7 @@ void PBRSceneManager::AddModel(Model* m, glm::vec3 size, float mass, glm::vec3 p
 	scene.GenerateInstance(m->id, size, mass, pos, rot);
 }
 
-void PBRSceneManager::RenderScene(Shader& shader)
+void PBRSceneManager::RenderInstances(Shader& shader)
 {
 	scene.RenderInstances(pbrModel->id, shader, dt);
 }

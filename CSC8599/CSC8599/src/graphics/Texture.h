@@ -11,6 +11,7 @@
 class Texture
 {
 public:
+	Texture();
 	Texture(std::string name);
 	Texture(std::string dir, std::string path, aiTextureType type);
 	Texture(std::string dirPath, aiTextureType type);
@@ -19,6 +20,7 @@ public:
 
 	void Load(bool flip = true);
 	void LoadFromAssimp(const aiTexture* aiTex, bool flip = false);
+	void LoadHDR(std::string path);
 
 	void Allocate(GLenum format, GLuint width, GLuint height, GLenum type);
 
