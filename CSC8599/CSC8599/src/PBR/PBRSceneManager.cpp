@@ -16,7 +16,6 @@ PBRSceneManager::~PBRSceneManager()
 	delete irradianceShader;
 	delete brdfShader;
 	delete backgroundShader;
-
 	delete pbrModel;
 }
 
@@ -33,6 +32,11 @@ void PBRSceneManager::Start()
 	}
 
 	Setup();
+}
+
+void PBRSceneManager::Cleanup()
+{
+	scene.Cleanup();
 }
 
 void PBRSceneManager::Update()
@@ -62,15 +66,21 @@ void PBRSceneManager::Update()
 		scene.RenderShader(pbrShader);
 
 		// Bind pre-computed IBL data
-		glActiveTexture(GL_TEXTURE8);
+		glActiveTexture(GL_TEXTURE6);
 		irrMap.Bind();
+		glActiveTexture(GL_TEXTURE7);
+ 		preMap.Bind();
+		glActiveTexture(GL_TEXTURE8);
+		brdfTexture->Bind();
 
 		RenderInstances(*pbrShader);
 
 		scene.RenderShader(backgroundShader);
 		glActiveTexture(GL_TEXTURE0);
 		envMap.Bind();
-		envMap.DrawVAO();
+		irrMap.Bind();
+		//preMap.Bind();
+		envMap.RenderCube();
 
 		// send new frame to window
 		scene.NewFrame();
@@ -78,11 +88,6 @@ void PBRSceneManager::Update()
 		// clear instances that have been marked for deletion
 		scene.ClearDeadInstances();
 	}
-}
-
-void PBRSceneManager::Cleanup()
-{
-	scene.Cleanup();
 }
 
 void PBRSceneManager::Setup()
@@ -124,9 +129,9 @@ void PBRSceneManager::SetShaders()
 	pbrShader				= new Shader(false, "pbr/pbr_vs.glsl", "pbr/pbr_fs.glsl");
 	equirectangularShader	= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/equirectangular_fs.glsl");
 	irradianceShader		= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/irradiance_fs.glsl");
-	backgroundShader		= new Shader(false, "pbr/background_vs.glsl", "pbr/background_fs.glsl");
 	prefilterShader			= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/prefilter_fs.glsl");
 	brdfShader				= new Shader(false, "pbr/brdf_vs.glsl", "pbr/brdf_fs.glsl");
+	backgroundShader		= new Shader(false, "pbr/background_vs.glsl", "pbr/background_fs.glsl");
 
 	pbrShader->Use();
 	pbrShader->SetInt("albedoMap", 0);
@@ -134,7 +139,10 @@ void PBRSceneManager::SetShaders()
 	pbrShader->SetInt("metallicMap", 2);
 	pbrShader->SetInt("roughnessMap", 3);
 	pbrShader->SetInt("aoMap", 4);
-	pbrShader->SetInt("irradianceMap", 8);
+
+	pbrShader->SetInt("irradianceMap", 6);
+	pbrShader->SetInt("prefilterMap", 7);
+	pbrShader->SetInt("brdfLUT", 8);
 
 	backgroundShader->Use();
 	backgroundShader->SetInt("environmentMap", 0);
@@ -171,6 +179,7 @@ void PBRSceneManager::SetMap()
 {
 	Texture hdrMap;
 	hdrMap.LoadHDR("assets/skybox/kiara_1_dawn_4k.hdr");
+	//hdrMap.LoadHDR("assets/skybox/newport_loft.hdr");
 
 	//============================================================================================//
 	//Set up projection and view matrices for capturing data onto the 6 cubemap face directions
@@ -191,36 +200,38 @@ void PBRSceneManager::SetMap()
 	//Environment map
 	//============================================================================================//
 
-	//Setup cubemap
 	envMap.Generate();
 	envMap.Bind();
-	envMap.Allocate(GL_RGB16F, GL_RGB, 512, 512, GL_FLOAT);
+	envMap.Allocate(GL_RGB16F, GL_RGB, 512, 512, GL_FLOAT, GL_LINEAR_MIPMAP_LINEAR);
 
 	//Convert HDR equirectangular environment map to cubemap equivalent
 	equirectangularShader->Use();
 	equirectangularShader->SetInt("equirectangularMap", 0);
 	equirectangularShader->SetMat4("projection", captureProjection);
+	glActiveTexture(GL_TEXTURE0);
 	hdrMap.Bind();
 
 	//Attach to framebuffer
 	glViewport(0, 0, 512, 512);	//Configure the viewport to the capture dimensions
 	scene.captureFBO.Bind();
-	envMap.Init();
 	for (unsigned int i = 0; i < 6; ++i)
 	{
 		equirectangularShader->SetMat4("view", captureViews[i]);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envMap.id, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		envMap.DrawVAO();
+
+		envMap.RenderCube();
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	/*//Then let OpenGL generate mipmaps from first mip face (combatting visible dots artifact)
+	
+	//Then let OpenGL generate mipmaps from first mip face (combatting visible dots artifact)
 	envMap.Bind();
-	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);*/
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+	
 
 	//============================================================================================//
-	//Irradiance cubemap
+	//Irradiance map
 	//============================================================================================//
 
 	irrMap.Generate();
@@ -234,19 +245,80 @@ void PBRSceneManager::SetMap()
 	irradianceShader->Use();
 	irradianceShader->SetInt("environmentMap", 0);
 	irradianceShader->SetMat4("projection", captureProjection);
+	glActiveTexture(GL_TEXTURE0);
 	envMap.Bind();
 
 	//Attach to framebuffer
 	glViewport(0, 0, 32, 32);	//Configure the viewport to the capture dimensions
 	scene.captureFBO.Bind();
-	irrMap.Init();
 	for (unsigned int i = 0; i < 6; ++i)
 	{
 		irradianceShader->SetMat4("view", captureViews[i]);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irrMap.id, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		irrMap.DrawVAO();
+
+		irrMap.RenderCube();
 	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//============================================================================================//
+	//Prefilter map
+	//============================================================================================//
+
+	preMap.Generate();
+	preMap.Bind();
+	preMap.Allocate(GL_RGB16F, GL_RGB, 128, 128, GL_FLOAT, GL_LINEAR_MIPMAP_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
+	prefilterShader->Use();
+	prefilterShader->SetInt("environmentMap", 0);
+	prefilterShader->SetMat4("projection", captureProjection);
+	glActiveTexture(GL_TEXTURE0);
+	envMap.Bind();
+
+	scene.captureFBO.Bind();
+	unsigned int maxMipLevels = 5;
+	for (unsigned int mip = 0; mip < maxMipLevels; ++mip)
+	{
+		// reisze framebuffer according to mip-level size.
+		unsigned int mipWidth = static_cast<unsigned int>(128 * std::pow(0.5, mip));
+		unsigned int mipHeight = static_cast<unsigned int>(128 * std::pow(0.5, mip));
+
+		scene.captureFBO.AttachRBO(GL_DEPTH_COMPONENT24, scene.captureFBO.rbos[0], mipWidth, mipHeight);
+		glViewport(0, 0, mipWidth, mipHeight);
+
+		float roughness = (float)mip / (float)(maxMipLevels - 1);
+		prefilterShader->SetFloat("roughness", roughness);
+		for (unsigned int i = 0; i < 6; ++i)
+		{
+			prefilterShader->SetMat4("view", captureViews[i]);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, preMap.id, mip);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			preMap.RenderCube();
+		}
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//============================================================================================//
+	//BRDF
+	//============================================================================================//
+
+	brdfTexture = new Texture();
+	//brdfTexture->Generate();
+	brdfTexture->Bind();
+	brdfTexture->Allocate(GL_RG16F, GL_RG, 512, 512, GL_FLOAT);
+	brdfTexture->SetParams(GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+
+	scene.captureFBO.Bind();
+	scene.captureFBO.AttachRBO(GL_DEPTH_COMPONENT24, scene.captureFBO.rbos[0], 512, 512);
+	scene.captureFBO.AttachTexture(GL_COLOR_ATTACHMENT0, *brdfTexture);
+
+	glViewport(0, 0, 512, 512);
+	brdfShader->Use();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	plane.Render();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

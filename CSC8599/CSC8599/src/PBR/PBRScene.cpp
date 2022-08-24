@@ -103,13 +103,7 @@ void PBRScene::SetParametres()
 	glEnable(GL_DEPTH_TEST);													// Depth testing: doesn't show vertices not visible to camera (back of object)
 
 	glDepthFunc(GL_LEQUAL);														// Set depth function to less than AND equal for skybox depth trick.
-	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);										// Enable seamless cubemap sampling for lower mip levels in the pre-filter map.
-
-	glEnable(GL_BLEND);															// Blending for text textures
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glEnable(GL_STENCIL_TEST);													// Stencil testing
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);									// Keep fragments if either stencil or depth fails, replace if both pass
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);										// Enable seamless cubemap sampling for lower mip levels in the pre-filter map.
 
 	//============================================================================================//
 	//Init model/instance trees

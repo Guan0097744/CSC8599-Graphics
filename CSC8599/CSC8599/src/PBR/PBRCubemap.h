@@ -17,20 +17,21 @@ class PBRScene;
 class PBRCubemap
 {
 public:
-	unsigned int			id;
+	unsigned int	id;
 
 	PBRCubemap();
 
-	void Allocate(GLenum format1, GLenum format2, GLuint width, GLuint height, GLenum type);
+	void Allocate(GLenum format1, GLenum format2, 
+		GLuint width, GLuint height, GLenum type, 
+		GLint param1 = GL_LINEAR, GLint param2 = GL_LINEAR);
 	void Generate();
 	void Bind();
-	void Init();
-	void DrawVAO();
+	void RenderCube();
 
 	void Cleanup();
 
 private:
-	ArrayObject				VAO;
+	ArrayObject		VAO;
 };
 
 #endif

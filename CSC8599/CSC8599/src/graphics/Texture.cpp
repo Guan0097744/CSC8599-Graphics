@@ -150,6 +150,11 @@ void Texture::Allocate(GLenum format, GLuint width, GLuint height, GLenum type)
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, type, NULL);
 }
 
+void Texture::Allocate(GLenum format1, GLenum format2, GLuint width, GLuint height, GLenum type)
+{
+	glTexImage2D(GL_TEXTURE_2D, 0, format1, width, height, 0, format2, type, NULL);
+}
+
 void Texture::SetParams(GLenum texMinFilter, GLenum texMagFilter, GLenum wrapS, GLenum wrapT)
 {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texMinFilter);

@@ -233,6 +233,7 @@
     <ClInclude Include="src\io\Keyboard.h" />
     <ClInclude Include="src\io\Mouse.h" />
     <ClInclude Include="src\graphics\Shader.h" />
+    <ClInclude Include="src\PBR\PBRPlane.hpp" />
     <ClInclude Include="src\PBR\PBRSceneManager.h" />
     <ClInclude Include="src\managers\SceneManager.h" />
     <ClInclude Include="src\PBR\PBRScene.h" />

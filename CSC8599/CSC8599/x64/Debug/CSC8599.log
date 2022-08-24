@@ -1,1 +1,44 @@
-﻿  CSC8599.vcxproj -> D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe
+﻿  PBRScene.cpp
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(68,49): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(91,76): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(196,1): warning C4244: '+=': conversion from 'const float' to 'int', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(241,1): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(242,35): warning C4018: '<': signed/unsigned mismatch
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(259,1): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\Linking\include\jsoncpp\json.hpp(300,25): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\VertexBuffer.hpp(160,1): warning C4312: 'type cast': conversion from 'GLint' to 'void *' of greater size
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\FrameBuffer.hpp(151,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(198,37): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(341,33): warning C4018: '>=': signed/unsigned mismatch
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\buffer\UniformBuffer.hpp(400,31): warning C4018: '<': signed/unsigned mismatch
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(64,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(70,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\graphics\models\Box.hpp(113,1): warning C4267: 'argument': conversion from 'size_t' to 'GLuint', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\PBR\PBRScene.cpp(338,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(137,39): warning C4018: '<': signed/unsigned mismatch
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(116): message : while compiling class template member function 'bool trie::Trie<RigidBody *>::Insert(std::string,T)'
+          with
+          [
+              T=RigidBody *
+          ]
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\PBR\PBRScene.cpp(373): message : see reference to function template instantiation 'bool trie::Trie<RigidBody *>::Insert(std::string,T)' being compiled
+          with
+          [
+              T=RigidBody *
+          ]
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\PBR\PBRScene.h(45): message : see reference to class template instantiation 'trie::Trie<RigidBody *>' being compiled
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(108,31): warning C4018: '<': signed/unsigned mismatch
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(95): message : while compiling class template member function 'trie::Trie<RigidBody *>::Trie(trie::charset)'
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\PBR\PBRScene.cpp(24): message : see reference to function template instantiation 'trie::Trie<RigidBody *>::Trie(trie::charset)' being compiled
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(292,31): warning C4018: '<': signed/unsigned mismatch
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(287): message : while compiling class template member function 'void trie::Trie<RigidBody *>::UnloadNode(trie::node<T> *)'
+          with
+          [
+              T=RigidBody *
+          ]
+D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\CSC8599\src\algorithms\tree\Trie.hpp(180): message : see reference to function template instantiation 'void trie::Trie<RigidBody *>::UnloadNode(trie::node<T> *)' being compiled
+          with
+          [
+              T=RigidBody *
+          ]
+  CSC8599.vcxproj -> D:\CGE\CSC8599\Project\CSC8599-Graphics\CSC8599\x64\Debug\CSC8599.exe

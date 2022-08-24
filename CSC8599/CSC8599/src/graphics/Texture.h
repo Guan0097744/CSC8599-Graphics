@@ -22,7 +22,10 @@ public:
 	void LoadFromAssimp(const aiTexture* aiTex, bool flip = false);
 	void LoadHDR(std::string path);
 
-	void Allocate(GLenum format, GLuint width, GLuint height, GLenum type);
+	void Allocate(GLenum format, 
+		GLuint width, GLuint height, GLenum type);
+	void Allocate(GLenum format1, GLenum format2, 
+		GLuint width, GLuint height, GLenum type);
 
 	static void SetParams(GLenum texMinFilter = GL_NEAREST,
 		GLenum texMagFilter = GL_NEAREST,
@@ -41,6 +44,7 @@ public:
 	std::string		name;
 	std::string		dir;	// Directory
 	std::string		path;
+
 };
 
 #endif

@@ -15,8 +15,8 @@ uniform sampler2D aoMap;
 
 // IBL
 uniform samplerCube irradianceMap;
-//uniform samplerCube prefilterMap;
-//uniform sampler2D   brdfLUT;
+uniform samplerCube prefilterMap;
+uniform sampler2D   brdfLUT;
 
 // lights
 #define MAX_LIGHTS 10
@@ -143,17 +143,16 @@ void main()
     
     vec3 irradiance     = texture(irradianceMap, N).rgb;
     vec3 diffuse        = irradiance * albedo;
-//    
-//    const float MAX_REFLECTION_LOD = 4.0;
-//    vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    
-//    vec2 brdf  = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
-//    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
-//
-//    vec3 ambient = (kD * diffuse + specular) * ao;
-
-    vec3 ambient        = (kD * diffuse) * ao;
     
-    //vec3 ambient = vec3(0.03) * albedo * ao;
+    const float MAX_REFLECTION_LOD  = 4.0;
+    vec3 prefilteredColor           = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    
+    vec2 brdf                       = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+    vec3 specular                   = prefilteredColor * (F * brdf.x + brdf.y);
+
+    vec3 ambient                    = (kD * diffuse + specular) * ao;
+
+    //vec3 ambient        = (kD * diffuse) * ao;
+    
     vec3 color          = ambient + Lo;
 
     // HDR tonemapping

@@ -2,6 +2,7 @@
 
 #include "PBRScene.h"
 #include "PBRCubemap.h"
+#include "PBRPlane.hpp"
 
 #include "../graphics/models/Sphere.hpp"
 #include "../graphics/models/PBRModel.hpp"
@@ -55,6 +56,10 @@ protected:
 	//unsigned int	hdrTexture;
 	PBRCubemap		envMap;
 	PBRCubemap		irrMap;
+	PBRCubemap		preMap;
+
+	PBRPlane		plane;
+	Texture*		brdfTexture;
 
 	//============================================================================================//
 	//Models

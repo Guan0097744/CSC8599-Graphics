@@ -249,6 +249,9 @@
     <ClInclude Include="src\PBR\PBRCubemap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\PBR\PBRPlane.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\images\takagi.jpg">
