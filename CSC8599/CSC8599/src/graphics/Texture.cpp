@@ -5,7 +5,7 @@
 
 Texture::Texture()
 {
-	Generate();
+	//Generate();
 }
 
 Texture::Texture(std::string name)

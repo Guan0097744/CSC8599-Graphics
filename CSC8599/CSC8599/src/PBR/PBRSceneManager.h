@@ -59,7 +59,7 @@ protected:
 	PBRCubemap		preMap;
 
 	PBRPlane		plane;
-	Texture*		brdfTexture;
+	Texture			brdfTexture;
 
 	//============================================================================================//
 	//Models

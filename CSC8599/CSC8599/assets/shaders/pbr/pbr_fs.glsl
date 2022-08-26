@@ -1,4 +1,5 @@
 #version 460 core
+#extension GL_ARB_bindless_texture : require
 
 out vec4 FragColor;
 
@@ -12,7 +13,6 @@ uniform sampler2D normalMap;
 uniform sampler2D metallicMap;
 uniform sampler2D roughnessMap;
 uniform sampler2D aoMap;
-
 // IBL
 uniform samplerCube irradianceMap;
 uniform samplerCube prefilterMap;
@@ -20,11 +20,17 @@ uniform sampler2D   brdfLUT;
 
 // lights
 #define MAX_LIGHTS 10
-layout (std140) uniform Lights 
+layout (binding = 0) uniform Lights 
 {
     int numLights;
 	vec3 lightPositions[MAX_LIGHTS];
     vec3 lightColors[MAX_LIGHTS];
+};
+
+// bindless texture
+layout (binding = 1) uniform BT 
+{
+    sampler2D tex[];
 };
 
 uniform vec3 camPos;

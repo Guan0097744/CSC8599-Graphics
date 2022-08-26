@@ -8,7 +8,6 @@
 
 #include "../Texture.h"
 #include "../Cubemap.h"
-#include "../../PBR/PBRCubemap.h"
 
 //class RenderbufferObject 
 //{

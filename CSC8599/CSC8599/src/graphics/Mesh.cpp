@@ -239,32 +239,6 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 		case aiTextureType_AMBIENT:
 			name = "aoMap";
 			break;
-		/*case aiTextureType_LIGHTMAP:
-			name = "aoMap";
-			break;*/
-
-		/*case aiTextureType_BASE_COLOR:
-			name = "albedoMap";
-			break;
-		case aiTextureType_NORMALS:
-			name = "normalMap";
-			break;
-		case aiTextureType_HEIGHT:
-			name = "normalMap";
-			break;
-		case aiTextureType_EMISSIVE:
-			name = "emissionMap";
-			break;
-		case aiTextureType_METALNESS:
-			name = "metallicMap";
-			break;
-		case aiTextureType_DIFFUSE_ROUGHNESS:
-			name = "roughnessMap";
-			break;
-		case aiTextureType_AMBIENT_OCCLUSION:
-			name = "aoMap";
-			break;*/
-
 		default:
 			name = textures[i].name;
 			break;

@@ -213,6 +213,7 @@
     <ClInclude Include="src\algorithms\States.hpp" />
     <ClInclude Include="src\algorithms\tree\Trie.hpp" />
     <ClInclude Include="src\graphics\buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\graphics\buffer\ShaderBuffer.hpp" />
     <ClInclude Include="src\graphics\buffer\UniformBuffer.hpp" />
     <ClInclude Include="src\graphics\buffer\VertexBuffer.hpp" />
     <ClInclude Include="src\graphics\Cubemap.h" />

@@ -71,7 +71,7 @@ void PBRSceneManager::Update()
 		glActiveTexture(GL_TEXTURE7);
  		preMap.Bind();
 		glActiveTexture(GL_TEXTURE8);
-		brdfTexture->Bind();
+		brdfTexture.Bind();
 
 		RenderInstances(*pbrShader);
 
@@ -304,15 +304,15 @@ void PBRSceneManager::SetMap()
 	//BRDF
 	//============================================================================================//
 
-	brdfTexture = new Texture();
-	//brdfTexture->Generate();
-	brdfTexture->Bind();
-	brdfTexture->Allocate(GL_RG16F, GL_RG, 512, 512, GL_FLOAT);
-	brdfTexture->SetParams(GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+	//brdfTexture = new Texture();
+	brdfTexture.Generate();
+	brdfTexture.Bind();
+	brdfTexture.Allocate(GL_RG16F, GL_RG, 512, 512, GL_FLOAT);
+	brdfTexture.SetParams(GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 
 	scene.captureFBO.Bind();
 	scene.captureFBO.AttachRBO(GL_DEPTH_COMPONENT24, scene.captureFBO.rbos[0], 512, 512);
-	scene.captureFBO.AttachTexture(GL_COLOR_ATTACHMENT0, *brdfTexture);
+	scene.captureFBO.AttachTexture(GL_COLOR_ATTACHMENT0, brdfTexture);
 
 	glViewport(0, 0, 512, 512);
 	brdfShader->Use();
