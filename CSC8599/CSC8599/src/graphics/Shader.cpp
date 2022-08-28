@@ -1,4 +1,4 @@
-#include "Shader.h"
+﻿#include "Shader.h"
 
 #include <stdio.h>
 #include <fstream>
@@ -166,6 +166,21 @@ void Shader::SetMat3(const std::string& name, glm::mat3 val)
 void Shader::SetMat4(const std::string& name, glm::mat4 val)
 {
 	glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, glm::value_ptr(val));
+}
+
+//============================================================================================//
+//Bindless Texture
+//============================================================================================//
+
+
+void Shader::SetHandle(const std::string& name, GLuint64 val)
+{
+	glUniformHandleui64ARB(glGetUniformLocation(id, name.c_str()), val);
+}
+
+void Shader::SetHandleArray(const std::string& name, GLsizei count​, GLuint64* val)
+{
+	glUniformHandleui64vARB(glGetUniformLocation(id, name.c_str()), count​, val);
 }
 
 void Shader::CompileAndAttach(GLuint id, bool includeDefaultHeader, const char* path, GLuint type)

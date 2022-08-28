@@ -23,7 +23,9 @@ protected:
 	void SetFonts();
 	void SetShaders();
 	void SetLightings();
+
 	void SetMap();
+
 	void SetModels();
 	void AddModel(Model* m, glm::vec3 size = glm::vec3(1.0f), float mass = 1.0f, glm::vec3 pos = glm::vec3(0.0f), glm::vec3 rot = glm::vec3(0.0f));
 	void RenderInstances(Shader& shader);
@@ -48,6 +50,8 @@ protected:
 	Shader*			irradianceShader;
 	Shader*			brdfShader;
 	Shader*			backgroundShader;
+
+	Shader*			bindlessShader;
 
 	//============================================================================================//
 	//Cubemap

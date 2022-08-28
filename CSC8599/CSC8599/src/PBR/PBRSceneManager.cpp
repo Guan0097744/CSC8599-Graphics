@@ -17,6 +17,8 @@ PBRSceneManager::~PBRSceneManager()
 	delete brdfShader;
 	delete backgroundShader;
 	delete pbrModel;
+
+	delete bindlessShader;
 }
 
 void PBRSceneManager::Start()
@@ -62,7 +64,7 @@ void PBRSceneManager::Update()
 		
 		scene.Update();
 
-		// Render PBR scene
+		/*// Render PBR scene
 		scene.RenderShader(pbrShader);
 
 		// Bind pre-computed IBL data
@@ -73,7 +75,23 @@ void PBRSceneManager::Update()
 		glActiveTexture(GL_TEXTURE8);
 		brdfTexture.Bind();
 
-		RenderInstances(*pbrShader);
+		RenderInstances(*pbrShader);*/
+
+		//============================================================================================//
+		//bindless
+		//============================================================================================//
+
+		scene.RenderShader(bindlessShader);
+
+		// Bind pre-computed IBL data
+		glActiveTexture(GL_TEXTURE6);
+		irrMap.Bind();
+		glActiveTexture(GL_TEXTURE7);
+		preMap.Bind();
+		glActiveTexture(GL_TEXTURE8);
+		brdfTexture.Bind();
+
+		RenderInstances(*bindlessShader);
 
 		scene.RenderShader(backgroundShader);
 		glActiveTexture(GL_TEXTURE0);
@@ -100,6 +118,7 @@ void PBRSceneManager::Setup()
 	SetModels();
 
 	scene.InitInstances();
+	//scene.SetBindless(pbrModel->id, *bindlessShader);
 
 	scene.variableLog["time"] = (double)0.0;
 
@@ -107,6 +126,8 @@ void PBRSceneManager::Setup()
 	SetMap();
 
 	glViewport(0, 0, scene.SCR_WIDTH, scene.SCR_HEIGHT);
+
+	scene.SetBindless(pbrModel->id, *bindlessShader);
 }
 
 void PBRSceneManager::SetCamera()
@@ -126,14 +147,14 @@ void PBRSceneManager::SetFonts()
 
 void PBRSceneManager::SetShaders()
 {
-	pbrShader				= new Shader(false, "pbr/pbr_vs.glsl", "pbr/pbr_fs.glsl");
+	//pbrShader				= new Shader(false, "pbr/pbr_vs.glsl", "pbr/pbr_fs.glsl");
 	equirectangularShader	= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/equirectangular_fs.glsl");
 	irradianceShader		= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/irradiance_fs.glsl");
 	prefilterShader			= new Shader(false, "pbr/cubemap_vs.glsl", "pbr/prefilter_fs.glsl");
 	brdfShader				= new Shader(false, "pbr/brdf_vs.glsl", "pbr/brdf_fs.glsl");
 	backgroundShader		= new Shader(false, "pbr/background_vs.glsl", "pbr/background_fs.glsl");
 
-	pbrShader->Use();
+	/*pbrShader->Use();
 	pbrShader->SetInt("albedoMap", 0);
 	pbrShader->SetInt("normalMap", 1);
 	pbrShader->SetInt("metallicMap", 2);
@@ -145,8 +166,25 @@ void PBRSceneManager::SetShaders()
 	pbrShader->SetInt("brdfLUT", 8);
 
 	backgroundShader->Use();
-	backgroundShader->SetInt("environmentMap", 0);
+	backgroundShader->SetInt("environmentMap", 0);*/
 
+	//============================================================================================//
+	//Bindless Texture
+	//============================================================================================//
+
+	bindlessShader = new Shader(false, "pbr/pbr_vs.glsl", "pbr/pbr_bindless_fs.glsl");
+	bindlessShader->Use();
+	//bindlessShader->SetInt("albedoMap", 0);
+	//bindlessShader->SetInt("normalMap", 1);
+	//bindlessShader->SetInt("metallicMap", 2);
+	//bindlessShader->SetInt("roughnessMap", 3);
+	//bindlessShader->SetInt("aoMap", 4);
+	bindlessShader->SetInt("irradianceMap", 6);
+	bindlessShader->SetInt("prefilterMap", 7);
+	bindlessShader->SetInt("brdfLUT", 8);
+
+	backgroundShader->Use();
+	backgroundShader->SetInt("environmentMap", 0);
 }
 
 void PBRSceneManager::SetLightings()
@@ -172,7 +210,8 @@ void PBRSceneManager::SetLightings()
 		scene.lights.push_back(&lights[i]);
 	}
 
-	scene.SetPBRLight(*pbrShader);
+	//scene.SetPBRLight(*pbrShader);
+	scene.SetPBRLight(*bindlessShader);
 }
 
 void PBRSceneManager::SetMap()
@@ -327,6 +366,7 @@ void PBRSceneManager::SetModels()
 	pbrModel = new PBRModel("PBRModel");
 	//pbrModel->Init("assets/models/pbr_kirby/scene.gltf");
 	pbrModel->Init("assets/models/pbr_kirby2/Robobo_Kirby.obj");
+	//pbrModel->Init("assets/models/pbr_horse2/horse_statue_01_4k.fbx");
 	AddModel(pbrModel, glm::vec3(0.1f), 1.0f, glm::vec3(0.0f, -5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	scene.LoadModels();

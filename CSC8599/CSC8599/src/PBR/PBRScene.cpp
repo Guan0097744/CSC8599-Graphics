@@ -174,9 +174,15 @@ void PBRScene::SetIBLFrameBuffer()
 	captureFBO.AllocateAndAttachRBO(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24);
 }
 
-void PBRScene::SetPBRCubemap()
+void PBRScene::SetBindless(std::string modelId, Shader& shader)
 {
-
+	void* val = avl_get(models, (void*)modelId.c_str());
+	if (val)
+	{
+		// render each mesh in specified model
+		shader.Use();
+		((Model*)val)->BindlessTexture(shader);
+	}
 }
 
 void PBRScene::Update()

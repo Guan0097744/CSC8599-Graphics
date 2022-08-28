@@ -172,3 +172,10 @@ void Texture::Cleanup()
 {
 	glDeleteTextures(1, &id);
 }
+
+void Texture::Bindless()
+{
+	glBindTexture(GL_TEXTURE_2D, id);
+	handle = glGetTextureHandleARB(id);
+	glMakeTextureHandleResidentARB(handle);
+}

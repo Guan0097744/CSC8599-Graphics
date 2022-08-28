@@ -108,3 +108,10 @@ void PBRCubemap::Cleanup()
 {
     VAO.Cleanup();
 }
+
+void PBRCubemap::Bindless()
+{
+    glBindTexture(GL_TEXTURE_2D, id);
+    handle = glGetTextureHandleARB(id);
+    glMakeTextureHandleResidentARB(handle);
+}

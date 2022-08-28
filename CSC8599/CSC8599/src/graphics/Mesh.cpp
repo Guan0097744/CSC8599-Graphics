@@ -217,9 +217,10 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 	//PBR Texture
 	//============================================================================================//
 
+	//Bindless test
 	for (int i = 0; i < textures.size(); i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + i);
+		//glActiveTexture(GL_TEXTURE0 + i);
 
 		std::string name;
 		switch (textures[i].type)
@@ -244,15 +245,16 @@ void Mesh::Render(Shader& shader, unsigned int numInstances)
 			break;
 		}
 
-		shader.SetInt(name, i);
-		textures[i].Bind();
+		/*shader.SetInt(name, i);
+		textures[i].Bind();*/
+		shader.SetHandle(name, textures[i].handle);
 	}
 
 	VAO.Bind();
 	VAO.Draw(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0, numInstances);
 	ArrayObject::Clear();
 
-	glActiveTexture(GL_TEXTURE0);
+	//glActiveTexture(GL_TEXTURE0);
 }
 
 void Mesh::Cleanup()
@@ -262,6 +264,38 @@ void Mesh::Cleanup()
 	for (Texture t : textures) 
 	{
 		t.Cleanup();
+	}
+}
+
+void Mesh::BindlessTexture(Shader& shader)
+{
+	for (int i = 0; i < textures.size(); i++)
+	{
+		std::string name;
+		switch (textures[i].type)
+		{
+		case aiTextureType_DIFFUSE:
+			name = "albedoMap";
+			break;
+		case aiTextureType_HEIGHT:
+			name = "normalMap";
+			break;
+		case aiTextureType_SPECULAR:
+			name = "metallicMap";
+			break;
+		case aiTextureType_SHININESS:
+			name = "roughnessMap";
+			break;
+		case aiTextureType_AMBIENT:
+			name = "aoMap";
+			break;
+		default:
+			name = textures[i].name;
+			break;
+		}
+
+		textures[i].Bindless();
+		//shader.SetHandle(name, textures[i].handle);
 	}
 }
 

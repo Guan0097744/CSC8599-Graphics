@@ -1,4 +1,4 @@
-#ifndef SHADER_H
+﻿#ifndef SHADER_H
 #define SHADER_H
 
 #include <glad/glad.h>
@@ -71,6 +71,13 @@ public:
 	void Set4Float(const std::string& name, glm::vec4 v);
 	void SetMat3(const std::string& name, glm::mat3 val);
 	void SetMat4(const std::string& name, glm::mat4 val);
+
+	//============================================================================================//
+	//Bindless Texture
+	//============================================================================================//
+
+	void SetHandle(const std::string& name, GLuint64 val);
+	void SetHandleArray(const std::string& name, GLsizei count​, GLuint64* val​);
 
 private:
 	void CompileAndAttach(GLuint id, bool includeDefaultHeader, const char* path, GLuint type);

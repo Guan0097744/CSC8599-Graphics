@@ -15,13 +15,6 @@ public:
 		LoadModel(path);
 	}
 
-	/*void LoadTexture(std::string path, aiTextureType type)
-	{
-		Texture t(path, type);
-		t.Load();
-
-		//this;
-	}*/
 };
 
 

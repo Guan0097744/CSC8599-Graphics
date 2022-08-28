@@ -87,6 +87,19 @@ void Model::Render(Shader& shader, float dt)
 	{
 		meshes[i].Render(shader, currentNumInstances);
 	}
+
+}
+
+void Model::BindlessTexture(Shader& shader)
+{
+	//============================================================================================//
+	//Bindless Texture
+	//============================================================================================//
+
+	for (unsigned int i = 0, numMeshes = meshes.size(); i < numMeshes; i++)
+	{
+		meshes[i].BindlessTexture(shader);
+	}
 }
 
 void Model::Cleanup()
@@ -401,7 +414,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			//============================================================================================//
 			//PBR Texture
 			//============================================================================================//
-
 			
 			// albedoMap
 			std::vector<Texture> pbrBaseColorMaps	= LoadTextures(material, aiTextureType_BASE_COLOR, scene);

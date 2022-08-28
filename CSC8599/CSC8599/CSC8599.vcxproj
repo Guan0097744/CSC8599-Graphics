@@ -193,6 +193,7 @@
     <None Include="assets\shaders\pbr\cubemap_vs.glsl" />
     <None Include="assets\shaders\pbr\equirectangular_fs.glsl" />
     <None Include="assets\shaders\pbr\irradiance_fs.glsl" />
+    <None Include="assets\shaders\pbr\pbr_bindless_fs.glsl" />
     <None Include="assets\shaders\pbr\pbr_fs.glsl" />
     <None Include="assets\shaders\pbr\pbr_vs.glsl" />
     <None Include="assets\shaders\pbr\prefilter_fs.glsl" />

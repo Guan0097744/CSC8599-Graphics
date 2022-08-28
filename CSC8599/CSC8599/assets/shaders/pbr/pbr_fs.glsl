@@ -27,12 +27,6 @@ layout (binding = 0) uniform Lights
     vec3 lightColors[MAX_LIGHTS];
 };
 
-// bindless texture
-layout (binding = 1) uniform BT 
-{
-    sampler2D tex[];
-};
-
 uniform vec3 camPos;
 
 const float PI = 3.14159265359;
@@ -157,8 +151,6 @@ void main()
 
     vec3 ambient                    = (kD * diffuse + specular) * ao;
 
-    //vec3 ambient        = (kD * diffuse) * ao;
-    
     vec3 color          = ambient + Lo;
 
     // HDR tonemapping

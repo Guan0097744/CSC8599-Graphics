@@ -59,6 +59,12 @@ public:
 	void Render(Shader& shader, unsigned int numInstances);
 	void Cleanup();
 
+	//============================================================================================//
+	//Bindless Texture
+	//============================================================================================//
+
+	void BindlessTexture(Shader& shader);
+
 private:
 	//bool noTex;
 

@@ -45,6 +45,8 @@ public:
 	virtual void Init() {};
 	virtual void Render(Shader& shader, float dt);
 
+	void BindlessTexture(Shader& shader);
+
 	void LoadModel(std::string path);
 	void EnableCollisionModel();
 	void AddMesh(Mesh* mesh);
